@@ -14,3 +14,11 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# Folders
+.metadata/
+.settings/
+.classpath
+.project
+Servers/
+bin/
