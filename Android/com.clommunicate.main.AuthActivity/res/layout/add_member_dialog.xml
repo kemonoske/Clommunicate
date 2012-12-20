@@ -91,7 +91,7 @@
             android:gravity="center_vertical|center_horizontal" >
 
             <ImageButton
-                android:id="@+id/add_member_dialog_cncel_button"
+                android:id="@+id/add_member_dialog_cancel_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/exit_button" />

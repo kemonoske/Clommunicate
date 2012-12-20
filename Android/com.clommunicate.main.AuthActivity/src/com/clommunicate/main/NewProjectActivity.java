@@ -55,9 +55,7 @@ public class NewProjectActivity extends Activity {
 			public void onClick(View v) {
 				
 				AddMemberDialog amd = new AddMemberDialog(me);
-				amd.show();
-				amd.setTitle(String.format("%-100s", "Add new member to project."));
-				System.err.println("hello");
+				System.err.println("dfsgdf");
 			}
 		});
 	}
@@ -73,6 +71,12 @@ public class NewProjectActivity extends Activity {
 		((TextView) findViewById(R.id.new_project_member_list_label)).setTypeface(type);
 		((EditText) findViewById(R.id.new_project_name)).setTypeface(type);
 		//((TextView) findViewById(android.R.id.text1)).setTypeface(type);
+		
+	}
+	
+	public ListView getMemberList(){
+		
+		return member_list;
 		
 	}
 	
