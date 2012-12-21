@@ -11,8 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class AddMemberDialog extends Dialog{
-	
+public class AddMemberDialog extends Dialog {
+
 	private EditText email = null;
 	private ImageButton ok = null;
 	private ImageButton cancel = null;
@@ -20,64 +20,83 @@ public class AddMemberDialog extends Dialog{
 
 	public AddMemberDialog(final Context context) {
 		super(context, R.style.cust_dialog);
-		
+
 		Typeface type = Typeface.createFromAsset(context.getAssets(),
 				"fonts/zekton.ttf");
 
 		setContentView(R.layout.add_member_dialog);
 
-		((TextView)findViewById(R.id.add_member_dialog_email_label)).setTypeface(type);
-		email = ((EditText)findViewById(R.id.add_member_dialog_email));
+		((TextView) findViewById(R.id.add_member_dialog_email_label))
+				.setTypeface(type);
+		email = ((EditText) findViewById(R.id.add_member_dialog_email));
 		email.setTypeface(type);
-		
-		ok = (ImageButton)findViewById(R.id.add_member_dialog_ok_button);
-		cancel = (ImageButton)findViewById(R.id.add_member_dialog_cancel_button);
+
+		ok = (ImageButton) findViewById(R.id.add_member_dialog_ok_button);
+		cancel = (ImageButton) findViewById(R.id.add_member_dialog_cancel_button);
 
 		ok.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
 
 				email.setEnabled(false);
-				//TODO:Add connection check here
-				if(WebApi.login(email.getText().toString())){
-					
-					User user = WebApi.getClommunicateUser(email.getText().toString());
-					
-					/*if(user != null)
-						((NewProjectActivity)context).getMemberList().getAdapter().*/
-						
-					user = null;
-					
-				}	else	{
-					
-					result = "No user with such email in the system.";
-					
-				}
-				dismiss();
+				// TODO:Add connection check here
+				Runnable r = new Runnable() {
+
+					@Override
+					public void run() {
+
+						if (WebApi.login(email.getText().toString())) {
+
+							final User user = WebApi.getClommunicateUser(email
+									.getText().toString());
+
+							if (user != null)	{
+								((NewProjectActivity) context).getMemberList().post(new Runnable() {
+									public void run() {
+										
+										((MemberListArrayAdapter) ((NewProjectActivity) context)
+												.getMemberList().getAdapter())
+												.addMember(user);
+										
+									}
+								});
+							}
+
+
+						} else {
+
+							result = "No user with such email in the system.";
+
+						}
+						dismiss();
+
+					}
+				};
+				
+				new Thread(r).start();
 			}
 		});
-		
+
 		cancel.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
-				
+
 				result = "Cancelled by user.";
 
 				dismiss();
-				
+
 			}
 		});
-		
 
 		setTitle(String.format("%-100s", "Add new member to project."));
 		show();
-		
+
 	}
-	
-	public String getResult(){
-		
+
+	public String getResult() {
+
 		return result;
-		
+
 	}
 
 }

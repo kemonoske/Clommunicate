@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="100"
         android:background="#f1eef4"
         android:orientation="vertical"
         android:padding="2dp" >
@@ -33,195 +35,188 @@
             android:background="@drawable/top_mid_gradient" >
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/new_project_main_layout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="80"
-            android:background="@drawable/mid_fill" >
+            android:background="@drawable/mid_fill"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
 
             <LinearLayout
-                android:id="@+id/new_project_main_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/mid_fill"
-                android:orientation="vertical"
-                android:paddingTop="10dp" >
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/new_project_name_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:textColor="#6c6b68"
+                        android:textColorHighlight="#6c6b68"
+                        android:textSize="25dp" />
+
+                    <EditText
+                        android:id="@+id/new_project_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp" >
-
-                        <TextView
-                            android:id="@+id/new_project_name_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Name"
-                            android:textColor="#6c6b68"
-                            android:textColorHighlight="#6c6b68"
-                            android:textSize="25dp" />
-
-                        <EditText
-                            android:id="@+id/new_project_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/border"
-                            android:padding="2dp"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp" >
-
-                        <TextView
-                            android:id="@+id/new_project_type_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Type"
-                            android:textColor="#6c6b68"
-                            android:textColorHighlight="#6c6b68"
-                            android:textSize="25dp" />
-
-                        <Spinner
-                            android:id="@+id/new_project_type"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/border"
-                            android:padding="2dp"
-                            android:textSize="25dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:background="#6c6b68" >
-                    </LinearLayout>
+                        android:background="@drawable/border"
+                        android:padding="2dp"
+                        android:textSize="25dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <TextView
+                        android:id="@+id/new_project_type_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Type"
+                        android:textColor="#6c6b68"
+                        android:textColorHighlight="#6c6b68"
+                        android:textSize="25dp" />
+
+                    <Spinner
+                        android:id="@+id/new_project_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/border"
+                        android:padding="2dp"
+                        android:textSize="25dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#6c6b68" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp" >
+
+                    <TextView
+                        android:id="@+id/new_project_logo_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Logo"
+                        android:textColor="#6c6b68"
+                        android:textColorHighlight="#6c6b68"
+                        android:textSize="25sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp" >
+                        android:layout_gravity="right"
+                        android:orientation="vertical" >
 
-                        <TextView
-                            android:id="@+id/new_project_logo_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Logo"
-                            android:textColor="#6c6b68"
-                            android:textColorHighlight="#6c6b68"
-                            android:textSize="25sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                        <ImageView
+                            android:id="@+id/new_project_logo"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:layout_gravity="right"
-                            android:orientation="vertical" >
-
-                            <ImageView
-                                android:id="@+id/new_project_logo"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:layout_gravity="right"
-                                android:background="@drawable/border"
-                                android:padding="2dp"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/photo" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:weightSum="100" >
-
-                        <TextView
-                            android:id="@+id/new_project_member_list_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="100"
-                            android:text="Members"
-                            android:textColor="#6c6b68"
-                            android:textColorHighlight="#6c6b68"
-                            android:textSize="25dp" />
-
-                        <ImageButton
-                            android:id="@+id/new_project_add_member_button"
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/add_button" />
+              			    android:background="@drawable/border_2dp"
+                            android:padding="2dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/photo" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:background="@drawable/bottom_mid_gradient" >
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:weightSum="100" >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:background="@drawable/top_mid_gradient" >
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/new_project_member_list_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="100"
+                        android:text="Members"
+                        android:textColor="#6c6b68"
+                        android:textColorHighlight="#6c6b68"
+                        android:textSize="25dp" />
 
-                <ListView
-                    android:id="@+id/new_project_member_list"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:cacheColorHint="@android:color/transparent"
-                    android:choiceMode="singleChoice"
-                    android:drawSelectorOnTop="false" >
-                </ListView>
+                    <ImageButton
+                        android:id="@+id/new_project_add_member_button"
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="right"
+                        android:background="@drawable/add_button" />
+                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@drawable/bottom_mid_gradient" >
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bottom_mid_gradient" >
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/top_mid_gradient" >
+            </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/registerButton"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:background="@drawable/login_button" />
+            <ListView
+                android:id="@+id/new_project_member_list"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="100"
+                android:cacheColorHint="@android:color/transparent"
+                android:choiceMode="singleChoice"
+                android:drawSelectorOnTop="false" >
+            </ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bottom_mid_gradient" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical" >
+
+                <ImageButton
+                    android:id="@+id/registerButton"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/login_button" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-</ScrollView>
+</LinearLayout>

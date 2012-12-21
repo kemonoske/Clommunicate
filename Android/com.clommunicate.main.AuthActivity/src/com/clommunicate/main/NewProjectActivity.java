@@ -37,9 +37,7 @@ public class NewProjectActivity extends Activity {
 				"test", "test", "test", "test", "test", "test" };
 		member_list = (ListView) findViewById(R.id.new_project_member_list);
 		member_list
-				.setAdapter(new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_1,
-						android.R.id.text1));
+				.setAdapter(new MemberListArrayAdapter(me, R.id.member_list_item_name));
 		
 		LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) member_list
 				.getLayoutParams();
