@@ -16,10 +16,13 @@ public class AddMemberDialog extends Dialog {
 	private EditText email = null;
 	private ImageButton ok = null;
 	private ImageButton cancel = null;
-	private String result = null;
+	private String result = "Cancelled by user.";
+	private NewProjectActivity context = null;
 
-	public AddMemberDialog(final Context context) {
-		super(context, R.style.cust_dialog);
+	public AddMemberDialog(Context cont) {
+		super(cont, R.style.cust_dialog);
+
+		this.context = (NewProjectActivity) cont;
 
 		Typeface type = Typeface.createFromAsset(context.getAssets(),
 				"fonts/zekton.ttf");
@@ -50,18 +53,33 @@ public class AddMemberDialog extends Dialog {
 							final User user = WebApi.getClommunicateUser(email
 									.getText().toString());
 
-							if (user != null)	{
-								((NewProjectActivity) context).getMemberList().post(new Runnable() {
+							if (user == null) {
+
+								result = "User cannot be added to the list, check your internet connection.";
+
+							} else if (((MemberListArrayAdapter) context
+									.getMemberList().getAdapter())
+									.contains(user)) {
+
+								result = "This user is already a member of this project.";
+							} else if (((MemberListArrayAdapter) context
+									.getMemberList().getAdapter())
+									.isOwner(user)) {
+
+								result = "You don't have to add yourself, owner is a member by default.";
+
+							} else {
+								result = "Member successfully added tot the project.";
+								context.getMemberList().post(new Runnable() {
 									public void run() {
-										
-										((MemberListArrayAdapter) ((NewProjectActivity) context)
+
+										((MemberListArrayAdapter) context
 												.getMemberList().getAdapter())
 												.addMember(user);
-										
+
 									}
 								});
 							}
-
 
 						} else {
 
@@ -72,7 +90,7 @@ public class AddMemberDialog extends Dialog {
 
 					}
 				};
-				
+
 				new Thread(r).start();
 			}
 		});

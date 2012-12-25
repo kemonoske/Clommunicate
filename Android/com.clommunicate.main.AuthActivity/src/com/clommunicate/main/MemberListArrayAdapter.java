@@ -65,6 +65,11 @@ public class MemberListArrayAdapter extends ArrayAdapter<User>{
         return members.size();
     }
 
+    public ArrayList<User> getMembers(){
+    	
+    	return this.members;
+    	
+    }
 	public void addMember(User member){
 		
 		members.add(member);
@@ -78,6 +83,25 @@ public class MemberListArrayAdapter extends ArrayAdapter<User>{
 		notifyDataSetChanged();
 		
 	}
+
 	
+	public boolean contains(User member){
+		
+		for(User i : members)
+			if(i.getId() == member.getId())
+				return true;
+		
+		return false;
+		
+	}
+	
+	public boolean isOwner(User member){
+		
+		if(User.user.getId() == member.getId())
+			return true;
+		
+		return false;
+		
+	}
 	
 }

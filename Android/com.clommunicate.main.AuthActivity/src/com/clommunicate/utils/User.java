@@ -9,8 +9,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Picture;
 
-public class User{
+public class User {
 
+	private int id = 0;
 	private String email = null;
 	private String name = null;
 	private Gender gender = Gender.Undefined;
@@ -21,32 +22,38 @@ public class User{
 	private int partIn = 0;
 	public static User user = null;
 
-	User(String email, String name, boolean gender, String locale, String picture)
-			throws IOException {
+	User(String email, String name, boolean gender, String locale,
+			String picture) throws IOException {
 
 		setEmail(email);
 		setName(name);
-		setGender((gender) ? Gender.Male
-				: Gender.Female);
+		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
 		setPicture(picture);
 		setPictureURL(picture);
 
 	}
 
-	User(String email, String name, boolean gender, String locale,
+	User(int id, String email, String name, boolean gender, String locale,
 			String picture, int projects, int partIn) throws IOException {
-
+		setId(id);
 		setEmail(email);
 		setName(name);
-		setGender((gender) ? Gender.Male
-				: Gender.Female);
+		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
 		setPicture(picture);
 		setPictureURL(picture);
 		setProjects(projects);
 		setPartIn(partIn);
 
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getProjects() {

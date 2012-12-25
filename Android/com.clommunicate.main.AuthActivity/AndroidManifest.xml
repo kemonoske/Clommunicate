@@ -49,6 +49,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ProjectListActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROJECT_LIST" />
+
+                <category android:name="android.intent.category.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".PrepareRequestTokenActivity"
             android:launchMode="singleTask" >
             <intent-filter>

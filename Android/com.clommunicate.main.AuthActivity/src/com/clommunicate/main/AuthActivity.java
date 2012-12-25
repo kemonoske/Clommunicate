@@ -1,7 +1,6 @@
 package com.clommunicate.main;
 
 import com.clommunicate.main.R;
-import com.clommunicate.utils.GUIFixes;
 import com.clommunicate.utils.Login;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
@@ -10,10 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
-import android.text.Editable;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class AuthActivity extends Activity {
 
@@ -33,7 +28,8 @@ public class AuthActivity extends Activity {
 	private ImageButton exit_button = null;
 	private ImageButton add_account_button = null;
 	private ListView accounts_list = null;
-	private Activity me = this;
+	//private Activity me = this;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

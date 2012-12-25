@@ -1,19 +1,13 @@
 package com.clommunicate.main;
 
-import java.io.IOException;
 
 import com.clommunicate.main.R;
 import com.clommunicate.oAuth2.AuthUtils;
-import com.clommunicate.oAuth2.GoogleAccountManager;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +32,16 @@ public class RegistrationActivity extends Activity {
 	private WaitDialog wd = null;
 	private Activity me = this;
 	private User usr = null;
+	
+
+	@Override
+	public void onBackPressed() {
+
+		finish();
+		
+	}
+
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -119,8 +123,8 @@ public class RegistrationActivity extends Activity {
 		    @Override
 		    protected User doInBackground(String... params) {
 
-		    	GoogleAccountManager googleAccountManager = new GoogleAccountManager(
-						me);
+		    	/*GoogleAccountManager googleAccountManager = new GoogleAccountManager(
+						me);*/
 				AccountManager am = AccountManager.get(getBaseContext());
 				Account[] accounts = am.getAccountsByType("com.google");
 
@@ -162,7 +166,7 @@ public class RegistrationActivity extends Activity {
 
 				System.err.println(accessToken);
 			    usr = WebApi.getGoogleUser(accessToken,acc.name);
-				
+				WebApi.fillClommunicateUser(usr);
 			    //TODO: Check here for exception in case of failed authentification
 			    
 				return usr;
@@ -184,7 +188,7 @@ public class RegistrationActivity extends Activity {
 		    }
 		};
 		
-		load_data.execute(null);
+		load_data.execute((String)null);
 		
 	}
 

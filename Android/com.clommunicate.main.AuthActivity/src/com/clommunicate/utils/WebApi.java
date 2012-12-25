@@ -20,6 +20,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 public class WebApi {
 
 	public static boolean login(String email) {
@@ -154,10 +156,10 @@ public class WebApi {
 
 			JSONObject jo = new JSONObject(sb.toString());
 			if (jo.getBoolean("state")) {
-				return new User(jo.getString("email"), jo.getString("name"),
-						jo.getBoolean("gender"), jo.getString("locale"),
-						jo.getString("photo"), jo.getInt("projects"),
-						jo.getInt("part_in"));
+				return new User(jo.getInt("id"), jo.getString("email"),
+						jo.getString("name"), jo.getBoolean("gender"),
+						jo.getString("locale"), jo.getString("photo"),
+						jo.getInt("projects"), jo.getInt("part_in"));
 			}
 
 		} catch (IllegalStateException e) {
@@ -175,6 +177,73 @@ public class WebApi {
 		}
 
 		return null;
+
+	}
+
+	public static boolean createProject(Project project) {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("name", project.getName()));
+		parameter_list.add(new BasicNameValuePair("description", project
+				.getDescription()));
+		parameter_list.add(new BasicNameValuePair("owner", String
+				.valueOf(project.getOwner_id())));
+		parameter_list.add(new BasicNameValuePair("end_date", project
+				.getEnd_date()));
+
+		ArrayList<User> users = project.getMember_list();
+		for (int i = 0; i < users.size(); i++)	{
+			parameter_list.add(new BasicNameValuePair("members[" + i + "]",
+					String.valueOf(users.get(i).getId())));
+			System.err.println(i);
+		}
+
+		HttpPost hp = new HttpPost(
+				"http://clommunicate.freehosting.md/NewProject.php");
+		System.err.println(project.getName() + "\n" + project.getDescription()
+				+ "\n" + String.valueOf(project.getOwner_id()) + "\n"
+				+ project.getEnd_date());
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+			if (jo.getBoolean("state"))
+				WebApi.fillClommunicateUser(User.user);
+
+			return jo.getBoolean("state");
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
 
 	}
 
@@ -254,8 +323,9 @@ public class WebApi {
 				picture = null;
 			}
 
-			User aux = new User(email, jo.getString("name"),
-					(jo.getString("gender").compareToIgnoreCase("male") == 0)?true:false, jo.getString("locale"), picture);
+			User aux = new User(email, jo.getString("name"), (jo.getString(
+					"gender").compareToIgnoreCase("male") == 0) ? true : false,
+					jo.getString("locale"), picture);
 			return aux;
 
 		} catch (IllegalStateException e) {

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="100"
+        android:background="#f1eef4"
+        android:orientation="vertical"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="#f1eef4"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_weight="100"
+                android:gravity="center_vertical|center_horizontal" >
+
+                <TextView
+                    android:id="@+id/project_list_activity_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Created Projects"
+                    android:textColor="#6c6b68"
+                    android:textColorHighlight="#6c6b68"
+                    android:textSize="35dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_bar_border"
+                android:fadingEdge="horizontal|vertical"
+                android:fadingEdgeLength="10dp"
+                android:gravity="center_vertical"
+                android:padding="7dp" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/search_bar_border"
+                    android:padding="0dp" >
+
+                    <EditText
+                        android:id="@+id/project_list_search_field"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:maxWidth="265dp"
+                        android:minWidth="265dp"
+                        android:padding="2dp"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+
+                    <ImageButton
+                        android:id="@+id/project_list_search_button"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="0dp"
+                        android:background="@drawable/search_button"
+                        android:padding="0dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@drawable/top_mid_gradient" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/mid_fill"
+            android:orientation="vertical"
+            android:paddingTop="10dp" >
+
+            <ListView
+                android:id="@+id/project_list_project_list"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="100"
+                android:cacheColorHint="@android:color/transparent"
+                android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:drawSelectorOnTop="false" >
+            </ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@drawable/bottom_mid_gradient" >
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
