@@ -1,5 +1,10 @@
 package com.clommunicate.main;
 
+import java.util.ArrayList;
+
+import com.clommunicate.utils.GUIFixes;
+import com.clommunicate.utils.Project;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +13,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -70,7 +77,20 @@ public class ProjectListActivity extends Activity {
 			
 		}
 		
-		
+		project_list.setAdapter(new ProjectListArrayAdapter(this, new ArrayList<Project>(10)));
+		/*GUIFixes.setListViewHeightBasedOnChildren(
+				project_list,
+				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
+		*/
+		project_list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				
+			}
+		});
 		
 	}
 

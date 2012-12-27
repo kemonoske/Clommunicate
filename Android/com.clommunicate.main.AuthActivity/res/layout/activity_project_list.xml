@@ -92,12 +92,11 @@
             <ListView
                 android:id="@+id/project_list_project_list"
                 android:layout_width="fill_parent"
-                android:layout_height="0dp"
+                android:layout_height="fill_parent"
                 android:layout_weight="100"
                 android:cacheColorHint="@android:color/transparent"
-                android:choiceMode="singleChoice"
-                android:divider="@null"
-                android:drawSelectorOnTop="false" >
+                android:choiceMode="singleChoice" >
+
             </ListView>
 
             <LinearLayout

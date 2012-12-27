@@ -2,6 +2,7 @@ package com.clommunicate.main;
 
 import java.util.ArrayList;
 
+import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
 
 import android.content.Context;
@@ -15,23 +16,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MemberListArrayAdapter extends ArrayAdapter<User>{
-	
-	private Context context = null;
-	private static ArrayList<User> members = new ArrayList<User>(0);
-	
-	public MemberListArrayAdapter(Context context, int textViewResourceId) {
-		super(context, R.layout.member_list_item,members);
-		this.context = context; 
-	}
+public class ProjectListArrayAdapter extends ArrayAdapter<Project> {
 
+	private Context context = null;
+	private ArrayList<Project> projects = null;
+
+	public ProjectListArrayAdapter(Context context, ArrayList<Project> arrayList) {
+		super(context, R.layout.project_list_item, arrayList);
+		this.context = context;
+		// members = new ArrayList<User>(0);
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LayoutInflater inf = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		View item = inf.inflate(R.layout.member_list_item, parent, false);
-		TextView name = (TextView)item.findViewById(R.id.member_list_item_name);
+		View item = inf.inflate(R.layout.project_list_item, parent, false);
+		/*TextView name = (TextView)item.findViewById(R.id.member_list_item_name);
 		TextView email = (TextView)item.findViewById(R.id.member_list_item_email);
 
 		Typeface type = Typeface.createFromAsset(context.getAssets(), "fonts/asen.ttf");
@@ -44,6 +45,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User>{
 		ImageButton remove = (ImageButton)item.findViewById(R.id.member_list_item_remove_button);
 		
 		final int pos = position;
+		
 		remove.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -53,53 +55,17 @@ public class MemberListArrayAdapter extends ArrayAdapter<User>{
 				
 			}
 		});
-		
+		*/
+		ImageButton remove = (ImageButton)item.findViewById(R.id.project_list_item_remove_project_button);
+		remove.setFocusable(false);
+		remove.setFocusableInTouchMode(false);
 		
 		return item;
 	}
 
-    @Override
-    public int getCount() {
-        return members.size();
-    }
-
-    public ArrayList<User> getMembers(){
-    	
-    	return this.members;
-    	
-    }
-	public void addMember(User member){
-		
-		members.add(member);
-		notifyDataSetChanged();
-		
-	}
-	
-	public void removeMember(int position){
-		
-		members.remove(position);
-		notifyDataSetChanged();
-		
+	@Override
+	public int getCount() {
+		return 20;
 	}
 
-	
-	public boolean contains(User member){
-		
-		for(User i : members)
-			if(i.getId() == member.getId())
-				return true;
-		
-		return false;
-		
-	}
-	
-	public boolean isOwner(User member){
-		
-		if(User.user.getId() == member.getId())
-			return true;
-		
-		return false;
-		
-	}
-	
 }
