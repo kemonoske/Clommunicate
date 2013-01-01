@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/tab_bg"
+    android:padding="5dp" >
+
+    <ImageButton
+        android:id="@+id/tab_item_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/tab_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Project Members"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#6c6b68" />
+
+</LinearLayout>

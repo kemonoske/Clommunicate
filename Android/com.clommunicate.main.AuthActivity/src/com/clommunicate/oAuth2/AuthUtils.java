@@ -17,10 +17,12 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -35,8 +37,9 @@ public class AuthUtils {
 	public static final String PREF_NAME = "Clommunicate";
 	public static final String PREF_TOKEN = "accessToken";
 	public static final String SCOPE = "oauth2:https://www.googleapis.com/auth/userinfo.profile";
-
-	public static void refreshAuthToken(final Activity activity, Account account) {
+	private static int state = 0;
+	
+	public static int refreshAuthToken(final Activity activity, Account account) throws NetworkErrorException{
 		final SharedPreferences settings = activity.getSharedPreferences(
 				PREF_NAME, 0);
 		String accessToken = settings.getString(PREF_TOKEN, "");
@@ -57,22 +60,28 @@ public class AuthUtils {
 						final SharedPreferences.Editor editor = settings.edit();
 						editor.putString(PREF_TOKEN, authToken);
 						editor.commit();
-						System.err.println("Auth token commited:" + authToken);
+						state = 1;
+						//System.err.println("Auth token commited:" + authToken);
 					} else if (authIntent != null) {
-						System.err.println("Allow shit");
-						activity.startActivityForResult(authIntent,0);
+						//System.err.println("Allow shit");
+						//authIntent.
+				    	authIntent.setFlags(authIntent.getFlags() & ~Intent.FLAG_ACTIVITY_NEW_TASK);
+						activity.startActivityForResult(authIntent, 0);
+						state = 2;
 					} else {
-						Log.e(TAG,
-								"AccountManager was unable to obtain an authToken.");
+						state = 0;
+						//System.err.println("AccountManager was unable to obtain an authToken.");
 					}
 				} catch (Exception e) {
-					Log.e(TAG, "Auth Error", e);
-				}
+					state = -1;
+				} 
 				
 				alive = false;
+				synchronized (this) {
+					this.notify();
+				}
 			}
 			
-
 
 			@Override
 			public boolean equals(Object o) {
@@ -80,18 +89,22 @@ public class AuthUtils {
 			}
 			
 		};
-		
 		System.err.println("INVALIDATING TOKEN:" + accessToken);
 		AccountManager.get(activity).invalidateAuthToken("com.google",
 				accessToken);
 		System.err.println("GETTING TOKEN:");
 		AccountManager.get(activity).getAuthToken(account, SCOPE, true, cb,
 				null);
-		while(cb.equals(null))
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		synchronized (cb) {
+			if(cb.equals(null))
+				try {
+					cb.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+		}
+		return state;
 	}
 }

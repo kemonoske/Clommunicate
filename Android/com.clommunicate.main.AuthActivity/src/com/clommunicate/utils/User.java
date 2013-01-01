@@ -30,7 +30,7 @@ public class User {
 		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
 		setPicture(picture);
-		setPictureURL(picture);
+		setPictureURL((picture == null)?"null":picture);
 
 	}
 
@@ -42,7 +42,7 @@ public class User {
 		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
 		setPicture(picture);
-		setPictureURL(picture);
+		setPictureURL((picture == null)?"null":picture);
 		setProjects(projects);
 		setPartIn(partIn);
 
@@ -117,11 +117,11 @@ public class User {
 	}
 
 	public void setPicture(String picture) throws IOException {
-		if (picture != null) {
+		if (picture != null && picture.compareToIgnoreCase("null") != 0) {
 			URL u = new URL(picture);
 			this.picture = BitmapFactory.decodeStream(u.openConnection()
 					.getInputStream());
-		}
+		} 
 	}
 
 }

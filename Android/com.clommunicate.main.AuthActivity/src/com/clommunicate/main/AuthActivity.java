@@ -5,8 +5,10 @@ import com.clommunicate.utils.Login;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -21,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AuthActivity extends Activity {
 
@@ -28,8 +31,8 @@ public class AuthActivity extends Activity {
 	private ImageButton exit_button = null;
 	private ImageButton add_account_button = null;
 	private ListView accounts_list = null;
-	//private Activity me = this;
-	
+	private Activity me = this;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,45 +115,60 @@ public class AuthActivity extends Activity {
 
 				final String s = (String) ((TextView) view
 						.findViewById(R.id.auth_acount_item2)).getText();
-				final View v = view;
-				Runnable r = new Runnable() {
 
-					public void run() {
+				final WaitDialog wd = new WaitDialog(me);
+				AsyncTask<String, Void, Byte> auth = new AsyncTask<String, Void, Byte>() {
 
-						if (WebApi.login(s)) {
+					@Override
+					protected void onPreExecute() {
+						wd.setTitle(String.format("%-100s","User Authentification..."));
+						wd.show();
+					}
+
+					@Override
+					protected Byte doInBackground(String... params) {
+
+						byte aux = -1;
+
+						try {
+							aux = (byte) ((WebApi.login(params[0])) ? 1 : 0);
+							if (aux == 1)
+								User.user = WebApi.getClommunicateUser(s);
+
+						} catch (NetworkErrorException e) {
+							aux = -1;
+						}
+
+						return aux;
+					}
+
+					@Override
+					protected void onPostExecute(Byte result) {
+
+						wd.dismiss();
+						if (result == 1) {
 
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
-							User.user = WebApi.getClommunicateUser(s);
 							startActivity(i);
-						} else {
 
-							/*
-							 * Daca emailul nu este in baza de date atunci facem
-							 * redirect la activitatea de inregistrare
-							 */
+						} else if (result == 0) {
+
 							Intent i = new Intent(getApplicationContext(),
 									RegistrationActivity.class);
 							i.putExtra("email", s);
 							startActivity(i);
 
-						}
+						} else
+							Toast.makeText(me.getApplicationContext(),
+									"No internet connection.",
+									Toast.LENGTH_SHORT).show();
+
 					}
+
 				};
-
-				WaitDialog wd = new WaitDialog(v.getRootView().getContext());
-				wd.setTitle(String.format("%100s", "User Authentification..."));
-				wd.show();
-				Thread t = new Thread(r);
-				t.start();
-				while (t.isAlive())
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				wd.dismiss();
-
+				
+				auth.execute(s);
 			}
 
 		});

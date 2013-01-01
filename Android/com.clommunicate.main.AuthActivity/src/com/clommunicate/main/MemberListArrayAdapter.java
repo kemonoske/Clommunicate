@@ -18,10 +18,10 @@ import android.widget.TextView;
 public class MemberListArrayAdapter extends ArrayAdapter<User>{
 	
 	private Context context = null;
-	private static ArrayList<User> members = new ArrayList<User>(0);
+	private ArrayList<User> members = new ArrayList<User>(0);
 	
 	public MemberListArrayAdapter(Context context, int textViewResourceId) {
-		super(context, R.layout.member_list_item,members);
+		super(context, R.layout.member_list_item);
 		this.context = context; 
 	}
 
@@ -40,7 +40,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User>{
 		email.setText(members.get(position).getEmail());
 		email.setTypeface(type);
 		ImageView photo =  (ImageView)item.findViewById(R.id.member_list_item_photo);
-		photo.setImageBitmap(members.get(position).getPicture());
+		if(members.get(position).getPicture() != null)
+			photo.setImageBitmap(members.get(position).getPicture());
 		ImageButton remove = (ImageButton)item.findViewById(R.id.member_list_item_remove_button);
 		
 		final int pos = position;

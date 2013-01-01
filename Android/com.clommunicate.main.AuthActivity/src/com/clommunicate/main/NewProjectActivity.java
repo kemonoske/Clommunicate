@@ -5,6 +5,7 @@ import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -27,7 +28,7 @@ public class NewProjectActivity extends Activity {
 	private ImageButton create_project = null;
 	private EditText name = null;
 	private EditText description = null;
-	private DatePicker end_date = null;
+	private DatePicker deadline = null;
 
 	@Override
 	public void onBackPressed() {
@@ -48,7 +49,7 @@ public class NewProjectActivity extends Activity {
 		create_project = (ImageButton) findViewById(R.id.new_project_create_project);
 		name = (EditText) findViewById(R.id.new_project_name);
 		description = (EditText) findViewById(R.id.new_project_description);
-		end_date = (DatePicker) findViewById(R.id.new_project_end_date);
+		deadline = (DatePicker) findViewById(R.id.new_project_deadline);
 
 		member_list.setAdapter(new MemberListArrayAdapter(me,
 				R.id.member_list_item_name));
@@ -100,12 +101,12 @@ public class NewProjectActivity extends Activity {
 						name.getText().toString(),
 						description.getText().toString(), 
 						User.user.getId(), 
-						end_date.getYear() + "-"
-							+ (end_date.getMonth() + 1) + "-"
-							+ end_date.getDayOfMonth(),
+						deadline.getYear() + "-"
+							+ (deadline.getMonth() + 1) + "-"
+							+ deadline.getDayOfMonth(),
 							((MemberListArrayAdapter)member_list.getAdapter()).getMembers());
 				
-				AsyncTask<Project, Void, Boolean> create_project_task = new AsyncTask<Project, Void, Boolean>(){
+				AsyncTask<Project, Void, Integer> create_project_task = new AsyncTask<Project, Void, Integer>(){
 					
 					private WaitDialog wd = null;
 
@@ -118,27 +119,33 @@ public class NewProjectActivity extends Activity {
 					}
 					
 					@Override
-					protected Boolean doInBackground(Project... params) {
+					protected Integer doInBackground(Project... params) {
 
-						if(WebApi.createProject(params[0]))	{
-							me.finish();
-							return true;
+						try {
+							if(WebApi.createProject(params[0]))	{
+								me.finish();
+								return 1;
+							}
+						} catch (NetworkErrorException e) {
+							return -1;
 						}
 						
-						return false;
+						return 0;
 					}
 
 					@Override
-					protected void onPostExecute(Boolean result) {
+					protected void onPostExecute(Integer result) {
 
 						wd.dismiss();
 						String text = null;
-						if(result)	{
+						if(result == 1)	
 							text = "Project created";
-						}	else	
-							text = "Error creating project, check your internet connection.";
+						else if(result == 0)
+							text = "Error creating project.";
+						else
+							text = "No internet connection.";
+							
 						Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-						System.err.println(text);
 						
 					}
 					

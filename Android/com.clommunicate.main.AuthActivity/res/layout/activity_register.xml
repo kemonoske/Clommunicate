@@ -70,8 +70,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/border"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:padding="2dp"
                         android:textSize="25sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -97,8 +101,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/border"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:padding="2dp"
                         android:textSize="25sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -124,8 +132,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/border"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:padding="2dp"
                         android:textSize="25sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -151,8 +163,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/border"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:padding="2dp"
                         android:textSize="25sp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -194,10 +210,11 @@
                             android:layout_width="100dp"
                             android:layout_height="100dp"
                             android:layout_gravity="right"
-               				android:background="@drawable/border_2dp"
+                            android:background="@drawable/border_2dp"
                             android:padding="2dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/photo" />
+                            android:src="@drawable/user_icon" />
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

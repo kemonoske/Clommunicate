@@ -1,71 +1,234 @@
 package com.clommunicate.main;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 
 import com.clommunicate.utils.Project;
-import com.clommunicate.utils.User;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Typeface;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ProjectListArrayAdapter extends ArrayAdapter<Project> {
+public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Filterable{
 
 	private Context context = null;
-	private ArrayList<Project> projects = null;
+	private boolean partIn = false;
+	private ArrayList<Project> defprojects = new ArrayList<Project>(0);
+	private ArrayList<Project> projects = new ArrayList<Project>(0);
+	private Typeface typef = null;
+	private ProjectListArrayAdapter me = this;
 
-	public ProjectListArrayAdapter(Context context, ArrayList<Project> arrayList) {
-		super(context, R.layout.project_list_item, arrayList);
+	public ProjectListArrayAdapter(Context context, ArrayList<Project> projects, boolean type) {
+		super(context, R.layout.project_list_item, R.id.project_list_item_project_name, projects);
 		this.context = context;
-		// members = new ArrayList<User>(0);
+		this.partIn = type;
+		typef = Typeface.createFromAsset(context.getAssets(), "fonts/zekton.ttf");
+		this.defprojects = projects;
+		this.projects = projects;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		LayoutInflater inf = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		View item = inf.inflate(R.layout.project_list_item, parent, false);
-		/*TextView name = (TextView)item.findViewById(R.id.member_list_item_name);
-		TextView email = (TextView)item.findViewById(R.id.member_list_item_email);
+		TextView name = (TextView)item.findViewById(R.id.project_list_item_project_name);
+		TextView start_date = (TextView)item.findViewById(R.id.project_list_item_start_date);
+		TextView start_date_label = (TextView)item.findViewById(R.id.project_list_item_start_date_label);
+		TextView deadline = (TextView)item.findViewById(R.id.project_list_item_deadline);
+		TextView deadline_label = (TextView)item.findViewById(R.id.project_list_item_deadline_label);
+		TextView end_date = (TextView)item.findViewById(R.id.project_list_item_end_date);
+		TextView end_date_label = (TextView)item.findViewById(R.id.project_list_item_end_date_label);
+		TextView day_count = (TextView)item.findViewById(R.id.project_list_item_day_count);
+		ImageButton quit = (ImageButton)item.findViewById(R.id.project_list_item_quit_project_button);
 
-		Typeface type = Typeface.createFromAsset(context.getAssets(), "fonts/asen.ttf");
-		name.setText(members.get(position).getName());
-		name.setTypeface(type);
-		email.setText(members.get(position).getEmail());
-		email.setTypeface(type);
-		ImageView photo =  (ImageView)item.findViewById(R.id.member_list_item_photo);
-		photo.setImageBitmap(members.get(position).getPicture());
-		ImageButton remove = (ImageButton)item.findViewById(R.id.member_list_item_remove_button);
+		name.setTypeface(typef);
+		start_date.setTypeface(typef);
+		start_date_label.setTypeface(typef);
+		deadline.setTypeface(typef);
+		deadline_label.setTypeface(typef);
+		end_date.setTypeface(typef);
+		end_date_label.setTypeface(typef);
+		day_count.setTypeface(typef);
 		
-		final int pos = position;
-		
-		remove.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
+		name.setText(projects.get(position).getName());
+		start_date.setText(projects.get(position).getStart_date());
+		deadline.setText(projects.get(position).getDeadline());
+		if(projects.get(position).getEnd_date().compareToIgnoreCase("null") == 0)
+			end_date.setText("N/A");
+		else
+			end_date.setText(projects.get(position).getEnd_date());
+		//day_count.setText(projects.get(position).getName());
 
-				removeMember(pos);
-				
-			}
-		});
-		*/
+		String[] rsd = projects.get(position).getStart_date().split("-");
+		
+		Time tsd = new Time();
+		tsd.set(Integer.valueOf(rsd[2]), Integer.valueOf(rsd[1])-1,Integer.valueOf(rsd[0]));
+		//System.err.println(tsd.toString());
+		Time ted = new Time();
+		ted.setToNow();
+		//System.err.println(ted.toString());
+
+		long difference = ted.toMillis(true) - tsd.toMillis(true);
+
+		long days = TimeUnit.MILLISECONDS.toDays(difference);
+		
+		day_count.setText(String.valueOf(days));
+
+		quit.setFocusable(false);
+		quit.setFocusableInTouchMode(false);
 		ImageButton remove = (ImageButton)item.findViewById(R.id.project_list_item_remove_project_button);
 		remove.setFocusable(false);
 		remove.setFocusableInTouchMode(false);
+		
+		if(!partIn)	{
+			
+			quit.setVisibility(View.GONE);
+			
+			remove.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+
+					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(),partIn);
+					ynd.setTitle(String.format("%-100s", "Confirm project romove..."));
+					ynd.setMessage("Do you really want to remove this project?");
+					
+					ynd.setOnDismissListener(new OnDismissListener() {
+						
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+
+							if(ynd.getStatus())	
+								removeProject(position);
+							
+							Toast.makeText(context.getApplicationContext(), ynd.getMsg(), Toast.LENGTH_SHORT).show();
+							
+						}
+					});
+					
+					ynd.show();
+					
+					
+				}
+			});
+			
+		}	else	{
+			
+			remove.setVisibility(View.GONE);
+
+			
+			quit.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+
+					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(),partIn);
+					ynd.setTitle(String.format("%-100s", "Confirm project quit..."));
+					ynd.setMessage("Do you really want to quit from this project?");
+					
+					ynd.setOnDismissListener(new OnDismissListener() {
+						
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+
+							if(ynd.getStatus())	
+								removeProject(position);
+							
+							Toast.makeText(context.getApplicationContext(), ynd.getMsg(), Toast.LENGTH_SHORT).show();
+							
+						}
+					});
+					
+					ynd.show();
+					
+				}
+			});
+		}
 		
 		return item;
 	}
 
 	@Override
 	public int getCount() {
-		return 20;
+		return projects.size();
+	}
+	
+	@Override
+	public Filter getFilter(){
+		
+		Filter filter = new Filter() {
+			
+			@Override
+			protected void publishResults(CharSequence constraint, FilterResults results) {
+
+				  if (results.count == 0)	{
+					  	projects.clear();
+				        notifyDataSetInvalidated();
+				  } else {
+				        projects = (ArrayList<Project>) results.values;
+				        notifyDataSetChanged();
+				    }
+				
+			}
+			
+			@Override
+			protected FilterResults performFiltering(CharSequence constraint) {
+				
+			    FilterResults results = new FilterResults();
+			    // We implement here the filter logic
+			    if (constraint == null || constraint.length() == 0) {
+			        // No filter implemented we return all the list
+			        results.values = defprojects;
+			        results.count = defprojects.size();
+			    }
+			    else {
+			        // We perform filtering operation
+			        ArrayList<Project> nProjectList = new ArrayList<Project>();
+			         
+			        for (Project p : defprojects) {
+			            if (p.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
+			            	nProjectList.add(p);
+			        }
+			         
+			        results.values = nProjectList;
+			        results.count = nProjectList.size();
+			 
+			    }
+			    return results;
+				
+			}
+		};
+		
+		return filter;
 	}
 
+	
+	public void removeProject(int position){
+		System.err.println("shit removed");
+		projects.remove(position);
+		notifyDataSetChanged();
+		
+	}
+	
+	public Project getProject(int position){
+		
+		return projects.get(position);
+		
+	}
+	
 }

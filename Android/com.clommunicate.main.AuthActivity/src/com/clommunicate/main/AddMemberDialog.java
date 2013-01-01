@@ -3,6 +3,7 @@ package com.clommunicate.main;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
+import android.accounts.NetworkErrorException;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -21,7 +22,7 @@ public class AddMemberDialog extends Dialog {
 
 	public AddMemberDialog(Context cont) {
 		super(cont, R.style.cust_dialog);
-
+		setCancelable(false);
 		this.context = (NewProjectActivity) cont;
 
 		Typeface type = Typeface.createFromAsset(context.getAssets(),
@@ -48,43 +49,47 @@ public class AddMemberDialog extends Dialog {
 					@Override
 					public void run() {
 
-						if (WebApi.login(email.getText().toString())) {
+						try {
+							if (WebApi.login(email.getText().toString())) {
 
-							final User user = WebApi.getClommunicateUser(email
-									.getText().toString());
+								final User user = WebApi.getClommunicateUser(email
+										.getText().toString());
 
-							if (user == null) {
+								if (user == null) {
 
-								result = "User cannot be added to the list, check your internet connection.";
+									result = "User cannot be added to the list, check your internet connection.";
 
-							} else if (((MemberListArrayAdapter) context
-									.getMemberList().getAdapter())
-									.contains(user)) {
+								} else if (((MemberListArrayAdapter) context
+										.getMemberList().getAdapter())
+										.contains(user)) {
 
-								result = "This user is already a member of this project.";
-							} else if (((MemberListArrayAdapter) context
-									.getMemberList().getAdapter())
-									.isOwner(user)) {
+									result = "This user is already a member of this project.";
+								} else if (((MemberListArrayAdapter) context
+										.getMemberList().getAdapter())
+										.isOwner(user)) {
 
-								result = "You don't have to add yourself, owner is a member by default.";
+									result = "You don't have to add yourself, owner is a member by default.";
+
+								} else {
+									result = "Member successfully added tot the project.";
+									context.getMemberList().post(new Runnable() {
+										public void run() {
+
+											((MemberListArrayAdapter) context
+													.getMemberList().getAdapter())
+													.addMember(user);
+
+										}
+									});
+								}
 
 							} else {
-								result = "Member successfully added tot the project.";
-								context.getMemberList().post(new Runnable() {
-									public void run() {
 
-										((MemberListArrayAdapter) context
-												.getMemberList().getAdapter())
-												.addMember(user);
+								result = "No user with such email in the system.";
 
-									}
-								});
 							}
-
-						} else {
-
-							result = "No user with such email in the system.";
-
+						} catch (NetworkErrorException e) {
+							result = "No internet connection.";
 						}
 						dismiss();
 

@@ -58,17 +58,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PrepareRequestTokenActivity"
-            android:launchMode="singleTask" >
+            android:name=".ProjectActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.PROJECT" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="callback"
-                    android:scheme="x-oauthflow" />
+                <category android:name="android.intent.category.MAIN" />
             </intent-filter>
         </activity>
     </application>

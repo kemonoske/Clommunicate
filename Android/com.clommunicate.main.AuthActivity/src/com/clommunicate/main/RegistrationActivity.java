@@ -1,6 +1,5 @@
 package com.clommunicate.main;
 
-
 import com.clommunicate.main.R;
 import com.clommunicate.oAuth2.AuthUtils;
 import com.clommunicate.utils.User;
@@ -8,6 +7,7 @@ import com.clommunicate.utils.WebApi;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,40 +32,38 @@ public class RegistrationActivity extends Activity {
 	private WaitDialog wd = null;
 	private Activity me = this;
 	private User usr = null;
-	
 
 	@Override
 	public void onBackPressed() {
 
 		finish();
-		
+
 	}
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_register);
-		
 
 		name = (TextView) findViewById(R.id.reg_nume);
 		email = (TextView) findViewById(R.id.reg_email);
 		locale = (TextView) findViewById(R.id.reg_location);
 		gender = (TextView) findViewById(R.id.reg_gender);
 		picture = (ImageView) findViewById(R.id.reg_foto);
-		
+
 		/* Setam fontul etichetei login */
 		Typeface type = Typeface.createFromAsset(getAssets(),
 				"fonts/zekton.ttf");
 		((TextView) findViewById(R.id.regLabel)).setTypeface(type);
 
 		/* Setam fontul la restul etichetelor */
-		type = Typeface.createFromAsset(getAssets(), "fonts/asen.ttf");
 		((TextView) findViewById(R.id.reg_name_label)).setTypeface(type);
 		((TextView) findViewById(R.id.reg_email_label)).setTypeface(type);
 		((TextView) findViewById(R.id.reg_location_label)).setTypeface(type);
 		((TextView) findViewById(R.id.reg_gender_label)).setTypeface(type);
 		((TextView) findViewById(R.id.reg_photo_label)).setTypeface(type);
+
+		// type = Typeface.createFromAsset(getAssets(), "fonts/asen.ttf");
 		((EditText) findViewById(R.id.reg_nume)).setTypeface(type);
 		((EditText) findViewById(R.id.reg_email)).setTypeface(type);
 		((EditText) findViewById(R.id.reg_location)).setTypeface(type);
@@ -76,124 +74,194 @@ public class RegistrationActivity extends Activity {
 		ib.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				WaitDialog wd = new WaitDialog(me);
-				wd.setTitle(String.format("%-100s", "User registration."));
-				wd.show();
-				String text = null;
-				if(WebApi.register(usr)){
-					System.err.println(true);
-					text = "Registration success.";
-					Intent i = new Intent(getApplicationContext(),
-							UserActivity.class);
-					
-					WebApi.fillClommunicateUser(usr);
-					User.user = usr;
-					startActivity(i);
-					finish();
-				}	else {
 
-					System.err.println(false);
-					text = "Registration failed.";
-					onBackPressed();
-				}
-				
-				wd.dismiss();
+				final WaitDialog wd = new WaitDialog(me);
 
-				Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+				AsyncTask<Void, Void, Integer> registerTask = new AsyncTask<Void, Void, Integer>() {
+
+					@Override
+					protected void onPreExecute() {
+
+						wd.setTitle(String.format("%-100s",
+								"User registration."));
+						wd.show();
+
+					}
+
+					@Override
+					protected Integer doInBackground(Void... params) {
+
+						try {
+							if (WebApi.register(usr))
+								return 1;
+						} catch (NetworkErrorException e) {
+
+							return -1;
+
+						}
+
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+
+						wd.dismiss();
+						String text = null;
+
+						if (result == 1) {
+							text = "Registration success.";
+							Intent i = new Intent(getApplicationContext(),
+									UserActivity.class);
+							User.user = usr;
+							startActivity(i);
+							finish();
+						} else if (result == 0) {
+							text = "Registration failed.";
+							onBackPressed();
+						} else {
+							text = "No internet connection.";
+							onBackPressed();
+						}
+						Toast.makeText(getApplicationContext(), text,
+								Toast.LENGTH_SHORT).show();
+					}
+
+				};
+
+				registerTask.execute();
 			}
 
 		});
 
 		loadUserData();
 	}
-	
-	private void loadUserData(){
-		
 
-		AsyncTask<String, Void, User> load_data = new AsyncTask<String, Void, User>() {
-			
-		    @Override
-		    protected void onPreExecute() {
-		        super.onPreExecute();
+	private void loadUserData() {
+
+		AsyncTask<String, Void, Integer> load_data = new AsyncTask<String, Void, Integer>() {
+
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
 				wd = new WaitDialog(me);
-				wd.setTitle(String.format("%-100s","Loading oAuth information..."));
+				wd.setTitle(String.format("%-100s",
+						"Loading oAuth information..."));
 				wd.show();
-		    }
+			}
 
-		    @Override
-		    protected User doInBackground(String... params) {
+			@Override
+			protected Integer doInBackground(String... params) {
 
-		    	/*GoogleAccountManager googleAccountManager = new GoogleAccountManager(
-						me);*/
+				/*
+				 * GoogleAccountManager googleAccountManager = new
+				 * GoogleAccountManager( me);
+				 */
 				AccountManager am = AccountManager.get(getBaseContext());
 				Account[] accounts = am.getAccountsByType("com.google");
 
 				Account acc = null;
-				
-				for(Account i : accounts)	{
-					
-					if(i.name.equalsIgnoreCase(getIntent().getExtras().getString("email")))	{
-						
+
+				for (Account i : accounts) {
+
+					if (i.name.equalsIgnoreCase(getIntent().getExtras()
+							.getString("email"))) {
+
 						acc = i;
 						break;
-						
+
 					}
 				}
-				
-				//TODO: If connection is closed throw somenthing.
-				
-				 
-				//TODO: If acces token is not updated need to do somenthing
 
-				AuthUtils.refreshAuthToken(me, acc);
+				// TODO: If connection is closed throw somenthing.
+
+				// TODO: If acces token is not updated need to do somenthing
+
+				// AuthUtils.refreshAuthToken(me, acc);
 				String accessToken = null;
-				SharedPreferences settings = getSharedPreferences("Clommunicate", 0);
+				SharedPreferences settings = getSharedPreferences(
+						"Clommunicate", 0);
 				Editor edit = settings.edit();
 				edit.putString("accessToken", null);
 				edit.commit();
 				edit = null;
-				System.err.println("before");
-				do{
-					AuthUtils.refreshAuthToken(me, acc);
-					settings = getSharedPreferences("Clommunicate", 0);
-					accessToken = settings.getString("accessToken", null);
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				} while (accessToken == null);
+				// System.err.println("before");
+				
+				int error = 0;
+				try {
+					error = AuthUtils.refreshAuthToken(me, acc);
+						
+				} catch (NetworkErrorException e1) {
+					return -1;
+				}
+				settings = getSharedPreferences("Clommunicate", 0);
+				accessToken = settings.getString("accessToken", null);
+				if (accessToken == null && error != 2) {
+					onBackPressed();
+					return 0;
+				} else if (error == 2)
+					return 2;
+				// System.err.println(accessToken);
+				try {
+					usr = WebApi.getGoogleUser(accessToken, acc.name);
+				} catch (NetworkErrorException e) {
+					return -1;
+				}
 
-				System.err.println(accessToken);
-			    usr = WebApi.getGoogleUser(accessToken,acc.name);
-				WebApi.fillClommunicateUser(usr);
-			    //TODO: Check here for exception in case of failed authentification
-			    
-				return usr;
-		    	
-		    }
+				if (usr != null)
+					return 1;
 
-		    @Override
-		    protected void onPostExecute(User user) {
-				name.setText(user.getName());
-				name.setEnabled(false);
-				email.setText(user.getEmail());
-				email.setEnabled(false);
-				locale.setText(user.getLocale());
-				locale.setEnabled(false);
-				gender.setText(user.getGender().toString());
-				gender.setEnabled(false);
-				picture.setImageBitmap(user.getPicture());
-		        wd.dismiss();
-		    }
+				return 0;
+
+			}
+
+			@Override
+			protected void onPostExecute(Integer result) {
+				wd.dismiss();
+
+				String text;
+				if (result == 1) {
+					text = "oAuth data loaded.";
+					name.setText(usr.getName());
+					name.setEnabled(false);
+					email.setText(usr.getEmail());
+					email.setEnabled(false);
+					locale.setText(usr.getLocale());
+					locale.setEnabled(false);
+					gender.setText(usr.getGender().toString());
+					gender.setEnabled(false);
+					if(usr.getPicture() != null)
+						picture.setImageBitmap(usr.getPicture());
+				} else if (result == 0)
+					text = "Failed to load oAuth data.";
+				else if (result == 2){
+					text = "Waiting for confirmation.";
+				}	else
+					text = "No internet connection.";
+
+				Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
+			}
 		};
-		
-		load_data.execute((String)null);
-		
+
+		load_data.execute((String) null);
+
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		
+		if(requestCode == 0)	{
+			if(resultCode == RESULT_CANCELED)	{
+				onBackPressed();
+				Toast.makeText(me, "Access denied by user..", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(me, "Access granted..", Toast.LENGTH_SHORT).show();
+				loadUserData();
+			}
+		}
+		
+	}
 	
 	
 
-	
 }
