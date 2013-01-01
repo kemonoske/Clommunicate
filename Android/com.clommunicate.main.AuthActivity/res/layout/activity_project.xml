@@ -62,19 +62,31 @@
                     android:textStyle="bold" />
 
                 <ImageButton
+                    android:id="@+id/activity_project_finish_project_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/finish_button"
+                    android:focusable="false"
+                    android:layout_margin="5dp"
+                    android:focusableInTouchMode="false" />
+
+
+                <ImageButton
                     android:id="@+id/activity_project_quit_project_button"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/quit_button"
                     android:focusable="false"
+                    android:layout_margin="5dp"
                     android:focusableInTouchMode="false" />
-
+                
                 <ImageButton
                     android:id="@+id/activity_project_remove_project_button"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/exit_button"
                     android:focusable="false"
+                    android:layout_margin="5dp"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
 
