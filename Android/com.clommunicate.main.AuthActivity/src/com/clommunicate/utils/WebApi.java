@@ -77,6 +77,57 @@ public class WebApi {
 
 	}
 
+	public static boolean finishProject(int id) throws NetworkErrorException {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("id", String.valueOf(id)));
+
+		HttpPost hp = new HttpPost(
+				"http://clommunicate.freehosting.md/FinishProject.php");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		if (he == null)
+			throw new NetworkErrorException();
+
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+			return jo.getBoolean("state");
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}	
+	
 	public static boolean removeProject(int id) throws NetworkErrorException {
 
 		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(

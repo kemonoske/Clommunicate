@@ -39,6 +39,7 @@ public class ProjectActivity extends Activity {
 	TextView description = null;
 	ImageButton quit = null;
 	ImageButton remove = null;
+	ImageButton finish = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +83,9 @@ public class ProjectActivity extends Activity {
 		description.setMovementMethod(new ScrollingMovementMethod());
 		quit = (ImageButton) findViewById(R.id.activity_project_quit_project_button);
 		remove = (ImageButton) findViewById(R.id.activity_project_remove_project_button);
+		finish = (ImageButton) findViewById(R.id.activity_project_finish_project_button);
 
-		if (User.user.getId() == project.getOwner_id())	{
+		if (User.user.getId() == project.getOwner_id()) {
 			quit.setVisibility(ImageButton.GONE);
 
 			remove.setOnClickListener(new OnClickListener() {
@@ -91,7 +93,8 @@ public class ProjectActivity extends Activity {
 				@Override
 				public void onClick(View v) {
 
-					final YesNoDialog ynd = new YesNoDialog(me, project.getId(), false);
+					final YesNoDialog ynd = new YesNoDialog(me,
+							project.getId(), false);
 					ynd.setTitle(String.format("%-100s",
 							"Confirm project romove..."));
 					ynd.setMessage("Do you really want to remove this project?");
@@ -114,37 +117,87 @@ public class ProjectActivity extends Activity {
 
 				}
 			});
-		}	else {
+
+			if (project.getEnd_date().compareToIgnoreCase("null") == 0) {
+
+				finish.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						final YesNoDialog ynd = new YesNoDialog(me, project
+								.getId());
+						ynd.setTitle(String.format("%-100s",
+								"Confirm project completion..."));
+						ynd.setMessage("Do you want to mark this project: completed?");
+
+						ynd.setOnDismissListener(new OnDismissListener() {
+
+							@Override
+							public void onDismiss(DialogInterface dialog) {
+
+								if (ynd.getStatus()) {
+
+									Time t = new Time();
+									t.setToNow();
+									project.setEnd_date(t.year + "-"
+											+ (((t.month + 1) < 10) ? "0" : "")
+											+ (t.month + 1) + "-"
+											+ ((t.monthDay < 10) ? "0" : "")
+											+ t.monthDay);
+									end_date.setText(project.getEnd_date());
+
+									finish.setEnabled(false);
+								}
+
+								Toast.makeText(me.getApplicationContext(),
+										ynd.getMsg(), Toast.LENGTH_SHORT)
+										.show();
+
+							}
+						});
+
+						ynd.show();
+
+					}
+				});
+			}	else	{
+				finish.setEnabled(false);
+				remove.setEnabled(false);			}
+		} else {
 			remove.setVisibility(ImageButton.GONE);
-			
+			finish.setVisibility(ImageButton.GONE);
 
 			quit.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 
-					final YesNoDialog ynd = new YesNoDialog(me, project.getId(),true);
-					ynd.setTitle(String.format("%-100s", "Confirm project quit..."));
+					final YesNoDialog ynd = new YesNoDialog(me,
+							project.getId(), true);
+					ynd.setTitle(String.format("%-100s",
+							"Confirm project quit..."));
 					ynd.setMessage("Do you really want to quit from this project?");
-					
+
 					ynd.setOnDismissListener(new OnDismissListener() {
-						
+
 						@Override
 						public void onDismiss(DialogInterface dialog) {
 
 							if (ynd.getStatus())
 								finish();
-							
-							Toast.makeText(me.getApplicationContext(), ynd.getMsg(), Toast.LENGTH_SHORT).show();
-							
+
+							Toast.makeText(me.getApplicationContext(),
+									ynd.getMsg(), Toast.LENGTH_SHORT).show();
+
 						}
 					});
-					
+
 					ynd.show();
-					
+
 				}
 			});
-			
+
 		}
 		name.setTypeface(typef);
 		start_date.setTypeface(typef);
@@ -164,10 +217,6 @@ public class ProjectActivity extends Activity {
 		name.setText(project.getName());
 		start_date.setText(project.getStart_date());
 		deadline.setText(project.getDeadline());
-		if (project.getEnd_date().compareToIgnoreCase("null") == 0)
-			end_date.setText("N/A");
-		else
-			end_date.setText(project.getEnd_date());
 		// day_count.setText(projects.get(position).getName());
 
 		String[] rsd = project.getStart_date().split("-");
@@ -177,7 +226,15 @@ public class ProjectActivity extends Activity {
 				Integer.valueOf(rsd[0]));
 		// System.err.println(tsd.toString());
 		Time ted = new Time();
-		ted.setToNow();
+		if (project.getEnd_date().compareToIgnoreCase("null") == 0) {
+			end_date.setText("N/A");
+			ted.setToNow();
+		} else {
+			end_date.setText(project.getEnd_date());
+			String[] red = project.getEnd_date().split("-");
+			ted.set(Integer.valueOf(red[2]), Integer.valueOf(red[1]) - 1,
+					Integer.valueOf(red[0]));
+		}
 		// System.err.println(ted.toString());
 
 		long difference = ted.toMillis(true) - tsd.toMillis(true);

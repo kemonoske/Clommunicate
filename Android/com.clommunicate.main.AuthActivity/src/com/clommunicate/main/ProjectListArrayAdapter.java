@@ -55,6 +55,7 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 		TextView end_date_label = (TextView)item.findViewById(R.id.project_list_item_end_date_label);
 		TextView day_count = (TextView)item.findViewById(R.id.project_list_item_day_count);
 		ImageButton quit = (ImageButton)item.findViewById(R.id.project_list_item_quit_project_button);
+		ImageButton remove = (ImageButton)item.findViewById(R.id.project_list_item_remove_project_button);
 
 		name.setTypeface(typef);
 		start_date.setTypeface(typef);
@@ -68,10 +69,6 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 		name.setText(projects.get(position).getName());
 		start_date.setText(projects.get(position).getStart_date());
 		deadline.setText(projects.get(position).getDeadline());
-		if(projects.get(position).getEnd_date().compareToIgnoreCase("null") == 0)
-			end_date.setText("N/A");
-		else
-			end_date.setText(projects.get(position).getEnd_date());
 		//day_count.setText(projects.get(position).getName());
 
 		String[] rsd = projects.get(position).getStart_date().split("-");
@@ -80,7 +77,16 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 		tsd.set(Integer.valueOf(rsd[2]), Integer.valueOf(rsd[1])-1,Integer.valueOf(rsd[0]));
 		//System.err.println(tsd.toString());
 		Time ted = new Time();
-		ted.setToNow();
+		if(projects.get(position).getEnd_date().compareToIgnoreCase("null") == 0)	{
+			end_date.setText("N/A");
+			ted.setToNow();
+		} else	{
+			remove.setEnabled(false);
+			quit.setEnabled(false);
+			end_date.setText(projects.get(position).getEnd_date());
+			String[] red = projects.get(position).getEnd_date().split("-");
+			ted.set(Integer.valueOf(red[2]), Integer.valueOf(red[1])-1,Integer.valueOf(red[0]));
+		}
 		//System.err.println(ted.toString());
 
 		long difference = ted.toMillis(true) - tsd.toMillis(true);
@@ -91,7 +97,6 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 
 		quit.setFocusable(false);
 		quit.setFocusableInTouchMode(false);
-		ImageButton remove = (ImageButton)item.findViewById(R.id.project_list_item_remove_project_button);
 		remove.setFocusable(false);
 		remove.setFocusableInTouchMode(false);
 		

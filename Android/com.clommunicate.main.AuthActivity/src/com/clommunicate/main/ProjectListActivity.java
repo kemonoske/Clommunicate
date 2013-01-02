@@ -179,7 +179,6 @@ public class ProjectListActivity extends Activity {
 					project_list.setAdapter(new ProjectListArrayAdapter(me, (new ArrayList<Project>(0)), partIn));
 					Toast.makeText(getApplicationContext(), "Project list is empty...", Toast.LENGTH_SHORT).show();
 				}else	{
-					project_list.setAdapter(new ProjectListArrayAdapter(me, (new ArrayList<Project>(0)), partIn));
 					Toast.makeText(getApplicationContext(), "No internet connection.", Toast.LENGTH_SHORT).show();
 				}
 			}
