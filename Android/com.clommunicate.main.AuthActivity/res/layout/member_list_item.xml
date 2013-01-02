@@ -67,6 +67,7 @@
 
         <ImageButton
             android:id="@+id/member_list_item_remove_button"
+            android:layout_margin="5dp"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center_vertical"
