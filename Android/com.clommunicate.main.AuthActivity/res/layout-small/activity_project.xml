@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+        android:background="#f1eef4"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f1eef4"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:orientation="horizontal"
-        android:padding="5dp" >
+        android:padding="2dp" >
 
         <LinearLayout
             android:layout_width="65dp"
@@ -32,7 +31,6 @@
                 android:fadingEdgeLength="2dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:shadowColor="#000000"
-                android:shadowRadius="4"
                 android:text="9999"
                 android:textColor="#f1eef4"
                 android:textSize="20sp"
@@ -52,7 +50,7 @@
                 android:paddingLeft="10dp"
                 android:text="Project Name"
                 android:textColor="#6c6b68"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -88,167 +86,173 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false" />
             </LinearLayout>
+		</LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/activity_project_project_description_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:text="Description:"
+            android:textColor="#6c6b68"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/top_mid_gradient" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mid_fill"
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/activity_project_project_description_label"
+                android:id="@+id/activity_project_project_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:maxLines="3"
                 android:paddingLeft="10dp"
-                android:text="Description:"
+                android:paddingRight="10dp"
+                android:scrollbars="vertical"
+                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet nulla id lorem congue tempus. Phasellus placerat pulvinar nisi, a bibendum nulla elementum in. Suspendisse venenatis fermentum adipiscing. Aenean rhoncus vestibulum sem ut posuere. Proin vehicula semper diam non consectetur. Phasellus rhoncus feugiat metus, at adipiscing est tristique id. Donec turpis tellus, mollis eu semper ac, interdum vel elit. Nullam eget nibh urna, rutrum feugiat eros. Cras non condimentum sem. Etiam vulputate egestas dolor. Vivamus sed urna leo, convallis euismod arcu. Sed congue egestas sapien ornare ullamcorper."
                 android:textColor="#6c6b68"
-                android:textSize="20sp" />
+                android:textSize="12sp"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@drawable/bottom_mid_gradient" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="2dp"
+            android:background="#6c6b68" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="90" >
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@drawable/top_mid_gradient" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/mid_fill"
-                android:orientation="vertical" >
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="30"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="5dp" >
 
                 <TextView
-                    android:id="@+id/activity_project_project_description"
+                    android:id="@+id/activity_project_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:maxLines="3"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:scrollbars="vertical"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet nulla id lorem congue tempus. Phasellus placerat pulvinar nisi, a bibendum nulla elementum in. Suspendisse venenatis fermentum adipiscing. Aenean rhoncus vestibulum sem ut posuere. Proin vehicula semper diam non consectetur. Phasellus rhoncus feugiat metus, at adipiscing est tristique id. Donec turpis tellus, mollis eu semper ac, interdum vel elit. Nullam eget nibh urna, rutrum feugiat eros. Cras non condimentum sem. Etiam vulputate egestas dolor. Vivamus sed urna leo, convallis euismod arcu. Sed congue egestas sapien ornare ullamcorper."
+                    android:layout_gravity="center_horizontal"
+                    android:text="26.12.2012"
                     android:textColor="#6c6b68"
-                    android:textSize="12sp"
-                    android:visibility="visible" />
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/activity_project_start_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Start Date"
+                    android:textColor="#6c6b68"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="@drawable/bottom_mid_gradient" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginTop="10dp"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
                 android:background="#6c6b68" >
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="90" >
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="30"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="5dp" >
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/activity_project_deadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="30"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp" >
+                    android:text="26.12.2013"
+                    android:textColor="#6c6b68"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/activity_project_start_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="26.12.2012"
-                        android:textColor="#6c6b68"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/activity_project_start_date_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Start Date"
-                        android:textColor="#6c6b68"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="#6c6b68" >
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/activity_project_deadline_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_weight="30"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp" >
-
-                    <TextView
-                        android:id="@+id/activity_project_deadline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="26.12.2013"
-                        android:textColor="#6c6b68"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/activity_project_deadline_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Deadline"
-                        android:textColor="#6c6b68"
-                        android:textSize="12dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="1px"
-                    android:layout_height="match_parent"
-                    android:background="#6c6b68" >
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_weight="30"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingTop="5dp" >
-
-                    <TextView
-                        android:id="@+id/activity_project_end_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="N/A"
-                        android:textColor="#6c6b68"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/activity_project_end_date_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Finished On"
-                        android:textColor="#6c6b68"
-                        android:textSize="12sp" />
-                </LinearLayout>
+                    android:text="Deadline"
+                    android:textColor="#6c6b68"
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_marginBottom="5dp"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
                 android:background="#6c6b68" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="30"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="5dp" >
+
+                <TextView
+                    android:id="@+id/activity_project_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="N/A"
+                    android:textColor="#6c6b68"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/activity_project_end_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Finished On"
+                    android:textColor="#6c6b68"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginBottom="5dp"
+            android:background="#6c6b68" >
+        </LinearLayout>
     </LinearLayout>
 
     <TabHost
@@ -282,7 +286,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="10dp"
                         android:background="@drawable/top_mid_gradient" >
                     </LinearLayout>
 
@@ -299,7 +303,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="10dp"
                         android:background="@drawable/bottom_mid_gradient" >
                     </LinearLayout>
                 </LinearLayout>

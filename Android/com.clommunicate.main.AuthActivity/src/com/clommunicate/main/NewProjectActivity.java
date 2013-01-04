@@ -1,5 +1,7 @@
 package com.clommunicate.main;
 
+import java.util.ArrayList;
+
 import com.clommunicate.utils.GUIFixes;
 import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
@@ -17,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,18 +53,18 @@ public class NewProjectActivity extends Activity {
 		name = (EditText) findViewById(R.id.new_project_name);
 		description = (EditText) findViewById(R.id.new_project_description);
 		deadline = (DatePicker) findViewById(R.id.new_project_deadline);
-
-		member_list.setAdapter(new MemberListArrayAdapter(me,
-				R.id.member_list_item_name));
-
+		member_list.setAdapter(new MemberListArrayAdapter(me));
+		/*ArrayList<User> usr = new ArrayList<User>();
+		
+		for(int i = 0; i < 20; i++)
+			usr.add(User.user);
+		
+		member_list.setAdapter(new MemberListArrayAdapter(me, usr, 0));
+		resizeList();
 		/*
 		 * LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)
 		 * member_list .getLayoutParams();
 		 */
-
-		GUIFixes.setListViewHeightBasedOnChildren(
-				member_list,
-				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
 
 		add_member_button.setOnClickListener(new OnClickListener() {
 
@@ -180,6 +183,13 @@ public class NewProjectActivity extends Activity {
 
 		return member_list;
 
+	}
+	
+	public void resizeList(){
+
+		GUIFixes.setListViewHeightBasedOnChildren(
+				member_list,
+				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
 	}
 
 }

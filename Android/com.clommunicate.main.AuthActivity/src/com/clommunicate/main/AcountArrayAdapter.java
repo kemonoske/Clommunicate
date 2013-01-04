@@ -39,6 +39,7 @@ public class AcountArrayAdapter extends ArrayAdapter<String> {
 		name.setTypeface(type);
 		token.setText(tokens[position]);
 		token.setTypeface(type);
+		
 		return item;
 	}
 

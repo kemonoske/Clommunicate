@@ -1,15 +1,19 @@
 package com.clommunicate.main;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
+import com.clommunicate.utils.WebApi;
 
+import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.format.Time;
@@ -17,8 +21,11 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +47,8 @@ public class ProjectActivity extends Activity {
 	ImageButton quit = null;
 	ImageButton remove = null;
 	ImageButton finish = null;
+	ListView task_list = null;
+	ListView member_list = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,7 @@ public class ProjectActivity extends Activity {
 		TextView tv = (TextView) view.findViewById(R.id.tab_item_title);
 		tv.setText("Project Tasks");
 		tv.setTypeface(typef);
-		th.addTab(th.newTabSpec("1").setIndicator(view).setContent(R.id.tab1));
+		th.addTab(th.newTabSpec("1").setIndicator(view).setContent(R.id.activity_project_task_tab));
 		view = LayoutInflater.from(th.getContext()).inflate(R.layout.tab_item,
 				null);
 		iv = (ImageView) view.findViewById(R.id.tab_item_icon);
@@ -67,7 +76,7 @@ public class ProjectActivity extends Activity {
 		tv = (TextView) view.findViewById(R.id.tab_item_title);
 		tv.setText("Project Members");
 		tv.setTypeface(typef);
-		th.addTab(th.newTabSpec("2").setIndicator(view).setContent(R.id.tab2));
+		th.addTab(th.newTabSpec("2").setIndicator(view).setContent(R.id.activity_project_member_tab));
 		th.setCurrentTab(0);
 
 		name = (TextView) findViewById(R.id.activity_project_project_name);
@@ -84,7 +93,43 @@ public class ProjectActivity extends Activity {
 		quit = (ImageButton) findViewById(R.id.activity_project_quit_project_button);
 		remove = (ImageButton) findViewById(R.id.activity_project_remove_project_button);
 		finish = (ImageButton) findViewById(R.id.activity_project_finish_project_button);
+		member_list = (ListView) findViewById(R.id.activity_project_member_list);
+		task_list = (ListView) findViewById(R.id.activity_project_task_list);
+		
+		member_list.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				if(arg2 == (member_list.getChildCount() - 1)){
+					
+					final AddMemberDialog amd = new AddMemberDialog(me);
+					amd.setOnDismissListener(new OnDismissListener() {
+
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+
+							Toast.makeText(getApplicationContext(),
+									amd.getResult(), Toast.LENGTH_SHORT).show();
+
+						}
+					});
+					
+				}
+				
+			}
+			
+			
+			
+		});
+		
+		
+		if (project.getEnd_date().compareToIgnoreCase("null") != 0) {
+			finish.setEnabled(false);
+			remove.setEnabled(false);
+			quit.setEnabled(false);
+		}
 		if (User.user.getId() == project.getOwner_id()) {
 			quit.setVisibility(ImageButton.GONE);
 
@@ -94,7 +139,7 @@ public class ProjectActivity extends Activity {
 				public void onClick(View v) {
 
 					final YesNoDialog ynd = new YesNoDialog(me,
-							project.getId(), false);
+							project.getId(), User.user.getId(), false);
 					ynd.setTitle(String.format("%-100s",
 							"Confirm project romove..."));
 					ynd.setMessage("Do you really want to remove this project?");
@@ -118,52 +163,45 @@ public class ProjectActivity extends Activity {
 				}
 			});
 
-			if (project.getEnd_date().compareToIgnoreCase("null") == 0) {
+			finish.setOnClickListener(new OnClickListener() {
 
-				finish.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
 
-					@Override
-					public void onClick(View v) {
+					final YesNoDialog ynd = new YesNoDialog(me, project.getId());
+					ynd.setTitle(String.format("%-100s",
+							"Confirm project completion..."));
+					ynd.setMessage("Do you want to mark this project: completed?");
 
-						final YesNoDialog ynd = new YesNoDialog(me, project
-								.getId());
-						ynd.setTitle(String.format("%-100s",
-								"Confirm project completion..."));
-						ynd.setMessage("Do you want to mark this project: completed?");
+					ynd.setOnDismissListener(new OnDismissListener() {
 
-						ynd.setOnDismissListener(new OnDismissListener() {
+						@Override
+						public void onDismiss(DialogInterface dialog) {
 
-							@Override
-							public void onDismiss(DialogInterface dialog) {
+							if (ynd.getStatus()) {
 
-								if (ynd.getStatus()) {
+								Time t = new Time();
+								t.setToNow();
+								project.setEnd_date(t.year + "-"
+										+ (((t.month + 1) < 10) ? "0" : "")
+										+ (t.month + 1) + "-"
+										+ ((t.monthDay < 10) ? "0" : "")
+										+ t.monthDay);
+								end_date.setText(project.getEnd_date());
 
-									Time t = new Time();
-									t.setToNow();
-									project.setEnd_date(t.year + "-"
-											+ (((t.month + 1) < 10) ? "0" : "")
-											+ (t.month + 1) + "-"
-											+ ((t.monthDay < 10) ? "0" : "")
-											+ t.monthDay);
-									end_date.setText(project.getEnd_date());
-
-									finish.setEnabled(false);
-								}
-
-								Toast.makeText(me.getApplicationContext(),
-										ynd.getMsg(), Toast.LENGTH_SHORT)
-										.show();
-
+								finish.setEnabled(false);
 							}
-						});
 
-						ynd.show();
+							Toast.makeText(me.getApplicationContext(),
+									ynd.getMsg(), Toast.LENGTH_SHORT).show();
 
-					}
-				});
-			}	else	{
-				finish.setEnabled(false);
-				remove.setEnabled(false);			}
+						}
+					});
+
+					ynd.show();
+
+				}
+			});
 		} else {
 			remove.setVisibility(ImageButton.GONE);
 			finish.setVisibility(ImageButton.GONE);
@@ -174,7 +212,7 @@ public class ProjectActivity extends Activity {
 				public void onClick(View v) {
 
 					final YesNoDialog ynd = new YesNoDialog(me,
-							project.getId(), true);
+							project.getId(), User.user.getId(), true);
 					ynd.setTitle(String.format("%-100s",
 							"Confirm project quit..."));
 					ynd.setMessage("Do you really want to quit from this project?");
@@ -246,4 +284,76 @@ public class ProjectActivity extends Activity {
 		description.setText(project.getDescription());
 	}
 
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+		/*ArrayList<User> usr = new ArrayList<User>();
+		
+		for(int i = 0; i < 20; i++)
+			usr.add(User.user);/*/
+		
+		//members.setAdapter(new MemberListArrayAdapter(me,usr));
+
+		WaitDialog wd = new WaitDialog(me);
+		wd.setTitle(String.format("%-100s", "Loading project members..."));
+		wd.show();
+		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>(){
+
+			@Override
+			protected Object[] doInBackground(WaitDialog... params) {
+				
+				Object[] aux = new Object[3];
+				WaitDialog wd = params[0];
+				ArrayList<User> members = new ArrayList<User>();
+				
+				try {
+					members = WebApi.getProjectMembers(project.getId());
+					
+					if(members.size() != 0)
+						aux[2] = 1;
+				} catch (NetworkErrorException e) {
+
+					aux[2] = -1;
+					
+				}
+				
+				aux[0] = wd;
+				aux[1] = members;
+				
+				return aux;
+				
+			}
+
+			@Override
+			protected void onPostExecute(Object[] result) {
+				WaitDialog wd = (WaitDialog) result[0];
+				ArrayList<User> members = (ArrayList<User>) result[1];
+				Integer error = (Integer) result[2];
+				wd.dismiss();
+				
+				members.add(null);
+				
+				String text = null;
+				
+				text = (error == 0)?"Error can't load member list.":"No internet connection.";
+
+				if(error == 0 || error == -1)
+					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
+				else
+					member_list.setAdapter(new MemberListArrayAdapter(me,members,project.getOwner_id()));
+				
+			}
+
+			
+			
+		};
+		loadMembers.execute(wd);
+		
+		
+	}
+
+	
+	
+	
 }

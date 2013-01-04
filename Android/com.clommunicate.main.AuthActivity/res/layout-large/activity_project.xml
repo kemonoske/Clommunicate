@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true" >
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -42,29 +46,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/activity_project_project_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:paddingLeft="10dp"
-                android:text="Project Name"
-                android:textColor="#6c6b68"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="5dp" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
                 android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/activity_project_project_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="100"
+                    android:paddingLeft="10dp"
+                    android:text="Project Name"
+                    android:textColor="#6c6b68"
+                    android:textSize="35sp"
+                    android:textStyle="bold" />
 
                 <ImageButton
                     android:id="@+id/activity_project_finish_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/finish_button"
                     android:focusable="false"
@@ -72,8 +77,8 @@
 
                 <ImageButton
                     android:id="@+id/activity_project_quit_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/quit_button"
                     android:focusable="false"
@@ -81,8 +86,8 @@
 
                 <ImageButton
                     android:id="@+id/activity_project_remove_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="5dp"
                     android:background="@drawable/exit_button"
                     android:focusable="false"
@@ -96,7 +101,7 @@
                 android:paddingLeft="10dp"
                 android:text="Description:"
                 android:textColor="#6c6b68"
-                android:textSize="20sp" />
+                android:textSize="25sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -115,13 +120,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:maxLines="3"
+                    android:maxLines="5"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:scrollbars="vertical"
                     android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet nulla id lorem congue tempus. Phasellus placerat pulvinar nisi, a bibendum nulla elementum in. Suspendisse venenatis fermentum adipiscing. Aenean rhoncus vestibulum sem ut posuere. Proin vehicula semper diam non consectetur. Phasellus rhoncus feugiat metus, at adipiscing est tristique id. Donec turpis tellus, mollis eu semper ac, interdum vel elit. Nullam eget nibh urna, rutrum feugiat eros. Cras non condimentum sem. Etiam vulputate egestas dolor. Vivamus sed urna leo, convallis euismod arcu. Sed congue egestas sapien ornare ullamcorper."
                     android:textColor="#6c6b68"
-                    android:textSize="12sp"
+                    android:textSize="20sp"
                     android:visibility="visible" />
             </LinearLayout>
 
@@ -151,7 +156,7 @@
                     android:layout_weight="30"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingTop="5dp" >
+                    android:paddingTop="10dp" >
 
                     <TextView
                         android:id="@+id/activity_project_start_date"
@@ -160,7 +165,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="26.12.2012"
                         android:textColor="#6c6b68"
-                        android:textSize="12sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/activity_project_start_date_label"
@@ -169,7 +174,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="Start Date"
                         android:textColor="#6c6b68"
-                        android:textSize="12sp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -185,7 +190,7 @@
                     android:layout_weight="30"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingTop="5dp" >
+                    android:paddingTop="10dp" >
 
                     <TextView
                         android:id="@+id/activity_project_deadline"
@@ -194,7 +199,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="26.12.2013"
                         android:textColor="#6c6b68"
-                        android:textSize="12sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/activity_project_deadline_label"
@@ -203,7 +208,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="Deadline"
                         android:textColor="#6c6b68"
-                        android:textSize="12dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -219,7 +224,7 @@
                     android:layout_weight="30"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
-                    android:paddingTop="5dp" >
+                    android:paddingTop="10dp" >
 
                     <TextView
                         android:id="@+id/activity_project_end_date"
@@ -228,7 +233,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="N/A"
                         android:textColor="#6c6b68"
-                        android:textSize="12sp" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/activity_project_end_date_label"
@@ -237,18 +242,17 @@
                         android:layout_gravity="center_horizontal"
                         android:text="Finished On"
                         android:textColor="#6c6b68"
-                        android:textSize="12sp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:background="#6c6b68" >
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <TabHost
@@ -341,3 +345,4 @@
     </TabHost>
 
 </LinearLayout>
+</ScrollView>

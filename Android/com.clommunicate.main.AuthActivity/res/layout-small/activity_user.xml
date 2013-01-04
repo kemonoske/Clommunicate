@@ -19,8 +19,8 @@
 
             <ImageView
                 android:id="@+id/user_avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
@@ -44,7 +44,8 @@
                     android:paddingLeft="30dp"
                     android:text="User Name"
                     android:textColor="#6c6b68"
-                    android:textSize="25sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -111,16 +112,18 @@
 
         <Button
             android:id="@+id/user_new_project"
-            android:layout_width="240dp"
-            android:layout_height="55dp"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:background="@drawable/add_btn_long"
+            android:paddingLeft="20dp"
             android:scaleType="fitStart"
             android:src="@drawable/add_img_btn_norm"
             android:text="New Project"
             android:textColor="#6c6b68"
-            android:textSize="20dp" />
+            android:textSize="15sp" />
+
     </LinearLayout>
 
     <LinearLayout

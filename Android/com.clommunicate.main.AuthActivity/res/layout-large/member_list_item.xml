@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/member_list_item_photo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_margin="10dp"
             android:background="@drawable/border_2dp"
             android:padding="2dp"
@@ -67,10 +67,10 @@
 
         <ImageButton
             android:id="@+id/member_list_item_remove_button"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/exit_button"
             android:focusable="false"
             android:focusableInTouchMode="false"

@@ -15,11 +15,12 @@ public class YesNoDialog extends Dialog {
 	private TextView message = null;
 	private ImageButton ok = null;
 	private ImageButton cancel = null;
-	private int id = 0;
+	private int pid = 0;
+	private int uid = 0;
 	private boolean status = false;
 	private String msg = null;
 
-	protected YesNoDialog(Context context, int pid, final boolean partIn) {
+	protected YesNoDialog(Context context, int p_id, int u_id, final boolean partIn) {
 
 		super(context, R.style.cust_dialog);
 		setContentView(R.layout.yes_no_dialog);
@@ -29,7 +30,8 @@ public class YesNoDialog extends Dialog {
 		ok = (ImageButton) findViewById(R.id.yes_no_dialog_yes_button);
 		cancel = (ImageButton) findViewById(R.id.yes_no_dialog_cancel_button);
 
-		this.id = pid;
+		this.pid = p_id;
+		this.uid = u_id;
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 
@@ -52,10 +54,9 @@ public class YesNoDialog extends Dialog {
 					public void run() {
 						try {
 							if (partIn)
-								status = WebApi.removeMember(id,
-										User.user.getId());
+								status = WebApi.removeMember(pid,uid);
 							else
-								status = WebApi.removeProject(id);
+								status = WebApi.removeProject(pid);
 							msg = (status) ? ((partIn) ? "You are no longer a member of the project."
 									: "Project removed.")
 									: "Operation failed, possible server problem.";
@@ -75,7 +76,7 @@ public class YesNoDialog extends Dialog {
 
 	}
 
-	protected YesNoDialog(Context context, int pid) {
+	protected YesNoDialog(Context context, int p_id) {
 
 		super(context, R.style.cust_dialog);
 		setContentView(R.layout.yes_no_dialog);
@@ -85,7 +86,7 @@ public class YesNoDialog extends Dialog {
 		ok = (ImageButton) findViewById(R.id.yes_no_dialog_yes_button);
 		cancel = (ImageButton) findViewById(R.id.yes_no_dialog_cancel_button);
 
-		this.id = pid;
+		this.pid = p_id;
 
 		cancel.setOnClickListener(new View.OnClickListener() {
 
@@ -108,7 +109,7 @@ public class YesNoDialog extends Dialog {
 					public void run() {
 						try {
 							
-							status = WebApi.finishProject(id);
+							status = WebApi.finishProject(pid);
 							msg = (status) ? "This project is now completed.": "Operation failed, possible server problem.";
 						} catch (NetworkErrorException e) {
 

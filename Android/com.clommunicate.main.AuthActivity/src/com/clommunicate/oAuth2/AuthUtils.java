@@ -26,11 +26,6 @@ import android.net.NetworkInfo.State;
 import android.os.Bundle;
 import android.util.Log;
 
-/**
- * Collection of OAuth 2 utilities to achieve "one-click" approval on Android.
- * 
- * @author Chirag Shah <chirags@google.com>
- */
 public class AuthUtils {
 	private static final String TAG = AuthUtils.class.getName();
 

@@ -76,7 +76,7 @@ public class UserActivity extends Activity {
 				case 4: {
 
 					Intent i = new Intent(me, ProjectListActivity.class);
-					i.putExtra("activityTitle", "Memeber Of Projects");
+					i.putExtra("activityTitle", "Projects");
 					i.putExtra("partIn", true);
 					startActivity(i);
 

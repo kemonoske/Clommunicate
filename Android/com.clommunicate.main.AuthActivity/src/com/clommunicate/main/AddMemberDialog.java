@@ -18,12 +18,12 @@ public class AddMemberDialog extends Dialog {
 	private ImageButton ok = null;
 	private ImageButton cancel = null;
 	private String result = "Cancelled by user.";
-	private NewProjectActivity context = null;
+	private Context context = null;
 
 	public AddMemberDialog(Context cont) {
 		super(cont, R.style.cust_dialog);
 		setCancelable(false);
-		this.context = (NewProjectActivity) cont;
+		this.context = cont;
 
 		Typeface type = Typeface.createFromAsset(context.getAssets(),
 				"fonts/zekton.ttf");
@@ -52,35 +52,45 @@ public class AddMemberDialog extends Dialog {
 						try {
 							if (WebApi.login(email.getText().toString())) {
 
-								final User user = WebApi.getClommunicateUser(email
-										.getText().toString());
+								final User user = WebApi
+										.getClommunicateUser(email.getText()
+												.toString());
 
 								if (user == null) {
 
 									result = "User cannot be added to the list, check your internet connection.";
 
-								} else if (((MemberListArrayAdapter) context
+								} else if (((MemberListArrayAdapter) ((NewProjectActivity)context)
 										.getMemberList().getAdapter())
 										.contains(user)) {
 
 									result = "This user is already a member of this project.";
-								} else if (((MemberListArrayAdapter) context
+								} else if (((MemberListArrayAdapter) ((NewProjectActivity)context)
 										.getMemberList().getAdapter())
 										.isOwner(user)) {
 
 									result = "You don't have to add yourself, owner is a member by default.";
 
 								} else {
-									result = "Member successfully added tot the project.";
-									context.getMemberList().post(new Runnable() {
-										public void run() {
 
-											((MemberListArrayAdapter) context
-													.getMemberList().getAdapter())
-													.addMember(user);
+									if (context instanceof ProjectActivity) {
 
-										}
-									});
+										
+										
+									} else {
+										result = "Member successfully added tot the project.";
+										((NewProjectActivity)context).getMemberList().post(
+												new Runnable() {
+													public void run() {
+
+														((MemberListArrayAdapter) ((NewProjectActivity)context)
+																.getMemberList()
+																.getAdapter())
+																.addMember(user);
+
+													}
+												});
+									}
 								}
 
 							} else {

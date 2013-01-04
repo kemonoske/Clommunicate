@@ -8,8 +8,8 @@
 
     <ImageButton
         android:id="@+id/tab_item_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="center_vertical" />
 
     <TextView
@@ -20,6 +20,6 @@
         android:text="Project Members"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#6c6b68"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import com.clommunicate.utils.Project;
+import com.clommunicate.utils.User;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -109,7 +110,7 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 				@Override
 				public void onClick(View v) {
 
-					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(),partIn);
+					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(), User.user.getId(),partIn);
 					ynd.setTitle(String.format("%-100s", "Confirm project romove..."));
 					ynd.setMessage("Do you really want to remove this project?");
 					
@@ -142,7 +143,7 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 				@Override
 				public void onClick(View v) {
 
-					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(),partIn);
+					final YesNoDialog ynd = new YesNoDialog(context, projects.get(position).getId(), User.user.getId(),partIn);
 					ynd.setTitle(String.format("%-100s", "Confirm project quit..."));
 					ynd.setMessage("Do you really want to quit from this project?");
 					
