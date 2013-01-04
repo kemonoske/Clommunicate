@@ -68,7 +68,8 @@ public class ProjectActivity extends Activity {
 		TextView tv = (TextView) view.findViewById(R.id.tab_item_title);
 		tv.setText("Project Tasks");
 		tv.setTypeface(typef);
-		th.addTab(th.newTabSpec("1").setIndicator(view).setContent(R.id.activity_project_task_tab));
+		th.addTab(th.newTabSpec("1").setIndicator(view)
+				.setContent(R.id.activity_project_task_tab));
 		view = LayoutInflater.from(th.getContext()).inflate(R.layout.tab_item,
 				null);
 		iv = (ImageView) view.findViewById(R.id.tab_item_icon);
@@ -76,7 +77,8 @@ public class ProjectActivity extends Activity {
 		tv = (TextView) view.findViewById(R.id.tab_item_title);
 		tv.setText("Project Members");
 		tv.setTypeface(typef);
-		th.addTab(th.newTabSpec("2").setIndicator(view).setContent(R.id.activity_project_member_tab));
+		th.addTab(th.newTabSpec("2").setIndicator(view)
+				.setContent(R.id.activity_project_member_tab));
 		th.setCurrentTab(0);
 
 		name = (TextView) findViewById(R.id.activity_project_project_name);
@@ -95,36 +97,36 @@ public class ProjectActivity extends Activity {
 		finish = (ImageButton) findViewById(R.id.activity_project_finish_project_button);
 		member_list = (ListView) findViewById(R.id.activity_project_member_list);
 		task_list = (ListView) findViewById(R.id.activity_project_task_list);
-		
+
 		member_list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 
-				if(arg2 == (member_list.getChildCount() - 1)){
-					
-					final AddMemberDialog amd = new AddMemberDialog(me);
+				if (arg2 == (member_list.getChildCount() - 1)
+						&& arg1.isEnabled()) {
+					AddMemberDialog amd = new AddMemberDialog(me, member_list,
+							(MemberListArrayAdapter) member_list.getAdapter(),
+							AddMemberDialog.REMOTE);
 					amd.setOnDismissListener(new OnDismissListener() {
 
 						@Override
 						public void onDismiss(DialogInterface dialog) {
 
 							Toast.makeText(getApplicationContext(),
-									amd.getResult(), Toast.LENGTH_SHORT).show();
+									((AddMemberDialog) dialog).getResult(),
+									Toast.LENGTH_SHORT).show();
 
 						}
 					});
-					
+
 				}
-				
+
 			}
-			
-			
-			
+
 		});
-		
-		
+
 		if (project.getEnd_date().compareToIgnoreCase("null") != 0) {
 			finish.setEnabled(false);
 			remove.setEnabled(false);
@@ -288,41 +290,34 @@ public class ProjectActivity extends Activity {
 	protected void onResume() {
 
 		super.onResume();
-		/*ArrayList<User> usr = new ArrayList<User>();
-		
-		for(int i = 0; i < 20; i++)
-			usr.add(User.user);/*/
-		
-		//members.setAdapter(new MemberListArrayAdapter(me,usr));
-
 		WaitDialog wd = new WaitDialog(me);
 		wd.setTitle(String.format("%-100s", "Loading project members..."));
 		wd.show();
-		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>(){
+		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
 
 			@Override
 			protected Object[] doInBackground(WaitDialog... params) {
-				
+
 				Object[] aux = new Object[3];
 				WaitDialog wd = params[0];
 				ArrayList<User> members = new ArrayList<User>();
-				
+
 				try {
 					members = WebApi.getProjectMembers(project.getId());
-					
-					if(members.size() != 0)
+
+					if (members.size() != 0)
 						aux[2] = 1;
 				} catch (NetworkErrorException e) {
 
 					aux[2] = -1;
-					
+
 				}
-				
+
 				aux[0] = wd;
 				aux[1] = members;
-				
+
 				return aux;
-				
+
 			}
 
 			@Override
@@ -331,29 +326,29 @@ public class ProjectActivity extends Activity {
 				ArrayList<User> members = (ArrayList<User>) result[1];
 				Integer error = (Integer) result[2];
 				wd.dismiss();
-				
-				members.add(null);
-				
-				String text = null;
-				
-				text = (error == 0)?"Error can't load member list.":"No internet connection.";
 
-				if(error == 0 || error == -1)
+				String text = null;
+
+				text = (error == 0) ? "Error can't load member list."
+						: "No internet connection.";
+
+				if (error == 0 || error == -1)
 					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
 				else
-					member_list.setAdapter(new MemberListArrayAdapter(me,members,project.getOwner_id()));
-				
+					member_list.setAdapter(new MemberListArrayAdapter(me,
+							members, project.getOwner_id()));
+
 			}
 
-			
-			
 		};
 		loadMembers.execute(wd);
-		
-		
+
 	}
 
-	
-	
-	
+	public ListView getMemberList() {
+
+		return member_list;
+
+	}
+
 }

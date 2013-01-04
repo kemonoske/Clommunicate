@@ -632,6 +632,57 @@ public class WebApi {
 
 	}
 
+	public static boolean addMember(int pid, int uid)
+			throws NetworkErrorException {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("pid", String.valueOf(pid)));
+		parameter_list.add(new BasicNameValuePair("uid", String.valueOf(uid)));
+
+		HttpPost hp = new HttpPost(
+				"http://clommunicate.freehosting.md/AddProjectMember.php");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+			return jo.getBoolean("state");
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
 	public static boolean removeMember(int pid, int uid)
 			throws NetworkErrorException {
 

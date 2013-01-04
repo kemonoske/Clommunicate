@@ -28,6 +28,7 @@ public class NewProjectActivity extends Activity {
 	private Activity me = this;
 	private ImageButton add_member_button = null;
 	private ListView member_list = null;
+	private MemberListArrayAdapter member_list_adapter = null;
 	private ImageButton create_project = null;
 	private EditText name = null;
 	private EditText description = null;
@@ -53,7 +54,8 @@ public class NewProjectActivity extends Activity {
 		name = (EditText) findViewById(R.id.new_project_name);
 		description = (EditText) findViewById(R.id.new_project_description);
 		deadline = (DatePicker) findViewById(R.id.new_project_deadline);
-		member_list.setAdapter(new MemberListArrayAdapter(me));
+		member_list_adapter = new MemberListArrayAdapter(me);
+		member_list.setAdapter(member_list_adapter);
 		/*ArrayList<User> usr = new ArrayList<User>();
 		
 		for(int i = 0; i < 20; i++)
@@ -70,7 +72,7 @@ public class NewProjectActivity extends Activity {
 
 			public void onClick(View v) {
 
-				final AddMemberDialog amd = new AddMemberDialog(me);
+				final AddMemberDialog amd = new AddMemberDialog(me, member_list, member_list_adapter, AddMemberDialog.LOCAL);
 				amd.setOnDismissListener(new OnDismissListener() {
 
 					@Override
@@ -176,12 +178,6 @@ public class NewProjectActivity extends Activity {
 				.setTypeface(type);
 		((EditText) findViewById(R.id.new_project_name)).setTypeface(type);
 		// ((TextView) findViewById(android.R.id.text1)).setTypeface(type);
-
-	}
-
-	public ListView getMemberList() {
-
-		return member_list;
 
 	}
 	

@@ -10,20 +10,46 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class AddMemberDialog extends Dialog {
 
+	/**
+	 * Constants Type Definitions
+	 */
+	final static int LOCAL = 1;
+	final static int REMOTE = 2;
+
+	/**
+	 * GUI Elements
+	 */
 	private EditText email = null;
 	private ImageButton ok = null;
 	private ImageButton cancel = null;
-	private String result = "Cancelled by user.";
 	private Context context = null;
+	private ListView member_list = null;
+	private MemberListArrayAdapter member_adapter = null;
 
-	public AddMemberDialog(Context cont) {
+	/**
+	 * Result and other data
+	 */
+	private String result = "Cancelled by user.";
+	private int action_type = LOCAL;
+
+	public AddMemberDialog(Context cont, ListView member_list,
+			MemberListArrayAdapter member_adapter, int add_type) {
+
 		super(cont, R.style.cust_dialog);
 		setCancelable(false);
+
+		/**
+		 * 
+		 */
 		this.context = cont;
+		this.member_list = member_list;
+		this.member_adapter = member_adapter;
+		this.action_type = add_type;
 
 		Typeface type = Typeface.createFromAsset(context.getAssets(),
 				"fonts/zekton.ttf");
@@ -38,78 +64,34 @@ public class AddMemberDialog extends Dialog {
 		ok = (ImageButton) findViewById(R.id.add_member_dialog_ok_button);
 		cancel = (ImageButton) findViewById(R.id.add_member_dialog_cancel_button);
 
+		/**
+		 * OK Button Listener
+		 */
 		ok.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
 
 				email.setEnabled(false);
-				// TODO:Add connection check here
+
 				Runnable r = new Runnable() {
 
 					@Override
 					public void run() {
 
-						try {
-							if (WebApi.login(email.getText().toString())) {
+						performAdd();
 
-								final User user = WebApi
-										.getClommunicateUser(email.getText()
-												.toString());
-
-								if (user == null) {
-
-									result = "User cannot be added to the list, check your internet connection.";
-
-								} else if (((MemberListArrayAdapter) ((NewProjectActivity)context)
-										.getMemberList().getAdapter())
-										.contains(user)) {
-
-									result = "This user is already a member of this project.";
-								} else if (((MemberListArrayAdapter) ((NewProjectActivity)context)
-										.getMemberList().getAdapter())
-										.isOwner(user)) {
-
-									result = "You don't have to add yourself, owner is a member by default.";
-
-								} else {
-
-									if (context instanceof ProjectActivity) {
-
-										
-										
-									} else {
-										result = "Member successfully added tot the project.";
-										((NewProjectActivity)context).getMemberList().post(
-												new Runnable() {
-													public void run() {
-
-														((MemberListArrayAdapter) ((NewProjectActivity)context)
-																.getMemberList()
-																.getAdapter())
-																.addMember(user);
-
-													}
-												});
-									}
-								}
-
-							} else {
-
-								result = "No user with such email in the system.";
-
-							}
-						} catch (NetworkErrorException e) {
-							result = "No internet connection.";
-						}
 						dismiss();
-
 					}
+
 				};
 
 				new Thread(r).start();
 			}
 		});
 
+		/**
+		 * Cancel Button Listener
+		 */
 		cancel.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
@@ -123,6 +105,63 @@ public class AddMemberDialog extends Dialog {
 
 		setTitle(String.format("%-100s", "Add new member to project."));
 		show();
+	}
+
+	private void performAdd() {
+
+		try {
+			if (WebApi.login(email.getText().toString())) {
+
+				final User user = WebApi.getClommunicateUser(email.getText()
+						.toString());
+				System.err.println(context.getClass());
+				if (user == null) {
+
+					result = "User cannot be added to the list, check your internet connection.";
+
+				} else if (member_adapter.contains(user)) {
+
+					result = "This user is already a member of this project.";
+				} else if (member_adapter.isOwner(user)) {
+
+					result = "You don't have to add yourself, owner is a member by default.";
+
+				} else {
+					if (action_type == REMOTE) {
+
+						if (WebApi.addMember(ProjectActivity.project.getId(),
+								user.getId())) {
+							result = "Member successfully added tot the project.";
+							member_list.post(new Runnable() {
+										public void run() {
+
+											member_adapter.addMember(user);
+
+										}
+									});
+						} else
+							result = "Error adding member to the project.";
+
+					} else {
+						result = "Member successfully added tot the project.";
+						member_list.post(new Runnable() {
+							public void run() {
+
+								member_adapter.addMember(user);
+
+							}
+						});
+					}
+				}
+
+			} else {
+
+				result = "No user with such email in the system.";
+
+			}
+		} catch (NetworkErrorException e) {
+			result = "No internet connection.";
+		}
 
 	}
 

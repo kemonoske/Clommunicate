@@ -47,7 +47,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
-		if(context instanceof ProjectActivity && position == (members.size() - 1)){
+		if(context instanceof ProjectActivity && position == members.size()){
 
 			LayoutInflater inf = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -56,6 +56,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 			TextView tv = (TextView)item.findViewById(R.id.add_list_item_tag);
 			tv.setText("Add New Member");
 			tv.setTypeface(type);
+			if (ProjectActivity.project.getEnd_date().compareToIgnoreCase("null") != 0)
+				item.setEnabled(false);
 			return item;
 		}	
 		
@@ -143,6 +145,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 	@Override
 	public int getCount() {
+		if(context instanceof ProjectActivity)
+			return members.size() +1 ;
 		return members.size();
 	}
 
