@@ -23,9 +23,7 @@ if($_POST[id])	{
 		$output[$i][id] = $result[id];
 		$output[$i][email] = $result[email];
 		$output[$i][name] = $result[name];
-		$output[$i][location] = $result[location];
 		$output[$i][photo] = $result[photo];
-		$output[$i][gender] = $result[gender];
 		$i++;
 	}	
 	if(!$i)
