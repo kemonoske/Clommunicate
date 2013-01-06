@@ -121,7 +121,8 @@ public class AuthActivity extends Activity {
 
 					@Override
 					protected void onPreExecute() {
-						wd.setTitle(String.format("%-100s","User Authentification..."));
+						wd.setTitle(String.format("%-100s",
+								"User Authentification..."));
 						wd.show();
 					}
 
@@ -167,7 +168,7 @@ public class AuthActivity extends Activity {
 					}
 
 				};
-				
+
 				auth.execute(s);
 			}
 
@@ -179,6 +180,12 @@ public class AuthActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_auth, menu);
 		return true;
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		finish();
 	}
 
 }

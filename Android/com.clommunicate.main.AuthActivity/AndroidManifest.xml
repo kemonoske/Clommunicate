@@ -49,6 +49,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TaskActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.TASK" />
+
+                <category android:name="android.intent.category.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NewTaskActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_TASK" />
+
+                <category android:name="android.intent.category.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ProjectListActivity"
             android:screenOrientation="portrait" >
             <intent-filter>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="task_type_array">
+        <item>General</item>
+        <item>Code</item>
+        <item>Design</item>
+        <item>Implementation</item>
+        <item>Project</item>
+        <item>Debug</item>
+        <item>Benchmark</item>
+    </string-array>
+</resources>

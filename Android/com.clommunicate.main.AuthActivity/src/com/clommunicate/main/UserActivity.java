@@ -48,14 +48,14 @@ public class UserActivity extends Activity {
 				"fonts/zekton.ttf");
 		((TextView) findViewById(R.id.user_part_in_text)).setTypeface(type);
 		((TextView) findViewById(R.id.user_projects_text)).setTypeface(type);
+
 		name.setTypeface(type);
-		name.setText(User.user.getName());
 		projects_count.setTypeface(type);
 		part_in__count.setTypeface(type);
 		new_project.setTypeface(type);
-		if(user.getPicture() != null)
+		name.setText(User.user.getName());
+		if (user.getPicture() != null)
 			avatar.setImageBitmap(user.getPicture());
-
 		userDataList = (ListView) findViewById(R.id.user_data);
 		userDataList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -124,7 +124,7 @@ public class UserActivity extends Activity {
 
 			@Override
 			protected void onPostExecute(Boolean result) {
-				if (!result)	{
+				if (!result) {
 					onBackPressed();
 					Toast.makeText(me,
 							"No internet connection, or server is inactive",
@@ -154,4 +154,13 @@ public class UserActivity extends Activity {
 
 	}
 
+
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		finish();
+	}
+	
+	
 }

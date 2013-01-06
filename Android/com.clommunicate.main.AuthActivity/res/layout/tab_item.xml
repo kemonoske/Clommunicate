@@ -10,7 +10,8 @@
         android:id="@+id/tab_item_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:id="@+id/tab_item_title"

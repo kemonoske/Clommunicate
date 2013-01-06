@@ -1,9 +1,12 @@
 package com.clommunicate.main;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import com.clommunicate.utils.GUIFixes;
 import com.clommunicate.utils.Project;
+import com.clommunicate.utils.Task;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
@@ -12,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -104,7 +108,7 @@ public class ProjectActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 
-				if (arg2 == (member_list.getChildCount() - 1)
+				if (arg2 == (member_list.getAdapter().getCount() - 1)
 						&& arg1.isEnabled()) {
 					AddMemberDialog amd = new AddMemberDialog(me, member_list,
 							(MemberListArrayAdapter) member_list.getAdapter(),
@@ -127,6 +131,31 @@ public class ProjectActivity extends Activity {
 
 		});
 
+
+		task_list.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				if (arg2 == (task_list.getAdapter().getCount() - 1)
+						&& arg1.isEnabled()) {
+					
+					Intent i = new Intent(me, NewTaskActivity.class);
+					i.putExtra("project_id", project.getId());
+					startActivity(i);
+
+				} else	{
+					
+					Intent i = new Intent(me, TaskActivity.class);
+					i.putExtra("task_id", ((TaskListArrayAdapter)task_list.getAdapter()).getTask(arg2).getId());
+					startActivity(i);
+					
+				}
+
+			}
+
+		});
 		if (project.getEnd_date().compareToIgnoreCase("null") != 0) {
 			finish.setEnabled(false);
 			remove.setEnabled(false);
@@ -250,8 +279,23 @@ public class ProjectActivity extends Activity {
 		description_label.setTypeface(typef);
 		description.setTypeface(typef);
 
+		/*ArrayList<Task> aux = new ArrayList<Task>();
+		
+		for(int i = 0; i < 20; i++)
+			aux.add(new Task());
+		
+		task_list.setAdapter(new TaskListArrayAdapter(me, aux));
+		*/
 		loadProjectData();
 	}
+
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		finish();
+	}
+	
 
 	private void loadProjectData() {
 		name.setText(project.getName());
@@ -298,13 +342,15 @@ public class ProjectActivity extends Activity {
 			@Override
 			protected Object[] doInBackground(WaitDialog... params) {
 
-				Object[] aux = new Object[3];
+				Object[] aux = new Object[4];
 				WaitDialog wd = params[0];
 				ArrayList<User> members = new ArrayList<User>();
+				ArrayList<Task> tasks = new ArrayList<Task>();
 
 				try {
 					members = WebApi.getProjectMembers(project.getId());
-
+					tasks = WebApi.getTaskList(project.getId());
+					
 					if (members.size() != 0)
 						aux[2] = 1;
 				} catch (NetworkErrorException e) {
@@ -315,6 +361,7 @@ public class ProjectActivity extends Activity {
 
 				aux[0] = wd;
 				aux[1] = members;
+				aux[3] = tasks;
 
 				return aux;
 
@@ -324,26 +371,41 @@ public class ProjectActivity extends Activity {
 			protected void onPostExecute(Object[] result) {
 				WaitDialog wd = (WaitDialog) result[0];
 				ArrayList<User> members = (ArrayList<User>) result[1];
+				ArrayList<Task> tasks = (ArrayList<Task>) result[3];
 				Integer error = (Integer) result[2];
 				wd.dismiss();
 
 				String text = null;
 
-				text = (error == 0) ? "Error can't load member list."
+				text = (error == 0) ? "Error can't load project info."
 						: "No internet connection.";
 
 				if (error == 0 || error == -1)
 					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
-				else
+				else		{
 					member_list.setAdapter(new MemberListArrayAdapter(me,
 							members, project.getOwner_id()));
-
+					task_list.setAdapter(new TaskListArrayAdapter(me, tasks));
+				}
 			}
 
 		};
 		loadMembers.execute(wd);
 
 	}
+
+	
+/*	public void resizeList(){
+
+		GUIFixes.setListViewHeightBasedOnChildren(
+				member_list,
+				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
+
+		GUIFixes.setListViewHeightBasedOnChildren(
+				task_list,
+				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
+	}*/
+
 
 	public ListView getMemberList() {
 

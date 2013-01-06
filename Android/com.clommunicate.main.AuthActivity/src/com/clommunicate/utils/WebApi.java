@@ -73,6 +73,67 @@ public class WebApi {
 			}
 
 			JSONObject jo = new JSONObject(sb.toString());
+
+			return jo.getBoolean("state");
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
+
+	public static boolean createTask(Task task)
+			throws NetworkErrorException {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("name", task.getName()));
+		parameter_list.add(new BasicNameValuePair("description", task
+				.getDescription()));
+		parameter_list.add(new BasicNameValuePair("owner", String
+				.valueOf(task.getOwner())));
+		parameter_list.add(new BasicNameValuePair("type", String
+				.valueOf(task.getType())));
+		parameter_list.add(new BasicNameValuePair("asigned", String
+				.valueOf(task.getAsigned())));
+		
+		HttpPost hp = new HttpPost(
+				"http://clommunicate.freehosting.md/NewTask.php");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
 			if (jo.getBoolean("state"))
 				WebApi.fillClommunicateUser(User.user);
 
@@ -96,6 +157,7 @@ public class WebApi {
 
 	}
 
+	
 	private static HttpEntity DoGet(String acces_token) {
 
 		/* Creare HttRequestului Post si transmiterea acestuia */
@@ -457,7 +519,72 @@ public class WebApi {
 
 		}
 
-		return null;
+		return aux;
+
+	}
+
+	public static ArrayList<Task> getTaskList(int id)
+			throws NetworkErrorException {
+
+		ArrayList<Task> aux = new ArrayList<Task>(0);
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("id", String.valueOf(id)));
+
+		HttpPost hp = null;
+
+		hp = new HttpPost("http://clommunicate.freehosting.md/TaskList.php");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONArray ja = new JSONArray(sb.toString());
+			JSONObject jo = null;
+			for (int i = 0; i < ja.length(); i++) {
+
+				jo = ja.getJSONObject(i);
+				aux.add(new Task(jo.getInt("id"), jo.getString("name"), jo
+						.getString("description"), jo.getInt("type"), jo
+						.getString("start_date"), jo.getString("end_date"),
+						((jo.getInt("completed") == 1) ? true : false), jo
+								.getInt("owner")));
+
+			}
+
+			return aux;
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return aux;
 
 	}
 
@@ -520,7 +647,7 @@ public class WebApi {
 
 		}
 
-		return null;
+		return aux;
 
 	}
 
@@ -683,6 +810,7 @@ public class WebApi {
 		return false;
 
 	}
+
 	public static boolean removeMember(int pid, int uid)
 			throws NetworkErrorException {
 

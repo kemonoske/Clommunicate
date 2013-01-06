@@ -79,7 +79,6 @@ public class ProjectListActivity extends Activity {
 		});
 		
 		Intent i = getIntent();
-		
 		title.setText(i.getStringExtra("activityTitle"));
 
 		this.partIn = i.getBooleanExtra("partIn", false);
@@ -189,6 +188,13 @@ public class ProjectListActivity extends Activity {
 		
 	}
 	
+
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		finish();
+	}
 	
 	
 }

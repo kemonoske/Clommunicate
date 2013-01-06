@@ -14,6 +14,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.DatePicker;
@@ -53,6 +54,7 @@ public class NewProjectActivity extends Activity {
 		create_project = (ImageButton) findViewById(R.id.new_project_create_project);
 		name = (EditText) findViewById(R.id.new_project_name);
 		description = (EditText) findViewById(R.id.new_project_description);
+		description.setMovementMethod( new ScrollingMovementMethod());
 		deadline = (DatePicker) findViewById(R.id.new_project_deadline);
 		member_list_adapter = new MemberListArrayAdapter(me);
 		member_list.setAdapter(member_list_adapter);
@@ -188,4 +190,11 @@ public class NewProjectActivity extends Activity {
 				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
 	}
 
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		finish();
+	}
+	
 }
