@@ -75,6 +75,8 @@ public class NewProjectActivity extends Activity {
 			public void onClick(View v) {
 
 				final AddMemberDialog amd = new AddMemberDialog(me, member_list, member_list_adapter, AddMemberDialog.LOCAL);
+				amd.setTitle("Add new member to project.");
+				amd.show();
 				amd.setOnDismissListener(new OnDismissListener() {
 
 					@Override

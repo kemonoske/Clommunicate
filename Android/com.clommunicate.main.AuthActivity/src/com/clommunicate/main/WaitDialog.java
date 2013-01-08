@@ -4,6 +4,7 @@ import com.clommunicate.main.R;
 
 import android.app.Dialog;
 import android.content.Context;
+
 //import android.graphics.Typeface;
 
 public class WaitDialog extends Dialog {
@@ -14,6 +15,11 @@ public class WaitDialog extends Dialog {
 		setCancelable(false);
 	}
 
-	
+	@Override
+	public void setTitle(CharSequence title) {
+
+		super.setTitle(String.format("%-100s", title));
+
+	}
 
 }

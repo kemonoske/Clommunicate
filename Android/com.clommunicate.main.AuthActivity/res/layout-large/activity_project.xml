@@ -119,7 +119,6 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:scrollbars="vertical"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sit amet nulla id lorem congue tempus. Phasellus placerat pulvinar nisi, a bibendum nulla elementum in. Suspendisse venenatis fermentum adipiscing. Aenean rhoncus vestibulum sem ut posuere. Proin vehicula semper diam non consectetur. Phasellus rhoncus feugiat metus, at adipiscing est tristique id. Donec turpis tellus, mollis eu semper ac, interdum vel elit. Nullam eget nibh urna, rutrum feugiat eros. Cras non condimentum sem. Etiam vulputate egestas dolor. Vivamus sed urna leo, convallis euismod arcu. Sed congue egestas sapien ornare ullamcorper."
                     android:textColor="#6c6b68"
                     android:textSize="20sp"
                     android:visibility="visible" />
@@ -158,7 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="26.12.2012"
+                        android:text="N/A"
                         android:textColor="#6c6b68"
                         android:textSize="15dp" />
 
@@ -192,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="26.12.2013"
+                        android:text="N/A"
                         android:textColor="#6c6b68"
                         android:textSize="15dp" />
 

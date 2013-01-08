@@ -18,7 +18,7 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/task_list_item_icon"
+                android:id="@+id/activity_task_icon"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_margin="10dp"
@@ -27,26 +27,27 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:gravity="center_vertical"
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/task_list_item_name"
+                    android:id="@+id/activity_task_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
                     android:background="@android:color/transparent"
+                    android:minHeight="80dp"
+                    android:paddingTop="10dp"
                     android:shadowColor="#FFFFFF"
                     android:shadowDx="2"
                     android:shadowDy="-1"
                     android:shadowRadius="2"
-                    android:text="Redesign exception handling system"
+                    android:text="Task Name"
                     android:textColor="#6c6b68"
                     android:textColorHighlight="#6c6b68"
-                    android:textSize="35sp"
+                    android:textSize="30sp"
                     android:textStyle="normal" >
                 </TextView>
 
@@ -55,11 +56,10 @@
                     android:layout_height="wrap_content" >
 
                     <TextView
-                        android:id="@+id/activity_task_start_date_label"
+                        android:id="@+id/activity_task_date_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
                         android:background="@android:color/transparent"
                         android:shadowColor="#FFFFFF"
                         android:shadowDx="2"
@@ -68,12 +68,11 @@
                         android:text="from"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
-                        android:textSize="25sp"
-                        android:textStyle="italic" >
+                        android:textSize="15sp" >
                     </TextView>
 
                     <TextView
-                        android:id="@+id/activity_task_start_date"
+                        android:id="@+id/activity_task_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
@@ -82,20 +81,18 @@
                         android:shadowDx="2"
                         android:shadowDy="-1"
                         android:shadowRadius="2"
-                        android:text="2013-01-12"
+                        android:text="N/A"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
-                        android:textSize="25sp"
+                        android:textSize="15sp"
                         android:textStyle="normal" />
-
                 </LinearLayout>
             </LinearLayout>
 
             <CheckBox
-                android:id="@+id/task_list_item_finished"
+                android:id="@+id/activity_task_finished"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_margin="10dp" />
         </LinearLayout>
 
@@ -104,13 +101,13 @@
             android:layout_height="wrap_content" >
 
             <TextView
+                android:id="@+id/activity_task_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="7"
                 android:paddingLeft="90dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut malesuada tempus quam eu venenatis. In a nunc a massa aliquam dapibus at quis diam. Ut quam massa, venenatis sit amet dictum id, accumsan sit amet mauris. Cras lacus lorem, placerat sit amet pulvinar vitae, volutpat quis nisi. Morbi sagittis, dolor quis pulvinar aliquam, eros nulla consectetur risus, at aliquet turpis ipsum nec justo. Integer convallis, mauris mattis consectetur commodo, eros libero porta ante, vel tincidunt purus ipsum in eros. Proin vitae dolor ac risus adipiscing posuere id eget quam. Morbi varius porttitor massa. Fusce augue augue, suscipit in rhoncus nec, mattis porta mauris. Sed imperdiet faucibus ligula eget vehicula. Etiam enim velit, malesuada vitae volutpat quis, posuere id est. Sed erat metus, mollis et viverra eget, adipiscing sit amet diam. Nullam eget ipsum quis ante dignissim cursus quis quis turpis.
-
-Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem felis, ultricies a laoreet eget, eleifend nec orci. Morbi ut lobortis magna. Cras at quam tortor, a dictum nisl. Sed luctus mi vitae ligula volutpat accumsan. Nam luctus lorem gravida tortor viverra molestie. Donec laoreet augue in ligula dictum blandit."
+                android:paddingRight="10dp"
+                android:scrollbars="vertical"
                 android:textColor="#6c6b68" />
         </LinearLayout>
 
@@ -127,7 +124,7 @@ Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem fe
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/member_list_item_name"
+                    android:id="@+id/activity_task_asigned_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
@@ -144,7 +141,7 @@ Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem fe
                 </TextView>
 
                 <TextView
-                    android:id="@+id/member_list_item_email"
+                    android:id="@+id/activity_task_asigned_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
@@ -162,7 +159,7 @@ Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem fe
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/member_list_item_photo"
+                android:id="@+id/activity_task_asigned_photo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="10dp"
@@ -178,31 +175,16 @@ Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem fe
         android:background="@drawable/top_mid_gradient" >
     </LinearLayout>
 
-    <ScrollView
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/activity_task_comment_list"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="100" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="100"
-            android:background="#dfdfe1"
-            android:orientation="vertical"
-            android:padding="2dp"
-            android:scrollbars="vertical" >
-
-            <LinearLayout
-                android:id="@+id/new_project_main_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/mid_fill"
-                android:orientation="vertical"
-                android:paddingTop="10dp" >
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        android:layout_weight="100"
+        android:cacheColorHint="@android:color/transparent"
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:drawSelectorOnTop="false" >
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -212,23 +194,34 @@ Vestibulum massa ligula, scelerisque ut rhoncus at, luctus ac nunc. Sed lorem fe
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:background="#f1eef4"
         android:gravity="center_vertical|center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="10dp" >
 
-        <ImageView 
+        <ImageView
+            android:id="@+id/activity_task_user_photo"
             android:layout_width="50dp"
-            android:layout_height="50dp"/>
-        
-        <EditText 
+            android:layout_height="50dp"
+            android:background="@drawable/border"
+            android:padding="1dp"
+            android:src="@drawable/user_icon" />
+
+        <EditText
+            android:id="@+id/activity_task_comment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-3dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="100"
+            android:maxLines="3" />
+
         <ImageButton
-            android:id="@+id/new_task_create_task"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:id="@+id/activity_task_submit_comment"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/login_button" />
     </LinearLayout>
 

@@ -83,7 +83,8 @@
                             android:singleLine="true"
                             android:textSize="25dp" >
 
-                            <requestFocus />
+                            <requestFocus android:layout_width="wrap_content" />
+
                         </EditText>
                     </LinearLayout>
 
@@ -212,6 +213,52 @@
                                 android:id="@+id/new_task_asigned"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#6c6b68" >
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/new_task_delete_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:visibility="gone"
+                        android:weightSum="100" >
+
+                        <TextView
+                            android:id="@+id/new_task_delete_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mark for deletion"
+                            android:textColor="#6c6b68"
+                            android:textColorHighlight="#6c6b68"
+                            android:textSize="25dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:orientation="vertical" >
+							
+                            <CheckBox
+                                android:id="@+id/new_task_delete"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

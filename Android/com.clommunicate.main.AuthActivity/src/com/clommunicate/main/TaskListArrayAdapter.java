@@ -3,23 +3,37 @@ package com.clommunicate.main;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Task;
+import com.clommunicate.utils.WebApi;
 
+import android.accounts.NetworkErrorException;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 
+ * Adapter for task list, contains an array list of Task objects that provide
+ * data for the list
+ * 
+ * @author Akira
+ * 
+ */
 public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 
 	/**
-	 * 
+	 * Context and other data
 	 */
 	private Context context = null;
 	private ArrayList<Task> tasks = null;
@@ -30,13 +44,17 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 	private TextView name = null;
 	private ImageView icon = null;
 	private CheckBox completed = null;
-	private Typeface typeface = null;
+	private Typeface font_asen = null;
 
 	public TaskListArrayAdapter(Context context, ArrayList<Task> tasks) {
 		super(context, R.layout.task_list_item);
 		this.context = context;
 		this.tasks = tasks;
-		typeface = Typeface.createFromAsset(context.getAssets(),
+
+		/*
+		 * Load font from Asserts
+		 */
+		font_asen = Typeface.createFromAsset(context.getAssets(),
 				"fonts/asen.ttf");
 
 	}
@@ -49,41 +67,67 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		if(position == tasks.size()){
+	public View getView(final int position, View convertView, ViewGroup parent) {
 
-			LayoutInflater inf = (LayoutInflater) context
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		/*
+		 * Get layout inflater service
+		 */
+		LayoutInflater inf = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		/*
+		 * If position higher tham max index then it's the add task item
+		 */
+		if (position == tasks.size()) {
 
+			/*
+			 * Inflate add list item
+			 */
 			View item = inf.inflate(R.layout.add_list_item, parent, false);
-			TextView tv = (TextView)item.findViewById(R.id.add_list_item_tag);
+
+			TextView tv = (TextView) item.findViewById(R.id.add_list_item_tag);
 			tv.setText("Add New Task");
-			tv.setTypeface(typeface);
-			if (ProjectActivity.project.getEnd_date().compareToIgnoreCase("null") != 0)
+			tv.setTypeface(font_asen);
+
+			/*
+			 * If project is completed we can't add a task
+			 */
+			if (ProjectActivity.project.isCompleted())
 				item.setEnabled(false);
 			return item;
-		}	
-		
+		}
 
-		LayoutInflater inf = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+		/*
+		 * inflate Task list item
+		 */
 		View item = inf.inflate(R.layout.task_list_item, parent, false);
-		completed = (CheckBox)item.findViewById(R.id.task_list_item_finished);
+
+		/*
+		 * Locate all controls in item view by id
+		 */
+		completed = (CheckBox) item.findViewById(R.id.task_list_item_finished);
+		name = (TextView) item.findViewById(R.id.task_list_item_name);
+		icon = (ImageView) item.findViewById(R.id.task_list_item_icon);
+
+		/*
+		 * Disable focus for CheckBox so the list item can be clicked
+		 */
 		completed.setFocusable(false);
 		completed.setFocusableInTouchMode(false);
-		
-		name = (TextView)item.findViewById(R.id.task_list_item_name);
-		icon = (ImageView)item.findViewById(R.id.task_list_item_icon);
-		
-		name.setTypeface(typeface);
-		
-		if(tasks.get(position).isCompleted())
+
+		name.setTypeface(font_asen);
+
+		/*
+		 * If task is completed it's name is crossed
+		 */
+		if (tasks.get(position).isCompleted())
 			name.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-		
+
 		name.setText(tasks.get(position).getName());
 		completed.setChecked(tasks.get(position).isCompleted());
 
+		/*
+		 * Set icon based on task type
+		 */
 		switch (tasks.get(position).getType()) {
 		case Task.GENERAL:
 			icon.setImageResource(R.drawable.general_task_icon);
@@ -117,16 +161,91 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 			icon.setImageResource(R.drawable.general_task_icon);
 			break;
 		}
-		
-		
-		
+
+		/*
+		 * If project is completed we update a task
+		 */
+		if (ProjectActivity.project.isCompleted())
+			completed.setEnabled(false);
+
+		/*
+		 * When completed box is checked or unchecked
+		 */
+		completed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					final boolean isChecked) {
+
+				AsyncTask<Void, Void, Integer> completeTask = new AsyncTask<Void, Void, Integer>() {
+
+					private WaitDialog wd = null;
+
+					@Override
+					protected void onPreExecute() {
+						/*
+						 * A WaitDialog will be displayed while performing request
+						 */
+						wd = new WaitDialog(context);
+						wd.setTitle(String.format("%-100s", "Updating task..."));
+						wd.show();
+					}
+
+					@Override
+					protected Integer doInBackground(Void... params) {
+
+						try {
+							/*
+							 * If task status changed return 1
+							 */
+							// TODO:if task is not removed, if project is not
+							// removed or finished
+							if (WebApi.completeTask(
+									tasks.get(position).getId(), (isChecked ? 1
+											: 0)))
+								return 1;
+
+						} catch (NetworkErrorException e) {
+							return -1;
+						}
+
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+
+						wd.dismiss();
+						String text = null;
+
+						if (result == 1) {
+							text = "Task updated.";
+							tasks.get(position).setCompleted(isChecked);
+							notifyDataSetChanged();
+						} else if (result == 0) {
+							text = "Error updating task.";
+						} else {
+							text = "No internet connection.";
+						}
+						Toast.makeText(context.getApplicationContext(), text,
+								Toast.LENGTH_SHORT).show();
+
+					}
+
+				};
+
+				completeTask.execute();
+
+			}
+		});
+
 		return item;
 	}
 
-	public Task getTask(int position){
-		
+	public Task getTask(int position) {
+
 		return this.tasks.get(position);
-		
+
 	}
-	
+
 }

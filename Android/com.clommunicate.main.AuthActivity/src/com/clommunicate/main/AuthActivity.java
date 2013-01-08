@@ -25,31 +25,54 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity reads google accounts registered on device and displays them in a
+ * list for log in
+ * 
+ * @author Akira
+ * 
+ */
 public class AuthActivity extends Activity {
 
+	/**
+	 * Context and other data
+	 */
+	private Activity me = this;
+
+	/**
+	 * GUI Elements
+	 */
 	private ImageButton expand_button = null;
 	private ImageButton exit_button = null;
 	private ImageButton add_account_button = null;
 	private ListView accounts_list = null;
-	private Activity me = this;
+	private TextView auth_label = null;
+	private Typeface font_zekton = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auth);
 
+		/*
+		 * Loading controls from content view
+		 */
 		expand_button = (ImageButton) findViewById(R.id.loginButton);
 		exit_button = (ImageButton) findViewById(R.id.exitButton);
 		add_account_button = (ImageButton) findViewById(R.id.auth_add_account_button);
 		accounts_list = (ListView) findViewById(R.id.authAcountList);
+		auth_label = (TextView) findViewById(R.id.authLabel);
 
-		/* Setam fontul etichetei login */
-		Typeface type = Typeface.createFromAsset(getAssets(),
-				"fonts/zekton.ttf");
-		((TextView) findViewById(R.id.authLabel)).setTypeface(type);
-		type = null;
+		/*
+		 * Load font from asserts
+		 */
+		font_zekton = Typeface.createFromAsset(getAssets(), "fonts/zekton.ttf");
 
-		/* Atribuim actiune la click pentru butonul ok */
+		auth_label.setTypeface(font_zekton);
+
+		/*
+		 * Expand/Collapse button on click
+		 */
 		expand_button.setOnClickListener(new OnClickListener() {
 
 			boolean ex = false;
@@ -57,18 +80,33 @@ public class AuthActivity extends Activity {
 			public void onClick(View v) {
 				LinearLayout ll = (LinearLayout) findViewById(R.id.midFrame);
 
+				/*
+				 * If the login form is nor expanded then layout visibility is
+				 * set to VISIBLE otherwise to GONE
+				 */
 				if (!ex) {
 					ll.setVisibility(LinearLayout.VISIBLE);
 
+					/*
+					 * Get user accounts from the device
+					 */
 					String[] tokens = Login.getDeviceAccounts(getBaseContext());
 					String[] values = new String[tokens.length];
 					for (int i = 0; i < tokens.length; i++)
 						values[i] = (tokens[i].split("@"))[0];
+					/*
+					 * Create an array adapter containing user nickname and
+					 * email and set the adapter to the ListView
+					 */
 					ArrayAdapter<String> adapter = new AcountArrayAdapter(
 							getBaseContext(), values, tokens);
 					accounts_list.setAdapter(adapter);
 					accounts_list.setVisibility(ListView.VISIBLE);
 
+					/*
+					 * Set translate animation to bottom layout and expand
+					 * animation to middle layout
+					 */
 					((LinearLayout) findViewById(R.id.botChoice))
 							.startAnimation(AnimationUtils.loadAnimation(
 									ll.getContext(), R.anim.auth_bot_frame));
@@ -87,7 +125,9 @@ public class AuthActivity extends Activity {
 			}
 		});
 
-		/* Actiunea pentru butonul cancel */
+		/*
+		 * If the exit button is pressed the task is minimized and goes to stack
+		 */
 		exit_button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -95,34 +135,46 @@ public class AuthActivity extends Activity {
 			}
 		});
 
-		/* Actiunea pentru butonul de adaugare a acountului */
+		/*
+		 * On click Add account button
+		 */
 		add_account_button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 
+				/*
+				 * Login form is collapsed then Android account add service is
+				 * starting using an intent
+				 */
 				findViewById(R.id.loginButton).performClick();
 				startActivity(new Intent(Settings.ACTION_ADD_ACCOUNT));
 
 			}
 		});
 
-		/* Actiunea la tastarea unui account din lista */
-
+		/*
+		 * Click on account list item
+		 */
 		accounts_list.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
+				/*
+				 * Get email from list item
+				 */
 				final String s = (String) ((TextView) view
 						.findViewById(R.id.auth_acount_item2)).getText();
 
+				/*
+				 * Wait dialog is displayed while login is performed
+				 */
 				final WaitDialog wd = new WaitDialog(me);
 				AsyncTask<String, Void, Byte> auth = new AsyncTask<String, Void, Byte>() {
 
 					@Override
 					protected void onPreExecute() {
-						wd.setTitle(String.format("%-100s",
-								"User Authentification..."));
+						wd.setTitle("User Authentification...");
 						wd.show();
 					}
 
@@ -132,6 +184,7 @@ public class AuthActivity extends Activity {
 						byte aux = -1;
 
 						try {
+							
 							aux = (byte) ((WebApi.login(params[0])) ? 1 : 0);
 							if (aux == 1)
 								User.user = WebApi.getClommunicateUser(s);

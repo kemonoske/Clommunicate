@@ -18,20 +18,37 @@ public class Task {
 	private String end_date = null;
 	private boolean completed = false;
 	private int owner = 0;
-	private int asigned  = 0;
+	private User asigned = null;
 
-
-	public Task(String name, String description, int type,int asigned,  int owner) {
+	public Task(String name, String description, int type, int asigned_id,
+			int owner) {
 		super();
 		this.name = name;
 		this.description = description;
 		this.type = type;
-		this.asigned = asigned;
+		this.asigned_id = asigned_id;
 		this.owner = owner;
 	}
-	
+
+	public Task(int id, String name, String description, int type,
+			String start_date, String end_date, boolean completed, int owner,
+			User asigned) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.type = type;
+		this.start_date = start_date;
+		this.end_date = end_date;
+		this.completed = completed;
+		this.owner = owner;
+		this.asigned = asigned;
+		if(asigned != null)
+			this.asigned_id = asigned.getId();
+	}
+
 	public Task(int id, String name, String description, int type,
 			String start_date, String end_date, boolean completed, int owner) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -42,13 +59,21 @@ public class Task {
 		this.owner = owner;
 	}
 
-	
-	
-	public int getAsigned() {
+	public int getAsigned_id() {
+		return asigned_id;
+	}
+
+	public void setAsigned_id(int asigned_id) {
+		this.asigned_id = asigned_id;
+	}
+
+	private int asigned_id = 0;
+
+	public User getAsigned() {
 		return asigned;
 	}
 
-	public void setAsigned(int asigned) {
+	public void setAsigned(User asigned) {
 		this.asigned = asigned;
 	}
 

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dfdfe1"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/round_layout_bg"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_layout_bg_top"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+            
+            <ImageButton
+                android:id="@+id/comment_item_remove_button"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="5dp"
+                android:background="@drawable/comment_remove_button" />
+
+            <TextView
+                android:id="@+id/comment_item_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="2013-01-08 19:25:56"
+                android:textColor="#6c6b68"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/comment_item_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="100"
+                android:gravity="right"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Bostanica Ion"
+                android:textColor="#6c6b68"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/comment_item_avatar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/border"
+                android:padding="1dp"
+                android:src="@drawable/user_icon" />
+            
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="3px"
+            android:layout_marginRight="6px"
+            android:background="#6c6b68" >
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/comment_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris faucibus odio non massa sagittis sodales. Nam tincidunt urna a erat euismod semper. Nunc hendrerit scelerisque viverra. Aenean quis velit eget justo rhoncus hendrerit in sit amet lectus. Sed nec orci turpis. Curabitur ante elit, pretium luctus bibendum ut, facilisis non turpis. Proin tempor mauris tellus, et facilisis tellus. Vestibulum eget orci eget magna ullamcorper rhoncus ac a elit."
+            android:textColor="#6c6b68"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
