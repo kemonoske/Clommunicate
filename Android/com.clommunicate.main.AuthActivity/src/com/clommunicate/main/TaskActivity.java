@@ -1,5 +1,8 @@
 package com.clommunicate.main;
 
+import java.util.ArrayList;
+
+import com.clommunicate.utils.Comment;
 import com.clommunicate.utils.Task;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
@@ -53,6 +56,7 @@ public class TaskActivity extends Activity{
 	private EditText user_comment = null;
 	private ImageButton submit_comment = null;
 	private ListView comment_list = null;
+	private ArrayList<Comment> comments = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +144,6 @@ public class TaskActivity extends Activity{
 
 				if (error == 0 || error == -1)	{
 					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
-					finish();
 				}	else	{
 					task = task1;
 					loadTaskDataToUI();
@@ -288,7 +291,9 @@ public class TaskActivity extends Activity{
 		/*
 		 * Populating comment list
 		 */
-		CommentArrayAdapter ca = new CommentArrayAdapter(me);
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		
+		CommentArrayAdapter ca = new CommentArrayAdapter(me, comments);
 		comment_list.setAdapter(ca);
 		
 	}
