@@ -47,9 +47,10 @@ public class WebApi {
 
 		HttpPost hp = new HttpPost(
 				"http://clommunicate.freehosting.md/NewProject.php");
-		System.err.println(project.getName() + "\n" + project.getDescription()
+		
+		/*System.err.println(project.getName() + "\n" + project.getDescription()
 				+ "\n" + String.valueOf(project.getOwner_id()) + "\n"
-				+ project.getEnd_date());
+				+ project.getEnd_date());*/
 
 		/* Receptionarea entitatii din raspuns shi decodarea JSON */
 		HttpEntity he = DoPost(parameter_list, hp);
@@ -310,7 +311,7 @@ public class WebApi {
 		HttpClient hc = new DefaultHttpClient();
 
 		try {
-			hp.setEntity(new UrlEncodedFormEntity(parameter_list));
+			hp.setEntity(new UrlEncodedFormEntity(parameter_list,"UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
