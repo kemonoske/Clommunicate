@@ -51,7 +51,7 @@
                 android:text="2013-01-08 19:25:56"
                 android:textColor="#6c6b68"
                 android:textSize="10sp" />
-            
+
             <ImageButton
                 android:id="@+id/comment_item_remove_button"
                 android:layout_width="30dp"
@@ -59,7 +59,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
                 android:background="@drawable/comment_remove_button" />
-            
         </LinearLayout>
 
         <LinearLayout
@@ -74,11 +73,11 @@
             android:id="@+id/comment_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autoLink="web"
             android:padding="10dp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris faucibus odio non massa sagittis sodales. Nam tincidunt urna a erat euismod semper. Nunc hendrerit scelerisque viverra. Aenean quis velit eget justo rhoncus hendrerit in sit amet lectus. Sed nec orci turpis. Curabitur ante elit, pretium luctus bibendum ut, facilisis non turpis. Proin tempor mauris tellus, et facilisis tellus. Vestibulum eget orci eget magna ullamcorper rhoncus ac a elit."
             android:textColor="#6c6b68"
             android:textSize="13sp" />
-
     </LinearLayout>
 
 </LinearLayout>

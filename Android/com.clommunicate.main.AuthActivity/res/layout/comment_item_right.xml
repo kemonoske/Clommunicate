@@ -24,7 +24,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
-            
+
             <ImageButton
                 android:id="@+id/comment_item_remove_button"
                 android:layout_width="30dp"
@@ -62,7 +62,6 @@
                 android:background="@drawable/border"
                 android:padding="1dp"
                 android:src="@drawable/user_icon" />
-            
         </LinearLayout>
 
         <LinearLayout
@@ -77,11 +76,11 @@
             android:id="@+id/comment_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autoLink="web"
             android:padding="10dp"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris faucibus odio non massa sagittis sodales. Nam tincidunt urna a erat euismod semper. Nunc hendrerit scelerisque viverra. Aenean quis velit eget justo rhoncus hendrerit in sit amet lectus. Sed nec orci turpis. Curabitur ante elit, pretium luctus bibendum ut, facilisis non turpis. Proin tempor mauris tellus, et facilisis tellus. Vestibulum eget orci eget magna ullamcorper rhoncus ac a elit."
             android:textColor="#6c6b68"
             android:textSize="13sp" />
-
     </LinearLayout>
 
 </LinearLayout>

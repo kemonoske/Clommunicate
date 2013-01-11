@@ -262,7 +262,7 @@ public class NewTaskActivity extends Activity {
 							break;
 						}
 						Toast.makeText(getApplicationContext(), text,
-								Toast.LENGTH_LONG).show();
+								Toast.LENGTH_SHORT).show();
 
 					}
 

@@ -22,6 +22,15 @@ public class User {
 	private int partIn = 0;
 	public static User user = null;
 
+	User(int id, String name, String picture) throws IOException {
+
+		setId(id);
+		setName(name);
+		setPicture(picture);
+		setPictureURL((picture == null)?"null":picture);
+
+	}
+
 	User(int id, String email, String name, String picture) throws IOException {
 
 		setId(id);
