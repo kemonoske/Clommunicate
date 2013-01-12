@@ -47,10 +47,13 @@ public class WebApi {
 
 		HttpPost hp = new HttpPost(
 				"http://clommunicate.freehosting.md/NewProject.php");
-		
-		/*System.err.println(project.getName() + "\n" + project.getDescription()
-				+ "\n" + String.valueOf(project.getOwner_id()) + "\n"
-				+ project.getEnd_date());*/
+
+		/*
+		 * System.err.println(project.getName() + "\n" +
+		 * project.getDescription() + "\n" +
+		 * String.valueOf(project.getOwner_id()) + "\n" +
+		 * project.getEnd_date());
+		 */
 
 		/* Receptionarea entitatii din raspuns shi decodarea JSON */
 		HttpEntity he = DoPost(parameter_list, hp);
@@ -274,6 +277,66 @@ public class WebApi {
 
 	}
 
+	public static boolean updateProject(Project project)
+			throws NetworkErrorException {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		parameter_list.add(new BasicNameValuePair("id", String.valueOf(project
+				.getId())));
+		parameter_list.add(new BasicNameValuePair("name", project.getName()));
+		parameter_list.add(new BasicNameValuePair("description", project
+				.getDescription()));
+		parameter_list.add(new BasicNameValuePair("deadline", String
+				.valueOf(project.getDeadline())));
+
+		HttpPost hp = new HttpPost(
+				"http://clommunicate.freehosting.md/updateProject.php");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = DoPost(parameter_list, hp);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+			if (jo.getBoolean("state"))
+				WebApi.fillClommunicateUser(User.user);
+
+			return jo.getBoolean("state");
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
 	private static HttpEntity DoGet(String acces_token) {
 
 		/* Creare HttRequestului Post si transmiterea acestuia */
@@ -311,7 +374,7 @@ public class WebApi {
 		HttpClient hc = new DefaultHttpClient();
 
 		try {
-			hp.setEntity(new UrlEncodedFormEntity(parameter_list,"UTF-8"));
+			hp.setEntity(new UrlEncodedFormEntity(parameter_list, "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

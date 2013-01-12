@@ -6,6 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class GUIFixes {
 
 	public static void setListViewHeightBasedOnChildren(ListView listView,int desiredWidth) {

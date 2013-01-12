@@ -219,6 +219,15 @@ public class TaskActivity extends Activity {
 		if (User.user.getPicture() != null)
 			user_photo.setImageBitmap(User.user.getPicture());
 
+		if(ProjectActivity.project.isCompleted())	{
+			
+			task_completion.setEnabled(false);
+			user_comment.setFocusable(false);
+			user_comment.clearFocus();
+			user_comment.setEnabled(false);
+			
+		}
+			
 		/*
 		 * When completed box is checked or unchecked
 		 */

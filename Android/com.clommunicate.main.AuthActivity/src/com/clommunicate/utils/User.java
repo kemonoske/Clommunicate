@@ -1,13 +1,10 @@
 package com.clommunicate.utils;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
 
 public class User {
 

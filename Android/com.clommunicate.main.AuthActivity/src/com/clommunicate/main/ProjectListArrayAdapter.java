@@ -1,6 +1,5 @@
 package com.clommunicate.main;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -8,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -24,6 +24,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Filterable{
 
 	private Context context = null;
@@ -31,7 +36,6 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 	private ArrayList<Project> defprojects = new ArrayList<Project>(0);
 	private ArrayList<Project> projects = new ArrayList<Project>(0);
 	private Typeface typef = null;
-	private ProjectListArrayAdapter me = this;
 
 	public ProjectListArrayAdapter(Context context, ArrayList<Project> projects, boolean type) {
 		super(context, R.layout.project_list_item, R.id.project_list_item_project_name, projects);
@@ -174,11 +178,13 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 		return projects.size();
 	}
 	
+	@SuppressLint("DefaultLocale")
 	@Override
 	public Filter getFilter(){
 		
 		Filter filter = new Filter() {
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
 
@@ -192,6 +198,7 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements Fi
 				
 			}
 			
+			@SuppressLint("DefaultLocale")
 			@Override
 			protected FilterResults performFiltering(CharSequence constraint) {
 				

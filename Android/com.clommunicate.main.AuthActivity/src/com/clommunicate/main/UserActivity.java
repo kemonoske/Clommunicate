@@ -19,6 +19,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class UserActivity extends Activity {
 
 	private ListView userDataList = null;

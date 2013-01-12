@@ -2,20 +2,17 @@ package com.clommunicate.utils;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-
 /**
  * Container class for project fields
  * 
  * @author Akira
- *
+ * 
  */
 public class Project {
 
 	private int id = 0;
 	private String name = null;
 	private String description = null;
-	private Bitmap logo = null;
 	private int owner_id = 0;
 	private ArrayList<User> member_list = null;
 	private ArrayList<Task> task_list = null;
@@ -23,8 +20,8 @@ public class Project {
 	private String end_date = null;
 	private String start_date = null;
 
-	public Project(int id, String name, String description, String start_date, String deadline,
-			String end_date, int owner_id) {
+	public Project(int id, String name, String description, String start_date,
+			String deadline, String end_date, int owner_id) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
@@ -43,6 +40,14 @@ public class Project {
 		this.member_list = member_list;
 	}
 
+	public Project(int id, String name, String description, String deadline) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.deadline = deadline;
+	}
+
 	public String getDeadline() {
 		return deadline;
 	}
@@ -59,14 +64,10 @@ public class Project {
 		return id;
 	}
 
-	public Bitmap getLogo() {
-		return logo;
-	}
-
 	public ArrayList<User> getMember_list() {
 		return member_list;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -99,10 +100,6 @@ public class Project {
 		this.id = id;
 	}
 
-	public void setLogo(Bitmap logo) {
-		this.logo = logo;
-	}
-
 	public void setMember_list(ArrayList<User> member_list) {
 		this.member_list = member_list;
 	}
@@ -123,10 +120,10 @@ public class Project {
 		this.task_list = task_list;
 	}
 
-	public boolean isCompleted(){
-		
+	public boolean isCompleted() {
+
 		return getEnd_date().compareToIgnoreCase("null") != 0;
-		
+
 	}
-	
+
 }

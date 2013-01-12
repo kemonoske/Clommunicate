@@ -2,8 +2,6 @@ package com.clommunicate.main;
 
 import java.util.ArrayList;
 
-import org.w3c.dom.Text;
-
 import com.clommunicate.utils.User;
 
 import android.content.Context;
@@ -20,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 	private Context context = null;

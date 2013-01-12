@@ -184,7 +184,11 @@ public class AuthActivity extends Activity {
 						byte aux = -1;
 
 						try {
-							
+
+							/*
+							 * If user exists in database we get user object
+							 * containing all user data
+							 */
 							aux = (byte) ((WebApi.login(params[0])) ? 1 : 0);
 							if (aux == 1)
 								User.user = WebApi.getClommunicateUser(s);
@@ -201,19 +205,28 @@ public class AuthActivity extends Activity {
 
 						wd.dismiss();
 						if (result == 1) {
-
+							/*
+							 * I the user data received start activity showing
+							 * user information
+							 */
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
 							startActivity(i);
 
 						} else if (result == 0) {
 
+							/*
+							 * If there is no such user in database then a
+							 * registration activity is displayed so the user
+							 * can register his email in the system, email is
+							 * passed to the register activity as a parameter
+							 */
 							Intent i = new Intent(getApplicationContext(),
 									RegistrationActivity.class);
 							i.putExtra("email", s);
 							startActivity(i);
 
-						} else
+						} else /*If there is no internet or post request returns null*/
 							Toast.makeText(me.getApplicationContext(),
 									"No internet connection.",
 									Toast.LENGTH_SHORT).show();

@@ -5,8 +5,11 @@ import com.clommunicate.main.R;
 import android.app.Dialog;
 import android.content.Context;
 
-//import android.graphics.Typeface;
-
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class WaitDialog extends Dialog {
 
 	public WaitDialog(Context context) {

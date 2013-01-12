@@ -6,7 +6,6 @@ import com.clommunicate.utils.Task;
 import com.clommunicate.utils.WebApi;
 
 import android.accounts.NetworkErrorException;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;

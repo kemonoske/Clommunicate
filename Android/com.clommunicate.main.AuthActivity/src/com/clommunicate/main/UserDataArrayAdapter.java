@@ -11,6 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class UserDataArrayAdapter extends ArrayAdapter<String> {
 
 	private Context context = null;

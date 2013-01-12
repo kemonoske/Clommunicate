@@ -1,6 +1,5 @@
 package com.clommunicate.main;
 
-import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebApi;
 
 import android.accounts.NetworkErrorException;
@@ -10,6 +9,11 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author Akira
+ * 
+ */
 public class YesNoDialog extends Dialog {
 
 	private TextView message = null;
@@ -174,6 +178,13 @@ public class YesNoDialog extends Dialog {
 	public String getMsg() {
 
 		return this.msg;
+
+	}
+
+	@Override
+	public void setTitle(CharSequence title) {
+
+		super.setTitle(String.format("%-100s", title));
 
 	}
 

@@ -1,7 +1,5 @@
 package com.clommunicate.main;
 
-import java.util.ArrayList;
-
 import com.clommunicate.utils.GUIFixes;
 import com.clommunicate.utils.Project;
 import com.clommunicate.utils.User;
@@ -20,13 +18,34 @@ import android.view.View.OnClickListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Activity for creating new projects and editing existing ones
+ * 
+ * @author Akira
+ * 
+ */
 public class NewProjectActivity extends Activity {
+
+	/*
+	 * Constants
+	 */
+	public static final int NEW_PROJECT = 1;
+	public static final int EDIT_PROJECT = 2;
+
+	/*
+	 * Context and other data
+	 */
 	private Activity me = this;
+	private int activity_type = NEW_PROJECT;
+	private static Project project = null;
+
+	/*
+	 * GUI Elements
+	 */
 	private ImageButton add_member_button = null;
 	private ListView member_list = null;
 	private MemberListArrayAdapter member_list_adapter = null;
@@ -36,45 +55,64 @@ public class NewProjectActivity extends Activity {
 	private DatePicker deadline = null;
 
 	@Override
-	public void onBackPressed() {
-
-		finish();
-
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_project);
 		setComponentsFont();
 
+		/*
+		 * Loading controls from the content view
+		 */
 		member_list = (ListView) findViewById(R.id.new_project_member_list);
 		add_member_button = (ImageButton) findViewById(R.id.new_project_add_member_button);
 		create_project = (ImageButton) findViewById(R.id.new_project_create_project);
 		name = (EditText) findViewById(R.id.new_project_name);
 		description = (EditText) findViewById(R.id.new_project_description);
-		description.setMovementMethod( new ScrollingMovementMethod());
+		description.setMovementMethod(new ScrollingMovementMethod());
 		deadline = (DatePicker) findViewById(R.id.new_project_deadline);
+
+		activity_type = getIntent().getIntExtra("activity_type", NEW_PROJECT);
+		/*
+		 * We don't need to add or remove users in edit mode because it can be
+		 * done from the project activity
+		 */
+		if (activity_type == EDIT_PROJECT) {
+
+			((TextView) findViewById(R.id.new_project_member_list_label))
+					.setVisibility(View.GONE);
+			add_member_button.setVisibility(View.GONE);
+			((TextView) findViewById(R.id.new_project_activity_title))
+					.setText("Edit Project");
+
+			name.setText(project.getName());
+			description.setText(project.getDescription());
+			String[] dl = project.getDeadline().split("-");
+			int mYear = Integer.valueOf(dl[0]);
+			int mMonth = Integer.valueOf(dl[1]) - 1;
+			int mDay = Integer.valueOf(dl[2]);
+			deadline.init(mYear, mMonth, mDay, null);
+
+		}
+
+		/*
+		 * Setting up list view
+		 */
 		member_list_adapter = new MemberListArrayAdapter(me);
 		member_list.setAdapter(member_list_adapter);
-		/*ArrayList<User> usr = new ArrayList<User>();
-		
-		for(int i = 0; i < 20; i++)
-			usr.add(User.user);
-		
-		member_list.setAdapter(new MemberListArrayAdapter(me, usr, 0));
-		resizeList();
-		/*
-		 * LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams)
-		 * member_list .getLayoutParams();
-		 */
 
+		/*
+		 * Add member button click
+		 */
 		add_member_button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 
-				final AddMemberDialog amd = new AddMemberDialog(me, member_list, member_list_adapter, AddMemberDialog.LOCAL);
+				/*
+				 * Add member dialog is displayed
+				 */
+				final AddMemberDialog amd = new AddMemberDialog(me,
+						member_list, member_list_adapter, AddMemberDialog.LOCAL);
 				amd.setTitle("Add new member to project.");
 				amd.show();
 				amd.setOnDismissListener(new OnDismissListener() {
@@ -82,6 +120,9 @@ public class NewProjectActivity extends Activity {
 					@Override
 					public void onDismiss(DialogInterface dialog) {
 
+						/*
+						 * When dialog closes a message with status is displayed
+						 */
 						Toast.makeText(getApplicationContext(),
 								amd.getResult(), Toast.LENGTH_SHORT).show();
 
@@ -90,55 +131,97 @@ public class NewProjectActivity extends Activity {
 			}
 		});
 
+		/*
+		 * Create project button Click
+		 */
 		create_project.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				if(name.getText().toString().trim().length() == 0)	{
-					
-					Toast.makeText(me.getApplicationContext(), "Specify project name.", Toast.LENGTH_SHORT).show();
-					return ;
-					
-				}else if(description.getText().toString().trim().length() == 0){
+				/*
+				 * Check if required fields are filled
+				 */
+				if (name.getText().toString().trim().length() == 0) {
 
-					Toast.makeText(me.getApplicationContext(), "Specify project description.", Toast.LENGTH_SHORT).show();
-					return ;
+					Toast.makeText(me.getApplicationContext(),
+							"Specify project name.", Toast.LENGTH_SHORT).show();
+					return;
+
+				} else if (description.getText().toString().trim().length() == 0) {
+
+					Toast.makeText(me.getApplicationContext(),
+							"Specify project description.", Toast.LENGTH_SHORT)
+							.show();
+					return;
 				}
-					
-				Project project = new Project(
-						name.getText().toString(),
-						description.getText().toString(), 
-						User.user.getId(), 
-						deadline.getYear() + "-"
-							+ (deadline.getMonth() + 1) + "-"
-							+ deadline.getDayOfMonth(),
-							((MemberListArrayAdapter)member_list.getAdapter()).getMembers());
-				
-				AsyncTask<Project, Void, Integer> create_project_task = new AsyncTask<Project, Void, Integer>(){
-					
+
+				Project project = null;
+
+				/*
+				 * If activity creates new project it is initialized using
+				 * completed fields otherwise current object is edited
+				 */
+				if (activity_type == NEW_PROJECT)
+					project = new Project(name.getText().toString(),
+							description.getText().toString(),
+							User.user.getId(), deadline.getYear() + "-"
+									+ (deadline.getMonth() + 1) + "-"
+									+ deadline.getDayOfMonth(),
+							((MemberListArrayAdapter) member_list.getAdapter())
+									.getMembers());
+				else {
+					NewProjectActivity.getProject().setName(
+							name.getText().toString());
+					NewProjectActivity.getProject().setDescription(
+							description.getText().toString());
+					NewProjectActivity.getProject().setDeadline(
+							deadline.getYear() + "-"
+									+ (deadline.getMonth() + 1) + "-"
+									+ deadline.getDayOfMonth());
+
+				}
+
+				AsyncTask<Project, Void, Integer> create_project_task = new AsyncTask<Project, Void, Integer>() {
+
 					private WaitDialog wd = null;
 
 					@Override
 					protected void onPreExecute() {
 
+						/*
+						 * Wait dialog will be displayed while project is
+						 * created or edited
+						 */
 						wd = new WaitDialog(me);
-						wd.setTitle(String.format("%-100s","Creating new project..."));
+						if (activity_type == NEW_PROJECT)
+							wd.setTitle("Creating new project...");
+						else
+							wd.setTitle("Updating project...");
 						wd.show();
 					}
-					
+
 					@Override
 					protected Integer doInBackground(Project... params) {
 
 						try {
-							if(WebApi.createProject(params[0]))	{
+
+							//TODO:Check here if project still exists
+							/*
+							 * Calling update or create project based on
+							 * activity type
+							 */
+							if ((activity_type == NEW_PROJECT) ? WebApi
+									.createProject(params[0]) : WebApi
+									.updateProject(NewProjectActivity
+											.getProject())) {
 								me.finish();
 								return 1;
 							}
 						} catch (NetworkErrorException e) {
 							return -1;
 						}
-						
+
 						return 0;
 					}
 
@@ -147,19 +230,22 @@ public class NewProjectActivity extends Activity {
 
 						wd.dismiss();
 						String text = null;
-						if(result == 1)	
-							text = "Project created";
-						else if(result == 0)
-							text = "Error creating project.";
+						if (result == 1)
+							text = (activity_type == NEW_PROJECT) ? "Project created"
+									: "Project updated";
+						else if (result == 0)
+							text = (activity_type == NEW_PROJECT) ? "Error creating project."
+									: "Error updating project";
 						else
 							text = "No internet connection.";
-							
-						Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-						
+
+						Toast.makeText(getApplicationContext(), text,
+								Toast.LENGTH_LONG).show();
+
 					}
-					
+
 				};
-				
+
 				create_project_task.execute(project);
 
 			}
@@ -168,6 +254,9 @@ public class NewProjectActivity extends Activity {
 
 	public void setComponentsFont() {
 
+		/*
+		 * Load font and set it to the controls
+		 */
 		Typeface type = Typeface.createFromAsset(getAssets(),
 				"fonts/zekton.ttf");
 		((TextView) findViewById(R.id.new_project_activity_title))
@@ -181,22 +270,38 @@ public class NewProjectActivity extends Activity {
 		((TextView) findViewById(R.id.new_project_member_list_label))
 				.setTypeface(type);
 		((EditText) findViewById(R.id.new_project_name)).setTypeface(type);
-		// ((TextView) findViewById(android.R.id.text1)).setTypeface(type);
 
 	}
-	
-	public void resizeList(){
 
+	@Override
+	public void onBackPressed() {
+
+		finish();
+
+	}
+
+	public void resizeList() {
+		/*
+		 * if list is contained by scroll view this will resize list so it can
+		 * wrap its content
+		 */
 		GUIFixes.setListViewHeightBasedOnChildren(
 				member_list,
 				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
 	}
-
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		finish();
 	}
-	
+
+	public static Project getProject() {
+		return project;
+	}
+
+	public static void setProject(Project project) {
+		NewProjectActivity.project = project;
+	}
+
 }

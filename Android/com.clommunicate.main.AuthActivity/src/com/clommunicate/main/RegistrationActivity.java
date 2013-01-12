@@ -23,6 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Akira
+ *
+ */
 public class RegistrationActivity extends Activity {
 	private TextView name = null;
 	private TextView email = null;
