@@ -21,7 +21,7 @@ class DBO {
 			try {
 			
 				self::$db = new PDO(
-					'mysql:dbname=akira_clommunicate;host='.$_ENV['OPENSHIFT_MYSQL_DB_HOST'], 
+					'mysql:dbname=clommunicate;host='.$_ENV['OPENSHIFT_MYSQL_DB_HOST'], 
 					$_ENV['OPENSHIFT_MYSQL_DB_USERNAME'],
 					$_ENV['OPENSHIFT_MYSQL_DB_PASSWORD']
 						);
