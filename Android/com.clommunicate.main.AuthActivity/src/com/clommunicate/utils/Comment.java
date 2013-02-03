@@ -1,8 +1,9 @@
 package com.clommunicate.utils;
 
 /**
+ * Clasa POJO, descrierea entitatii Comment
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class Comment {

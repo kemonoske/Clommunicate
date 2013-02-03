@@ -3,7 +3,8 @@ package com.clommunicate.main;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Task;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.TaskDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
@@ -176,14 +177,15 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 			public void onCheckedChanged(CompoundButton buttonView,
 					final boolean isChecked) {
 
-				AsyncTask<Void, Void, Integer> completeTask = new AsyncTask<Void, Void, Integer>() {
+				AsyncTask<Void, Void, Exception> completeTask = new AsyncTask<Void, Void, Exception>() {
 
 					private WaitDialog wd = null;
 
 					@Override
 					protected void onPreExecute() {
 						/*
-						 * A WaitDialog will be displayed while performing request
+						 * A WaitDialog will be displayed while performing
+						 * request
 						 */
 						wd = new WaitDialog(context);
 						wd.setTitle(String.format("%-100s", "Updating task..."));
@@ -191,7 +193,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 					}
 
 					@Override
-					protected Integer doInBackground(Void... params) {
+					protected Exception doInBackground(Void... params) {
 
 						try {
 							/*
@@ -199,30 +201,34 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 							 */
 							// TODO:if task is not removed, if project is not
 							// removed or finished
-							if (WebApi.completeTask(
-									tasks.get(position).getId(), (isChecked ? 1
-											: 0)))
-								return 1;
+							TaskDAO.markTaskCompleted(tasks.get(position)
+									.getId(), (isChecked ? 1 : 0));
 
 						} catch (NetworkErrorException e) {
-							return -1;
+							
+							return e;
+							
+						} catch (WebAPIException e) {
+							
+							return e;
+							
 						}
 
-						return 0;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Integer result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
 						String text = null;
 
-						if (result == 1) {
+						if (result == null) {
 							text = "Task updated.";
 							tasks.get(position).setCompleted(isChecked);
 							notifyDataSetChanged();
-						} else if (result == 0) {
-							text = "Error updating task.";
+						} else if (result instanceof WebAPIException) {
+							text = result.getMessage();
 						} else {
 							text = "No internet connection.";
 						}

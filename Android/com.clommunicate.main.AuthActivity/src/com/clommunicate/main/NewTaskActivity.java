@@ -2,9 +2,11 @@ package com.clommunicate.main;
 
 import java.util.ArrayList;
 
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
+import com.clommunicate.utils.TaskDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
@@ -27,7 +29,7 @@ import android.widget.Toast;
 /**
  * 
  * @author Akira
- *
+ * 
  */
 public class NewTaskActivity extends Activity {
 
@@ -89,12 +91,12 @@ public class NewTaskActivity extends Activity {
 		create_task = (ImageButton) findViewById(R.id.new_task_create_task);
 		delete = (CheckBox) findViewById(R.id.new_task_delete);
 		delete_layout = (LinearLayout) findViewById(R.id.new_task_delete_layout);
-		
-		if(activity_type == EDIT_ACTIVITY)	{
+
+		if (activity_type == EDIT_ACTIVITY) {
 			activity_title.setText("Edit Task");
 			delete_layout.setVisibility(View.VISIBLE);
 		}
-		
+
 		activity_title.setTypeface(typeface);
 		name_label.setTypeface(typeface);
 		name.setTypeface(typeface);
@@ -114,9 +116,9 @@ public class NewTaskActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				if(delete.isChecked())
+				if (delete.isChecked())
 					activity_type = DELETE_ACTIVITY;
-				
+
 				if (name.getText().toString().trim().length() == 0) {
 
 					Toast.makeText(me.getApplicationContext(),
@@ -132,13 +134,14 @@ public class NewTaskActivity extends Activity {
 				}
 
 				Task task = new Task(name.getText().toString(), description
-						.getText().toString(), type.getSelectedItemPosition() + 1,
-						member_ids.get(asign.getSelectedItemPosition()),
+						.getText().toString(),
+						type.getSelectedItemPosition() + 1, member_ids
+								.get(asign.getSelectedItemPosition()),
 						project_id);
-				if(activity_type == EDIT_ACTIVITY)
+				if (activity_type == EDIT_ACTIVITY)
 					task.setId(task_id);
 
-				AsyncTask<Task, Void, Integer> create_project_task = new AsyncTask<Task, Void, Integer>() {
+				AsyncTask<Task, Void, Exception> create_project_task = new AsyncTask<Task, Void, Exception>() {
 
 					private WaitDialog wd = null;
 
@@ -146,112 +149,115 @@ public class NewTaskActivity extends Activity {
 					protected void onPreExecute() {
 
 						wd = new WaitDialog(me);
-						
+
 						switch (activity_type) {
 						case NEW_ACTIVITY:
 
 							wd.setTitle(String.format("%-100s",
 									"Creating new task..."));
-							
+
 							break;
-							
+
 						case EDIT_ACTIVITY:
 
 							wd.setTitle(String.format("%-100s",
 									"Updating task info..."));
-							
+
 							break;
 
 						case DELETE_ACTIVITY:
 
 							wd.setTitle(String.format("%-100s",
 									"Deleting task..."));
-							
+
 							break;
 						default:
 							break;
 						}
-						
+
 						wd.show();
 					}
 
 					@Override
-					protected Integer doInBackground(Task... params) {
+					protected Exception doInBackground(Task... params) {
 
 						try {
-							
-							switch (activity_type) {
-							case NEW_ACTIVITY:
-								
-								if (WebApi.createTask(params[0])) 
-									return 1;
-								
-								break;
-								
-							case EDIT_ACTIVITY:
-								
-								if (WebApi.updateTask(params[0])) 
-									return 1;
-								
-								break;
-								
-							case DELETE_ACTIVITY:
-								
-								if (WebApi.removeTask(task_id)) 
-									return 1;
-								
-								break;
 
-							default:
-								break;
+							switch (activity_type) {
+								case NEW_ACTIVITY:
+	
+									TaskDAO.addTask(params[0]);
+	
+									break;
+	
+								case EDIT_ACTIVITY:
+	
+									TaskDAO.updateTask(params[0]);
+	
+									break;
+	
+								case DELETE_ACTIVITY:
+	
+									TaskDAO.removeTask(task_id);
+	
+									break;
+	
+								default:
+									break;
 							}
-							
+
 						} catch (NetworkErrorException e) {
-							return -1;
+
+							return e;
+
+						} catch (WebAPIException e) {
+
+							return e;
+
 						}
 
-						return 0;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Integer result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
 						String text = null;
 						switch (activity_type) {
 						case NEW_ACTIVITY:
 
-							if (result == 1) {
+							if (result == null) {
 								text = "Task created.";
 								finish();
-							} else if (result == 0) {
-								text = "Error creating task.";
+							} else if (result instanceof WebAPIException) {
+								text = result.getMessage();
 								finish();
 							} else
 								text = "No internet connection.";
 
 							break;
-							
+
 						case EDIT_ACTIVITY:
 
-							if (result == 1) {
+							if (result == null) {
 								text = "Task updated.";
 								finish();
-							} else if (result == 0) {
-								text = "Error updating task.";
+							} else if (result instanceof WebAPIException) {
+								text = result.getMessage();
 								finish();
 							} else
 								text = "No internet connection.";
 
 							break;
-							
+
 						case DELETE_ACTIVITY:
 
-							if (result == 1) {
+							if (result == null) {
 								text = "Task Deleted.";
 								finish();
-							} else if (result == 0) {
-								text = "Error deleting task.";
+							} else if (result instanceof WebAPIException) {
+								text = result.getLocalizedMessage();
 								finish();
 							} else
 								text = "No internet connection.";
@@ -291,23 +297,26 @@ public class NewTaskActivity extends Activity {
 				ArrayList<User> members = new ArrayList<User>();
 				Task task = null;
 
-				aux[2] = 0;
-				
+				aux[2] = null;
+
 				try {
-					
-					if(activity_type == EDIT_ACTIVITY)	{
-						members = WebApi.getProjectMembers(project_id);
-						task =  WebApi.getTask(task_id);
-						if (members.size() != 0 && task != null)
-							aux[2] = 1;
-					} else	{
-						members = WebApi.getProjectMembers(project_id);
-						if (members.size() != 0)
-							aux[2] = 1;
+
+					if (activity_type == EDIT_ACTIVITY) {
+
+						members = ProjectDAO.getProjectMembers(project_id);
+						task = TaskDAO.getTask(task_id);
+
+					} else {
+						members = ProjectDAO.getProjectMembers(project_id);
+
 					}
 				} catch (NetworkErrorException e) {
 
-					aux[2] = -1;
+					aux[2] = e;
+
+				} catch (WebAPIException e) {
+
+					aux[2] = e;
 
 				}
 
@@ -325,17 +334,18 @@ public class NewTaskActivity extends Activity {
 				WaitDialog wd = (WaitDialog) result[0];
 				ArrayList<User> members = (ArrayList<User>) result[1];
 				Task task = (Task) result[3];
-				Integer error = (Integer) result[2];
+				Exception error = (Exception) result[2];
 				wd.dismiss();
 
-				String text = null;
+				if (error instanceof NetworkErrorException) {
 
-				text = (error == 0) ? "Error can't load task info."
-						: "No internet connection.";
+					Toast.makeText(me, "No internet connection.", Toast.LENGTH_SHORT).show();
+					
+				} else if (error instanceof WebAPIException) {
 
-				if (error == 0 || error == -1)
-					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
-				else {
+					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT).show();
+					
+				} else {
 
 					ArrayList<CharSequence> aux = new ArrayList<CharSequence>();
 					member_ids = new ArrayList<Integer>();
@@ -344,8 +354,8 @@ public class NewTaskActivity extends Activity {
 					for (User i : members) {
 						aux.add(i.getName() + "\t(" + i.getEmail() + ")");
 						member_ids.add(i.getId());
-						if(activity_type == EDIT_ACTIVITY)
-							if(i.getId() == task.getAsigned_id())	
+						if (activity_type == EDIT_ACTIVITY)
+							if (i.getId() == task.getAsigned_id())
 								pos = member_ids.size() - 1;
 					}
 
@@ -353,7 +363,7 @@ public class NewTaskActivity extends Activity {
 							me, android.R.layout.simple_spinner_item, aux);
 					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 					asign.setAdapter(adapter);
-					if(activity_type == EDIT_ACTIVITY){
+					if (activity_type == EDIT_ACTIVITY) {
 						name.setText(task.getName());
 						description.setText(task.getDescription());
 						type.setSelection(task.getType() - 1, true);

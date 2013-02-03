@@ -1,7 +1,9 @@
 package com.clommunicate.main;
 
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.UserDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Dialog;
@@ -133,63 +135,40 @@ public class AddMemberDialog extends Dialog {
 			/*
 			 * If such user exist in system, we can add it
 			 */
-			if (WebApi.login(email.getText().toString())) {
+			final User user = UserDAO.login(email.getText().toString());
 
+			if (user == null) {
+
+				result = "User cannot be added to the list, maybe a server error.";
+
+			} else if (member_adapter.contains(user)) /*
+													 * We can't add same user 2
+													 * times
+													 */{
+
+				result = "This user is already a member of this project.";
+
+			} else if (member_adapter.isOwner(user)) /*
+													 * We can't add owner to his
+													 * own project
+													 */{
+
+				result = "You don't have to add yourself, owner is a member by default.";
+
+			} else {
 				/*
-				 * Retrieve user object from the server
+				 * If dialog works in remote mode we must add user to database
+				 * otherwise just add to the list adapter
 				 */
-				final User user = WebApi.getClommunicateUser(email.getText()
-						.toString());
+				if (action_type == REMOTE) {
 
-				if (user == null) {
-
-					result = "User cannot be added to the list, maybe a server error.";
-
-				} else if (member_adapter.contains(user)) /*
-														 * We can't add same
-														 * user 2 times
-														 */{
-
-					result = "This user is already a member of this project.";
-
-				} else if (member_adapter.isOwner(user)) /*
-														 * We can't add owner to
-														 * his own project
-														 */{
-
-					result = "You don't have to add yourself, owner is a member by default.";
-
-				} else {
 					/*
-					 * If dialog works in remote mode we must add user to
-					 * database otherwise just add to the list adapter
+					 * If user successfully added to database then we set
+					 * positive result message and add member to the adapter
+					 * using post on ListView control
 					 */
-					if (action_type == REMOTE) {
-
-						/*
-						 * If user successfully added to database then we set
-						 * positive result message and add member to the adapter
-						 * using post on ListView control
-						 */
-						if (WebApi.addMember(ProjectActivity.project.getId(),
-								user.getId())) {
-							result = "Member successfully added tot the project.";
-							member_list.post(new Runnable() {
-								public void run() {
-
-									member_adapter.addMember(user);
-
-								}
-							});
-						} else
-							result = "Error adding member to the project.";
-
-					} else {
-
-						/*
-						 * Set positive result message and add member to the
-						 * adapter using post on ListView control
-						 */
+					if (ProjectDAO.addMember(ProjectActivity.project.getId(),
+							user.getId())) {
 						result = "Member successfully added tot the project.";
 						member_list.post(new Runnable() {
 							public void run() {
@@ -198,19 +177,34 @@ public class AddMemberDialog extends Dialog {
 
 							}
 						});
-					}
+					} else
+						result = "Error adding member to the project.";
+
+				} else {
+
+					/*
+					 * Set positive result message and add member to the adapter
+					 * using post on ListView control
+					 */
+					result = "Member successfully added tot the project.";
+					member_list.post(new Runnable() {
+						public void run() {
+
+							member_adapter.addMember(user);
+
+						}
+					});
 				}
-
-			} else /* If there is no such user in the system */{
-
-				result = "No user with such email in the system.";
-
 			}
 		} catch (NetworkErrorException e) /*
 										 * if connection is lost or post request
 										 * returns null
 										 */{
 			result = "No internet connection.";
+		} catch (WebAPIException e) {
+
+			result = e.getMessage();
+
 		}
 
 	}

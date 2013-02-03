@@ -2,8 +2,9 @@ package com.clommunicate.main;
 
 import com.clommunicate.utils.GUIFixes;
 import com.clommunicate.utils.Project;
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
@@ -182,7 +183,7 @@ public class NewProjectActivity extends Activity {
 
 				}
 
-				AsyncTask<Project, Void, Integer> create_project_task = new AsyncTask<Project, Void, Integer>() {
+				AsyncTask<Project, Void, Exception> create_project_task = new AsyncTask<Project, Void, Exception>() {
 
 					private WaitDialog wd = null;
 
@@ -202,40 +203,45 @@ public class NewProjectActivity extends Activity {
 					}
 
 					@Override
-					protected Integer doInBackground(Project... params) {
+					protected Exception doInBackground(Project... params) {
 
 						try {
 
-							//TODO:Check here if project still exists
+							// TODO:Check here if project still exists
 							/*
 							 * Calling update or create project based on
 							 * activity type
 							 */
-							if ((activity_type == NEW_PROJECT) ? WebApi
-									.createProject(params[0]) : WebApi
-									.updateProject(NewProjectActivity
-											.getProject())) {
-								me.finish();
-								return 1;
-							}
+							if (activity_type == NEW_PROJECT)
+								ProjectDAO.addProject(params[0]);
+							else
+								ProjectDAO.updateProject(NewProjectActivity
+										.getProject());
+							me.finish();
+
 						} catch (NetworkErrorException e) {
-							return -1;
+
+							return e;
+
+						} catch (WebAPIException e) {
+
+							return e;
+
 						}
 
-						return 0;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Integer result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
 						String text = null;
-						if (result == 1)
+						if (result == null)
 							text = (activity_type == NEW_PROJECT) ? "Project created"
 									: "Project updated";
-						else if (result == 0)
-							text = (activity_type == NEW_PROJECT) ? "Error creating project."
-									: "Error updating project";
+						else if (result instanceof WebAPIException)
+							text = result.getMessage();
 						else
 							text = "No internet connection.";
 

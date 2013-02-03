@@ -1,6 +1,7 @@
 package com.clommunicate.main;
 
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.ProjectDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Dialog;
@@ -59,9 +60,9 @@ public class YesNoDialog extends Dialog {
 					public void run() {
 						try {
 							if (partIn)
-								status = WebApi.removeMember(pid, uid);
+								status = ProjectDAO.removeMember(pid, uid);
 							else
-								status = WebApi.removeProject(pid);
+								status = ProjectDAO.removeProject(pid);
 							msg = (status) ? ((partIn) ? "You are no longer a member of the project."
 									: "Project removed.")
 									: "Operation failed, possible server problem.";
@@ -69,6 +70,10 @@ public class YesNoDialog extends Dialog {
 
 							msg = "No internet connection.";
 
+						} catch (WebAPIException e) {
+
+							msg = e.getMessage();
+							
 						}
 						dismiss();
 					}
@@ -114,13 +119,17 @@ public class YesNoDialog extends Dialog {
 					public void run() {
 						try {
 
-							status = WebApi.finishProject(pid);
+							status = ProjectDAO.markProjectCompleted(pid);
 							msg = (status) ? "This project is now completed."
 									: "Operation failed, possible server problem.";
 						} catch (NetworkErrorException e) {
 
 							msg = "No internet connection.";
 
+						} catch (WebAPIException e) {
+
+							msg = e.getMessage();
+							
 						}
 						dismiss();
 					}

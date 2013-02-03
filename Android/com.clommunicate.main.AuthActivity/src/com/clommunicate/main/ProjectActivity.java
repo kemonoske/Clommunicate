@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import com.clommunicate.utils.Project;
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
+import com.clommunicate.utils.TaskDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
@@ -572,7 +574,7 @@ public class ProjectActivity extends Activity {
 				WaitDialog wd = params[0];
 				ArrayList<User> members = new ArrayList<User>();
 				ArrayList<Task> tasks = new ArrayList<Task>();
-				aux[2] = 0;
+				aux[2] = null;
 
 				try {
 
@@ -581,20 +583,19 @@ public class ProjectActivity extends Activity {
 					/*
 					 * Geting tasks and members from Server
 					 */
-					members = WebApi.getProjectMembers(project.getId());
-					tasks = WebApi.getTaskList(project.getId());
-					/*
-					 * If data received then error is 1 witch means everything
-					 * is ok
-					 */
-					if (members.size() != 0)
-						aux[2] = 1;
+					members = ProjectDAO.getProjectMembers(project.getId());
+					tasks = TaskDAO.getTaskList(project.getId());
+
 				} catch (NetworkErrorException e) {
 					/*
 					 * When there is no internet connection, or postRequest
 					 * returns null
 					 */
-					aux[2] = -1;
+					aux[2] = e;
+
+				} catch (WebAPIException e) {
+
+					aux[2] = e;
 
 				}
 
@@ -612,22 +613,22 @@ public class ProjectActivity extends Activity {
 				WaitDialog wd = (WaitDialog) result[0];
 				ArrayList<User> members = (ArrayList<User>) result[1];
 				ArrayList<Task> tasks = (ArrayList<Task>) result[3];
-				Integer error = (Integer) result[2];
+				Exception error = (Exception) result[2];
 				wd.dismiss();
-
-				String text = null;
-
-				text = (error == 0) ? "Error can't load project info."
-						: "No internet connection.";
 
 				/*
 				 * When there is an error Activity is finished, and a message is
 				 * displayed
 				 */
-				if (error == 0 || error == -1) {
-					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
-					if (error == 0)
-						finish();
+				if (error instanceof NetworkErrorException) {
+
+					Toast.makeText(me, "No internet connection.", Toast.LENGTH_SHORT).show();
+					finish();
+
+				} else if (error instanceof WebAPIException) {
+
+					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT).show();
+
 				} else {
 					project.setTask_list(tasks);
 					project.setMember_list(members);

@@ -3,7 +3,8 @@ package com.clommunicate.main;
 import com.clommunicate.main.R;
 import com.clommunicate.utils.Login;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.UserDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -170,7 +171,7 @@ public class AuthActivity extends Activity {
 				 * Wait dialog is displayed while login is performed
 				 */
 				final WaitDialog wd = new WaitDialog(me);
-				AsyncTask<String, Void, Byte> auth = new AsyncTask<String, Void, Byte>() {
+				AsyncTask<String, Void, Exception> auth = new AsyncTask<String, Void, Exception>() {
 
 					@Override
 					protected void onPreExecute() {
@@ -179,9 +180,7 @@ public class AuthActivity extends Activity {
 					}
 
 					@Override
-					protected Byte doInBackground(String... params) {
-
-						byte aux = -1;
+					protected Exception doInBackground(String... params) {
 
 						try {
 
@@ -189,22 +188,27 @@ public class AuthActivity extends Activity {
 							 * If user exists in database we get user object
 							 * containing all user data
 							 */
-							aux = (byte) ((WebApi.login(params[0])) ? 1 : 0);
-							if (aux == 1)
-								User.user = WebApi.getClommunicateUser(s);
-
+							User.user = UserDAO.login(params[0]);
+							
+							
 						} catch (NetworkErrorException e) {
-							aux = -1;
+							
+							return e;
+					
+						} catch(WebAPIException e){
+							
+							return e;
+							
 						}
 
-						return aux;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Byte result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
-						if (result == 1) {
+						if (result == null) {
 							/*
 							 * I the user data received start activity showing
 							 * user information
@@ -213,7 +217,7 @@ public class AuthActivity extends Activity {
 									UserActivity.class);
 							startActivity(i);
 
-						} else if (result == 0) {
+						} else if (result instanceof WebAPIException) {
 
 							/*
 							 * If there is no such user in database then a
@@ -226,11 +230,14 @@ public class AuthActivity extends Activity {
 							i.putExtra("email", s);
 							startActivity(i);
 
-						} else /*If there is no internet or post request returns null*/
+						} else if(result instanceof NetworkErrorException){/*If there is no internet or post request returns null*/
 							Toast.makeText(me.getApplicationContext(),
 									"No internet connection.",
 									Toast.LENGTH_SHORT).show();
-
+						}	else	
+							Toast.makeText(me.getApplicationContext(),
+									"Unknown exception.",
+									Toast.LENGTH_SHORT).show();
 					}
 
 				};

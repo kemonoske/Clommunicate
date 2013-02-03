@@ -3,8 +3,9 @@ package com.clommunicate.main;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Project;
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.annotation.SuppressLint;
@@ -18,10 +19,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -56,7 +63,7 @@ public class ProjectListActivity extends Activity {
 	 * GUI elements
 	 */
 	private TextView title = null;
-	private ListView project_list = null;
+	private AbsListView project_list = null;
 	private ImageButton search_button = null;
 	private EditText search_field = null;
 
@@ -75,6 +82,23 @@ public class ProjectListActivity extends Activity {
 		search_field = (EditText) findViewById(R.id.project_list_search_field);
 
 		/*
+		 * Creating animation
+		 */
+		AnimationSet set = new AnimationSet(true);
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+		animation.setDuration(10);
+		set.addAnimation(animation);
+		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
+				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, -1.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f);
+		animation.setDuration(200);
+		set.addAnimation(animation);
+		LayoutAnimationController controller = new LayoutAnimationController(
+				set, 0.5f);
+		project_list.setLayoutAnimation(controller);
+		
+		/*
 		 * Loading font from asserts
 		 */
 		Typeface type = Typeface.createFromAsset(getAssets(),
@@ -89,7 +113,6 @@ public class ProjectListActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
 				/*
 				 * If search bar is not expanded, it is made visible and
 				 * expanded is set to true otherwise its hidden, search bar is
@@ -173,7 +196,8 @@ public class ProjectListActivity extends Activity {
 									.setProject(((ProjectListArrayAdapter) project_list
 											.getAdapter()).getProject(arg2));
 							Intent i = new Intent(me, NewProjectActivity.class);
-							i.putExtra("activity_type", NewProjectActivity.EDIT_PROJECT);
+							i.putExtra("activity_type",
+									NewProjectActivity.EDIT_PROJECT);
 							startActivity(i);
 
 							return false;
@@ -212,6 +236,7 @@ public class ProjectListActivity extends Activity {
 				 * Unused
 				 */
 			}
+
 		});
 
 	}
@@ -240,16 +265,16 @@ public class ProjectListActivity extends Activity {
 
 				Object[] res = new Object[2];
 				res[0] = null;
-				res[1] = new Integer(0);
+				res[1] = null;
 
 				try {
-					res[0] = WebApi.getProjectList(User.user.getId(), partIn);
+					res[0] = ProjectDAO.getProjectList(User.user.getId(), partIn);
 				} catch (NetworkErrorException e) {
-					res[1] = -1;
-				}
+					res[1] = e;
+				} catch (WebAPIException e) {
 
-				if (res[0] != null)
-					res[1] = 1;
+					res[1] = e;
+				}
 
 				return res;
 			}
@@ -258,25 +283,28 @@ public class ProjectListActivity extends Activity {
 			@Override
 			protected void onPostExecute(Object[] res) {
 
-				Integer result = (Integer) res[1];
+				Exception result = (Exception) res[1];
 
 				wd.dismiss();
+
 				/*
 				 * If everything is ok the the adapter is set using data from
 				 * server otherwise an empty list is used to set adapter
 				 */
-				if (result == 1)
+				if (result == null)	{
 					project_list.setAdapter(new ProjectListArrayAdapter(me,
 							((ArrayList<Project>) res[0]), partIn));
-				else if (result == 0) {
-					project_list.setAdapter(new ProjectListArrayAdapter(me,
+					project_list.startLayoutAnimation();
+				}	else if (result instanceof NetworkErrorException) {
+					/*project_list.setAdapter(new ProjectListArrayAdapter(me,
 							(new ArrayList<Project>(0)), partIn));
-					Toast.makeText(getApplicationContext(),
-							"Project list is empty...", Toast.LENGTH_SHORT)
-							.show();
-				} else {
+					project_list.startLayoutAnimation();*/
 					Toast.makeText(getApplicationContext(),
 							"No internet connection.", Toast.LENGTH_SHORT)
+							.show();
+				} else if(result instanceof WebAPIException) {
+					Toast.makeText(getApplicationContext(),
+							result.getMessage(), Toast.LENGTH_SHORT)
 							.show();
 				}
 			}

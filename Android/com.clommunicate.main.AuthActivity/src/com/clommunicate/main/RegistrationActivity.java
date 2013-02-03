@@ -3,7 +3,8 @@ package com.clommunicate.main;
 import com.clommunicate.main.R;
 import com.clommunicate.oAuth2.AuthUtils;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.UserDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -82,7 +83,7 @@ public class RegistrationActivity extends Activity {
 
 				final WaitDialog wd = new WaitDialog(me);
 
-				AsyncTask<Void, Void, Integer> registerTask = new AsyncTask<Void, Void, Integer>() {
+				AsyncTask<Void, Void, Exception> registerTask = new AsyncTask<Void, Void, Exception>() {
 
 					@Override
 					protected void onPreExecute() {
@@ -94,37 +95,39 @@ public class RegistrationActivity extends Activity {
 					}
 
 					@Override
-					protected Integer doInBackground(Void... params) {
+					protected Exception doInBackground(Void... params) {
 
 						try {
-							if (WebApi.register(usr))
-								return 1;
-						} catch (NetworkErrorException e) {
+							
+							if (UserDAO.register(usr))
+								return null;
+							
+						} catch (Exception e) {
 
-							return -1;
+							return e;
 
 						}
 
-						return 0;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Integer result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
 						String text = null;
 
-						if (result == 1) {
+						if (result == null) {
 							text = "Registration success.";
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
 							User.user = usr;
 							startActivity(i);
 							finish();
-						} else if (result == 0) {
-							text = "Registration failed.";
+						} else if (result instanceof WebAPIException) {
+							text = result.getMessage();
 							onBackPressed();
-						} else {
+						} else if(result instanceof NetworkErrorException){
 							text = "No internet connection.";
 							onBackPressed();
 						}
@@ -208,9 +211,11 @@ public class RegistrationActivity extends Activity {
 					return 2;
 				// System.err.println(accessToken);
 				try {
-					usr = WebApi.getGoogleUser(accessToken, acc.name);
+					usr = AuthUtils.getGoogleUser(accessToken, acc.name);
 				} catch (NetworkErrorException e) {
 					return -1;
+				} catch (WebAPIException e) {
+					return 0;
 				}
 
 				if (usr != null)

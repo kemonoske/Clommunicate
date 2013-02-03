@@ -3,9 +3,12 @@ package com.clommunicate.main;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Comment;
+import com.clommunicate.utils.CommentDAO;
+import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
+import com.clommunicate.utils.TaskDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
@@ -115,20 +118,22 @@ public class TaskActivity extends Activity {
 				WaitDialog wd = params[0];
 				Task task = null;
 
-				aux[2] = 0;
+				aux[2] = null;
 				try {
-					task = WebApi.getTask(task_id);
+					task = TaskDAO.getTask(task_id);
 					if (task != null) {
 
-						members = WebApi.getProjectMembers(task.getOwner());
-						comments = WebApi.getCommentList(task.getId());
-
-						aux[2] = 1;
+						members = ProjectDAO.getProjectMembers(task.getOwner());
+						comments = CommentDAO.getCommentList(task.getId());
 
 					}
 				} catch (NetworkErrorException e) {
 
-					aux[2] = -1;
+					aux[2] = e;
+
+				} catch (WebAPIException e) {
+
+					aux[2] = e;
 
 				}
 
@@ -143,19 +148,24 @@ public class TaskActivity extends Activity {
 			protected void onPostExecute(Object[] result) {
 				WaitDialog wd = (WaitDialog) result[0];
 				Task task1 = (Task) result[1];
-				Integer error = (Integer) result[2];
+				Exception error = (Exception) result[2];
 				wd.dismiss();
 
-				String text = null;
+				if (error == null) {
 
-				text = (error == 0) ? "Error can't load task info."
-						: "No internet connection.";
-
-				if (error == 0 || error == -1) {
-					Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
-				} else {
 					task = task1;
 					loadTaskDataToUI();
+
+				} else if (error instanceof WebAPIException) {
+
+					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT)
+							.show();
+
+				} else if (error instanceof NetworkErrorException) {
+
+					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT)
+							.show();
+
 				}
 			}
 
@@ -219,15 +229,15 @@ public class TaskActivity extends Activity {
 		if (User.user.getPicture() != null)
 			user_photo.setImageBitmap(User.user.getPicture());
 
-		if(ProjectActivity.project.isCompleted())	{
-			
+		if (ProjectActivity.project.isCompleted()) {
+
 			task_completion.setEnabled(false);
 			user_comment.setFocusable(false);
 			user_comment.clearFocus();
 			user_comment.setEnabled(false);
-			
+
 		}
-			
+
 		/*
 		 * When completed box is checked or unchecked
 		 */
@@ -238,7 +248,7 @@ public class TaskActivity extends Activity {
 					public void onCheckedChanged(CompoundButton buttonView,
 							final boolean isChecked) {
 
-						AsyncTask<Void, Void, Integer> completeTask = new AsyncTask<Void, Void, Integer>() {
+						AsyncTask<Void, Void, Exception> completeTask = new AsyncTask<Void, Void, Exception>() {
 
 							private WaitDialog wd = null;
 
@@ -255,7 +265,7 @@ public class TaskActivity extends Activity {
 							}
 
 							@Override
-							protected Integer doInBackground(Void... params) {
+							protected Exception doInBackground(Void... params) {
 
 								try {
 									/*
@@ -264,24 +274,28 @@ public class TaskActivity extends Activity {
 									// TODO:if task is not removed, if project
 									// is not
 									// removed or finished
-									if (WebApi.completeTask(task.getId(),
-											(isChecked ? 1 : 0)))
-										return 1;
+									TaskDAO.markTaskCompleted(task.getId(),
+											(isChecked ? 1 : 0));
 
 								} catch (NetworkErrorException e) {
-									return -1;
+
+									return e;
+
+								} catch (WebAPIException e) {
+
+									return e;
 								}
 
-								return 0;
+								return null;
 							}
 
 							@Override
-							protected void onPostExecute(Integer result) {
+							protected void onPostExecute(Exception result) {
 
 								wd.dismiss();
 								String text = null;
 
-								if (result == 1) {
+								if (result == null) {
 									text = "Task updated.";
 									task.setCompleted(isChecked);
 									Time t = new Time();
@@ -292,9 +306,9 @@ public class TaskActivity extends Activity {
 											+ (((t.monthDay) < 10) ? "0" : "")
 											+ (t.monthDay));
 									loadTaskDataToUI();
-								} else if (result == 0) {
-									text = "Error updating task.";
-								} else {
+								} else if (result instanceof WebAPIException) {
+									text = result.getMessage();
+								} else if (result instanceof NetworkErrorException) {
 									text = "No internet connection.";
 								}
 								Toast.makeText(getApplicationContext(), text,
@@ -317,15 +331,14 @@ public class TaskActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				if(user_comment.getText().toString().trim().length() == 0)	{
+				if (user_comment.getText().toString().trim().length() == 0) {
 					return;
 				}
-				
-				Comment comment = new Comment(
-						user_comment.getText().toString().trim(), User.user.getId(),
-						task.getId());
 
-				AsyncTask<Comment, Void, Integer> create_comment = new AsyncTask<Comment, Void, Integer>() {
+				Comment comment = new Comment(user_comment.getText().toString()
+						.trim(), User.user.getId(), task.getId());
+
+				AsyncTask<Comment, Void, Exception> create_comment = new AsyncTask<Comment, Void, Exception>() {
 
 					private WaitDialog wd = null;
 
@@ -338,31 +351,36 @@ public class TaskActivity extends Activity {
 					}
 
 					@Override
-					protected Integer doInBackground(Comment... params) {
+					protected Exception doInBackground(Comment... params) {
 
 						try {
-							if (WebApi.createComment(params[0]))
-								return 1;
+
+							CommentDAO.addComment(params[0]);
 
 						} catch (NetworkErrorException e) {
-							return -1;
+							
+							return e;
+						
+						} catch (WebAPIException e) {
+
+							return e;
 						}
 
-						return 0;
+						return null;
 					}
 
 					@Override
-					protected void onPostExecute(Integer result) {
+					protected void onPostExecute(Exception result) {
 
 						wd.dismiss();
 						String text = null;
 
-						if (result == 1) {
+						if (result == null) {
 							text = "Comment added.";
 							user_comment.setText("");
 							onResume();
-						} else if (result == 0) {
-							text = "Error adding comment.";
+						} else if (result instanceof WebAPIException) {
+							text = result.getMessage();
 						} else
 							text = "No internet connection.";
 
@@ -385,5 +403,4 @@ public class TaskActivity extends Activity {
 		comment_list.setAdapter(ca);
 
 	}
-
 }

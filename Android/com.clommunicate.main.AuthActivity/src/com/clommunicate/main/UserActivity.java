@@ -1,7 +1,8 @@
 package com.clommunicate.main;
 
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.UserDAO;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
@@ -22,12 +23,11 @@ import android.widget.Toast;
 /**
  * 
  * @author Akira
- *
+ * 
  */
 public class UserActivity extends Activity {
 
 	private ListView userDataList = null;
-	private User user = null;
 	private TextView name = null;
 	private TextView projects_count = null;
 	private TextView part_in__count = null;
@@ -41,7 +41,6 @@ public class UserActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user);
 
-		user = User.user;
 		name = (TextView) findViewById(R.id.user_name);
 		projects_count = (TextView) findViewById(R.id.user_created_projects);
 		part_in__count = (TextView) findViewById(R.id.user_projects_part_in);
@@ -59,8 +58,8 @@ public class UserActivity extends Activity {
 		part_in__count.setTypeface(type);
 		new_project.setTypeface(type);
 		name.setText(User.user.getName());
-		if (user.getPicture() != null)
-			avatar.setImageBitmap(user.getPicture());
+		if (User.user.getPicture() != null)
+			avatar.setImageBitmap(User.user.getPicture());
 		userDataList = (ListView) findViewById(R.id.user_data);
 		userDataList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -113,44 +112,53 @@ public class UserActivity extends Activity {
 
 		super.onResume();
 
-		AsyncTask<Void, Void, Boolean> loadUser = new AsyncTask<Void, Void, Boolean>() {
+		AsyncTask<Void, Void, Exception> loadUser = new AsyncTask<Void, Void, Exception>() {
 
 			@Override
-			protected Boolean doInBackground(Void... params) {
+			protected Exception doInBackground(Void... params) {
 
 				try {
-					WebApi.fillClommunicateUser(User.user);
+					User.user = UserDAO.login(User.user.getEmail());
 				} catch (NetworkErrorException e) {
-					return false;
+					return e;
+				} catch (WebAPIException e) {
+					return e;
 				}
 
-				return true;
+				return null;
 			}
 
 			@Override
-			protected void onPostExecute(Boolean result) {
-				if (!result) {
+			protected void onPostExecute(Exception result) {
+				if (result instanceof NetworkErrorException) {
 					onBackPressed();
-					Toast.makeText(me,
-							"No internet connection, or server is inactive",
+					Toast.makeText(me, "No internet connection.",
 							Toast.LENGTH_SHORT).show();
 					return;
-				}
-				projects_count.setText(String.valueOf(user.getProjects()));
-				part_in__count.setText(String.valueOf(user.getPartIn()));
-				String[] userData = { user.getEmail(),
-						user.getGender().toString(), user.getLocale(),
-						String.valueOf(user.getProjects()),
-						String.valueOf(user.getPartIn()) };
-				String[] userDataTitles = { "Email", "Gender", "Locale",
-						"Projects Created", "Projects Part In" };
-				int[] userDataIcons = { R.drawable.email_icon,
-						R.drawable.gender_icon, R.drawable.locale_icon,
-						R.drawable.owner_icon, R.drawable.part_in_icon };
+				} else if (result instanceof WebAPIException) {
 
-				UserDataArrayAdapter userDataAdapter = new UserDataArrayAdapter(
-						me, userData, userDataTitles, userDataIcons);
-				userDataList.setAdapter(userDataAdapter);
+					onBackPressed();
+					Toast.makeText(me, result.getMessage(), Toast.LENGTH_SHORT)
+							.show();
+					return;
+
+				} else {
+					projects_count.setText(String.valueOf(User.user.getProjects()));
+					part_in__count.setText(String.valueOf(User.user.getPartIn()));
+					String[] userData = { User.user.getEmail(),
+							User.user.getGender().toString(), User.user.getLocale(),
+							String.valueOf(User.user.getProjects()),
+							String.valueOf(User.user.getPartIn()) };
+					String[] userDataTitles = { "Email", "Gender", "Locale",
+							"Projects Created", "Projects Part In" };
+					int[] userDataIcons = { R.drawable.email_icon,
+							R.drawable.gender_icon, R.drawable.locale_icon,
+							R.drawable.owner_icon, R.drawable.part_in_icon };
+
+					UserDataArrayAdapter userDataAdapter = new UserDataArrayAdapter(
+							me, userData, userDataTitles, userDataIcons);
+					userDataList.setAdapter(userDataAdapter);
+				}
 			}
 
 		};
@@ -159,13 +167,10 @@ public class UserActivity extends Activity {
 
 	}
 
-
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		finish();
 	}
-	
-	
+
 }

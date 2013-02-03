@@ -3,8 +3,9 @@ package com.clommunicate.main;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Comment;
+import com.clommunicate.utils.CommentDAO;
 import com.clommunicate.utils.User;
-import com.clommunicate.utils.WebApi;
+import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
@@ -149,7 +150,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 										Object[] aux = new Object[2];
 										WaitDialog wd = params[0];
 
-										aux[1] = 0;
+										aux[1] = null;
+
 										try {
 
 											// TODO:Check here if the task still
@@ -158,13 +160,17 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 											 * If comment removed from database
 											 * then the error status is OK
 											 */
-											if (WebApi.removeComment(comments
-													.get(position).getId()))
-												aux[1] = 1;
+											CommentDAO.removeComment(comments
+													.get(position).getId());
+
 										} catch (NetworkErrorException e) {
 
-											aux[1] = -1;
+											aux[1] = e;	
+											
+										} catch (WebAPIException e) {
 
+											aux[1] = e;
+										
 										}
 
 										aux[0] = wd;
@@ -176,25 +182,30 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 									@Override
 									protected void onPostExecute(Object[] result) {
 										WaitDialog wd = (WaitDialog) result[0];
-										Integer error = (Integer) result[1];
+										Exception e = (Exception) result[1];
 										wd.dismiss();
 
 										String text = null;
-
-										text = (error == 0) ? "Error can't remove comment."
-												: "No internet connection.";
 
 										/*
 										 * If removing is successful we remove
 										 * comment object from the list and
 										 * notify data set changed
 										 */
-										if (error == 1) {
+										if (e == null) {
 
 											text = "Comment removed.";
 											comments.remove(position);
 											notifyDataSetChanged();
 
+										}	else if( e instanceof NetworkErrorException)	{
+											
+											text = "NO internet connection";
+											
+										}	else if(e instanceof WebAPIException)	{
+											
+											text = e.getMessage();
+											
 										}
 
 										Toast.makeText(context, text,
