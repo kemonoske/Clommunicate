@@ -13,6 +13,7 @@
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
             android:name=".AuthActivity"
+            android:windowSoftInputMode="stateHidden" 
             android:label="@string/title_activity_auth">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity">
+            android:name=".RegistrationActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.REGISTER" />
 
@@ -29,7 +31,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserActivity" >
+            android:name=".UserActivity"
+            android:windowSoftInputMode="stateHidden"  >
             <intent-filter>
                 <action android:name="android.intent.action.USER" />
 
@@ -37,7 +40,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewProjectActivity">
+            android:name=".NewProjectActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_PROJECT" />
 
@@ -45,7 +49,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TaskActivity">
+            android:name=".TaskActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.TASK" />
 
@@ -53,7 +58,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewTaskActivity">
+            android:name=".NewTaskActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_TASK" />
 
@@ -61,7 +67,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProjectListActivity">
+            android:name=".ProjectListActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.PROJECT_LIST" />
 
@@ -69,7 +76,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProjectActivity">
+            android:name=".ProjectActivity"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.PROJECT" />
 
