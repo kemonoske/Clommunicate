@@ -33,7 +33,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class TaskActivity extends Activity {
@@ -63,6 +63,7 @@ public class TaskActivity extends Activity {
 	private ListView comment_list = null;
 	private ArrayList<Comment> comments = null;
 	private ArrayList<User> members = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +97,11 @@ public class TaskActivity extends Activity {
 		task_date_label.setTypeface(typeface);
 		task_date.setTypeface(typeface);
 		task_description.setTypeface(typeface);
-		asigned_name.setTypeface(typeface);
-		asigned_email.setTypeface(typeface);
-		user_comment.setTypeface(typeface);
+		if (asigned_name != null) {
+			asigned_name.setTypeface(typeface);
+			asigned_email.setTypeface(typeface);
+			user_comment.setTypeface(typeface);
+		}
 
 	}
 
@@ -106,7 +109,7 @@ public class TaskActivity extends Activity {
 	protected void onResume() {
 
 		super.onResume();
-		WaitDialog wd = new WaitDialog(me);
+		wd = new WaitDialog(me);
 		wd.setTitle(String.format("%-100s", "Loading task data..."));
 		wd.show();
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
@@ -115,7 +118,7 @@ public class TaskActivity extends Activity {
 			protected Object[] doInBackground(WaitDialog... params) {
 
 				Object[] aux = new Object[3];
-				WaitDialog wd = params[0];
+				wd = params[0];
 				Task task = null;
 
 				aux[2] = null;
@@ -146,7 +149,7 @@ public class TaskActivity extends Activity {
 
 			@Override
 			protected void onPostExecute(Object[] result) {
-				WaitDialog wd = (WaitDialog) result[0];
+				wd = (WaitDialog) result[0];
 				Task task1 = (Task) result[1];
 				Exception error = (Exception) result[2];
 				wd.dismiss();
@@ -154,7 +157,18 @@ public class TaskActivity extends Activity {
 				if (error == null) {
 
 					task = task1;
-					loadTaskDataToUI();
+					try {
+						loadTaskDataToUI();
+					} catch (NullPointerException e) {
+
+						Intent i = new Intent(me, AuthActivity.class);
+						startActivity(i);
+						Toast.makeText(
+								me,
+								"You have been away for too long, please relogin.",
+								Toast.LENGTH_SHORT).show();
+						finish();
+					}
 
 				} else if (error instanceof WebAPIException) {
 
@@ -174,7 +188,7 @@ public class TaskActivity extends Activity {
 
 	}
 
-	public void loadTaskDataToUI() {
+	public void loadTaskDataToUI() throws NullPointerException {
 
 		switch (task.getType()) {
 		case Task.GENERAL:
@@ -222,13 +236,14 @@ public class TaskActivity extends Activity {
 		task_date.setText((task.isCompleted() ? task.getEnd_date() : task
 				.getStart_date()));
 		task_description.setText(task.getDescription());
-		asigned_name.setText(task.getAsigned().getName());
-		asigned_email.setText(task.getAsigned().getEmail());
-		if (task.getAsigned().getPicture() != null)
-			asigned_photo.setImageBitmap(task.getAsigned().getPicture());
-		if (User.user.getPicture() != null)
-			user_photo.setImageBitmap(User.user.getPicture());
-
+		if (asigned_name != null) {
+			asigned_name.setText(task.getAsigned().getName());
+			asigned_email.setText(task.getAsigned().getEmail());
+			if (task.getAsigned().getPicture() != null)
+				asigned_photo.setImageBitmap(task.getAsigned().getPicture());
+			if (User.user.getPicture() != null)
+				user_photo.setImageBitmap(User.user.getPicture());
+		}
 		if (ProjectActivity.project.isCompleted()) {
 
 			task_completion.setEnabled(false);
@@ -358,9 +373,9 @@ public class TaskActivity extends Activity {
 							CommentDAO.addComment(params[0]);
 
 						} catch (NetworkErrorException e) {
-							
+
 							return e;
-						
+
 						} catch (WebAPIException e) {
 
 							return e;
@@ -403,4 +418,14 @@ public class TaskActivity extends Activity {
 		comment_list.setAdapter(ca);
 
 	}
+
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+
+		if (wd != null)
+			wd.dismiss();
+	}
+
 }

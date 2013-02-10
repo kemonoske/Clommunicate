@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
@@ -30,7 +31,7 @@ import android.widget.Toast;
  * Activity reads google accounts registered on device and displays them in a
  * list for log in
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class AuthActivity extends Activity {
@@ -49,6 +50,7 @@ public class AuthActivity extends Activity {
 	private ListView accounts_list = null;
 	private TextView auth_label = null;
 	private Typeface font_zekton = null;
+	private WaitDialog wd = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -170,7 +172,7 @@ public class AuthActivity extends Activity {
 				/*
 				 * Wait dialog is displayed while login is performed
 				 */
-				final WaitDialog wd = new WaitDialog(me);
+				wd = new WaitDialog(me);
 				AsyncTask<String, Void, Exception> auth = new AsyncTask<String, Void, Exception>() {
 
 					@Override
@@ -189,16 +191,15 @@ public class AuthActivity extends Activity {
 							 * containing all user data
 							 */
 							User.user = UserDAO.login(params[0]);
-							
-							
+
 						} catch (NetworkErrorException e) {
-							
+
 							return e;
-					
-						} catch(WebAPIException e){
-							
+
+						} catch (WebAPIException e) {
+
 							return e;
-							
+
 						}
 
 						return null;
@@ -230,14 +231,25 @@ public class AuthActivity extends Activity {
 							i.putExtra("email", s);
 							startActivity(i);
 
-						} else if(result instanceof NetworkErrorException){/*If there is no internet or post request returns null*/
+						} else if (result instanceof NetworkErrorException) {/*
+																			 * If
+																			 * there
+																			 * is
+																			 * no
+																			 * internet
+																			 * or
+																			 * post
+																			 * request
+																			 * returns
+																			 * null
+																			 */
 							Toast.makeText(me.getApplicationContext(),
 									"No internet connection.",
 									Toast.LENGTH_SHORT).show();
-						}	else	
+						} else
 							Toast.makeText(me.getApplicationContext(),
-									"Unknown exception.",
-									Toast.LENGTH_SHORT).show();
+									"Unknown exception.", Toast.LENGTH_SHORT)
+									.show();
 					}
 
 				};
@@ -251,14 +263,36 @@ public class AuthActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		getMenuInflater().inflate(R.menu.activity_auth, menu);
+
 		return true;
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+
+		case R.id.menu_about:
+
+			AboutDialog about = new AboutDialog(this);
+			about.show();
+
+			break;
+
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onPause() {
+		
+		super.onPause();
+		
+		if(wd != null)
+			wd.dismiss();
 	}
 
 }

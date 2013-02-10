@@ -9,6 +9,7 @@ import com.clommunicate.utils.WebAPIException;
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -26,7 +27,7 @@ import android.widget.Toast;
 /**
  * Activity for creating new projects and editing existing ones
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class NewProjectActivity extends Activity {
@@ -54,6 +55,7 @@ public class NewProjectActivity extends Activity {
 	private EditText name = null;
 	private EditText description = null;
 	private DatePicker deadline = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,15 +87,25 @@ public class NewProjectActivity extends Activity {
 			add_member_button.setVisibility(View.GONE);
 			((TextView) findViewById(R.id.new_project_activity_title))
 					.setText("Edit Project");
+			try {
 
-			name.setText(project.getName());
-			description.setText(project.getDescription());
-			String[] dl = project.getDeadline().split("-");
-			int mYear = Integer.valueOf(dl[0]);
-			int mMonth = Integer.valueOf(dl[1]) - 1;
-			int mDay = Integer.valueOf(dl[2]);
-			deadline.init(mYear, mMonth, mDay, null);
+				name.setText(project.getName());
+				description.setText(project.getDescription());
+				String[] dl = project.getDeadline().split("-");
+				int mYear = Integer.valueOf(dl[0]);
+				int mMonth = Integer.valueOf(dl[1]) - 1;
+				int mDay = Integer.valueOf(dl[2]);
+				deadline.init(mYear, mMonth, mDay, null);
+				
+			} catch (NullPointerException e) {
 
+				Intent i = new Intent(me, AuthActivity.class);
+				startActivity(i);
+				Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+				.show();
+				finish();
+				
+			}
 		}
 
 		/*
@@ -184,8 +196,6 @@ public class NewProjectActivity extends Activity {
 				}
 
 				AsyncTask<Project, Void, Exception> create_project_task = new AsyncTask<Project, Void, Exception>() {
-
-					private WaitDialog wd = null;
 
 					@Override
 					protected void onPreExecute() {
@@ -296,18 +306,21 @@ public class NewProjectActivity extends Activity {
 				getApplicationContext().getResources().getDisplayMetrics().widthPixels);
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
-	}
-
 	public static Project getProject() {
 		return project;
 	}
 
 	public static void setProject(Project project) {
 		NewProjectActivity.project = project;
+	}
+
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+
+		if (wd != null)
+			wd.dismiss();
 	}
 
 }

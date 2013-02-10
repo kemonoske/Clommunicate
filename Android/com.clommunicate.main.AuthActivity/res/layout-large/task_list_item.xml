@@ -13,11 +13,9 @@
 
         <ImageView
             android:id="@+id/task_list_item_icon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_margin="30dp"
             android:padding="2dp" />
 
         <LinearLayout
@@ -41,7 +39,7 @@
                 android:text="Sample"
                 android:textColor="#6c6b68"
                 android:textColorHighlight="#6c6b68"
-                android:textSize="20sp"
+                android:textSize="35sp"
                 android:textStyle="normal" >
 
             </TextView>

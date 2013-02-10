@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -21,12 +22,10 @@ public class User {
 	private int partIn = 0;
 	public static User user = null;
 
-	User()	{
-		
-		
-		
+	User() {
+
 	}
-	
+
 	User(int id, String name, String picture) throws IOException {
 
 		setId(id);
@@ -151,73 +150,74 @@ public class User {
 	public static User deserialize(JSONObject jo) {
 
 		User aux = new User();
-		
-		try{
+
+		try {
 			aux.setId(jo.getInt("id"));
-		}	catch (Exception e){
-			
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
-		}
-		
-		try{
-			aux.setEmail(jo.getString("email"));
-		}	catch (Exception e){
-			
-			e.printStackTrace();
-			
-		}
-		
-		try{
-			aux.setName(jo.getString("name"));
-		}	catch (Exception e){
-			
-			e.printStackTrace();
-			
-		}
-		
-		try{
-			aux.setGender((jo.getInt("gender") == 1) ? Gender.Male : Gender.Female);
-		}	catch (Exception e){
-			
-			e.printStackTrace();
-			
+
 		}
 
-		try{
-			aux.setLocale(jo.getString("locale"));
-		}	catch (Exception e){
-			
+		try {
+			aux.setEmail(jo.getString("email"));
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
+
 		}
-		
-		try{
+
+		try {
+			aux.setName(jo.getString("name"));
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+			aux.setGender((jo.getInt("gender") == 1) ? Gender.Male
+					: Gender.Female);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
+			aux.setLocale(jo.getString("locale"));
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		try {
 			aux.setPicture(jo.getString("photo"));
 			aux.setPictureURL(jo.getString("photo"));
-		}	catch (Exception e){
-			
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
+
 		}
-		
-		try{
+
+		try {
 			aux.setProjects(jo.getInt("projects_created"));
-		}	catch (Exception e){
-			
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
+
 		}
-		
-		try{
+
+		try {
 			aux.setPartIn(jo.getInt("projects_part_in"));
-		}	catch (Exception e){
-			
+		} catch (Exception e) {
+
 			e.printStackTrace();
-			
+
 		}
 
 		return aux;
-		
+
 	}
 }

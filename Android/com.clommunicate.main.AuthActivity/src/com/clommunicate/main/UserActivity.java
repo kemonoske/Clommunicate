@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class UserActivity extends Activity {
@@ -57,9 +57,6 @@ public class UserActivity extends Activity {
 		projects_count.setTypeface(type);
 		part_in__count.setTypeface(type);
 		new_project.setTypeface(type);
-		name.setText(User.user.getName());
-		if (User.user.getPicture() != null)
-			avatar.setImageBitmap(User.user.getPicture());
 		userDataList = (ListView) findViewById(R.id.user_data);
 		userDataList.setOnItemClickListener(new OnItemClickListener() {
 
@@ -123,6 +120,8 @@ public class UserActivity extends Activity {
 					return e;
 				} catch (WebAPIException e) {
 					return e;
+				} catch (NullPointerException e)	{
+					return e;
 				}
 
 				return null;
@@ -142,7 +141,19 @@ public class UserActivity extends Activity {
 							.show();
 					return;
 
+				} else if (result instanceof NullPointerException)	{
+
+					Intent i = new Intent(me, AuthActivity.class);
+					startActivity(i);
+					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					.show();
+					finish();
+					
 				} else {
+		
+					name.setText(User.user.getName());
+					if (User.user.getPicture() != null)
+						avatar.setImageBitmap(User.user.getPicture());
 					projects_count.setText(String.valueOf(User.user.getProjects()));
 					part_in__count.setText(String.valueOf(User.user.getPartIn()));
 					String[] userData = { User.user.getEmail(),
@@ -165,12 +176,6 @@ public class UserActivity extends Activity {
 
 		loadUser.execute();
 
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
 	}
 
 }

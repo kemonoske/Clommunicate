@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 public class RegistrationActivity extends Activity {
@@ -81,7 +81,7 @@ public class RegistrationActivity extends Activity {
 
 			public void onClick(View v) {
 
-				final WaitDialog wd = new WaitDialog(me);
+				wd = new WaitDialog(me);
 
 				AsyncTask<Void, Void, Exception> registerTask = new AsyncTask<Void, Void, Exception>() {
 
@@ -272,12 +272,14 @@ public class RegistrationActivity extends Activity {
 		
 	}
 
+
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
+	protected void onPause() {
+		
+		super.onPause();
+		
+		if(wd != null)
+			wd.dismiss();
 	}
-	
-	
 
 }

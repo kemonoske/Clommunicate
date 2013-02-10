@@ -61,7 +61,7 @@ import android.widget.Toast;
  * </li>
  * </ul>
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class ProjectActivity extends Activity {
@@ -75,21 +75,22 @@ public class ProjectActivity extends Activity {
 	/**
 	 * GUI Elements
 	 */
-	TextView name = null;
-	TextView start_date = null;
-	TextView start_date_label = null;
-	TextView deadline = null;
-	TextView deadline_label = null;
-	TextView end_date = null;
-	TextView end_date_label = null;
-	TextView day_count = null;
-	TextView description_label = null;
-	TextView description = null;
-	ImageButton quit = null;
-	ImageButton remove = null;
-	ImageButton finish = null;
-	ListView task_list = null;
-	ListView member_list = null;
+	private TextView name = null;
+	private TextView start_date = null;
+	private TextView start_date_label = null;
+	private TextView deadline = null;
+	private TextView deadline_label = null;
+	private TextView end_date = null;
+	private TextView end_date_label = null;
+	private TextView day_count = null;
+	private TextView description_label = null;
+	private TextView description = null;
+	private ImageButton quit = null;
+	private ImageButton remove = null;
+	private ImageButton finish = null;
+	private ListView task_list = null;
+	private ListView member_list = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +121,8 @@ public class ProjectActivity extends Activity {
 		description_label = (TextView) findViewById(R.id.activity_project_project_description_label);
 		description = (TextView) findViewById(R.id.activity_project_project_description);
 		/* Enable TextView scrolling */
-		description.setMovementMethod(new ScrollingMovementMethod());
+		if(description != null)
+			description.setMovementMethod(new ScrollingMovementMethod());
 		quit = (ImageButton) findViewById(R.id.activity_project_quit_project_button);
 		remove = (ImageButton) findViewById(R.id.activity_project_remove_project_button);
 		finish = (ImageButton) findViewById(R.id.activity_project_finish_project_button);
@@ -169,15 +171,11 @@ public class ProjectActivity extends Activity {
 		end_date.setTypeface(font_zekton);
 		end_date_label.setTypeface(font_zekton);
 		day_count.setTypeface(font_zekton);
-		description_label.setTypeface(font_zekton);
-		description.setTypeface(font_zekton);
+		if(description !=null)	{
+			description_label.setTypeface(font_zekton);
+			description.setTypeface(font_zekton);
+		}
 
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
 	}
 
 	public void loadIntoGUI() {
@@ -544,7 +542,8 @@ public class ProjectActivity extends Activity {
 		long days = TimeUnit.MILLISECONDS.toDays(difference);
 
 		day_count.setText(String.valueOf(days));
-		description.setText(project.getDescription());
+		if(description != null)
+			description.setText(project.getDescription());
 
 		member_list.setAdapter(new MemberListArrayAdapter(me, project
 				.getMember_list(), project.getOwner_id()));
@@ -561,7 +560,7 @@ public class ProjectActivity extends Activity {
 		/*
 		 * Dialog will be displayed while data loads
 		 */
-		WaitDialog wd = new WaitDialog(me);
+		wd = new WaitDialog(me);
 		wd.setTitle(String.format("%-100s", "Loading project data..."));
 		wd.show();
 
@@ -571,7 +570,7 @@ public class ProjectActivity extends Activity {
 			protected Object[] doInBackground(WaitDialog... params) {
 
 				Object[] aux = new Object[4];
-				WaitDialog wd = params[0];
+				wd = params[0];
 				ArrayList<User> members = new ArrayList<User>();
 				ArrayList<Task> tasks = new ArrayList<Task>();
 				aux[2] = null;
@@ -597,6 +596,10 @@ public class ProjectActivity extends Activity {
 
 					aux[2] = e;
 
+				} catch (NullPointerException e)	{
+					
+					aux[2] = e;
+					
 				}
 
 				aux[0] = wd;
@@ -610,7 +613,7 @@ public class ProjectActivity extends Activity {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected void onPostExecute(Object[] result) {
-				WaitDialog wd = (WaitDialog) result[0];
+				wd = (WaitDialog) result[0];
 				ArrayList<User> members = (ArrayList<User>) result[1];
 				ArrayList<Task> tasks = (ArrayList<Task>) result[3];
 				Exception error = (Exception) result[2];
@@ -629,6 +632,14 @@ public class ProjectActivity extends Activity {
 
 					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT).show();
 
+				}  else if (error instanceof NullPointerException)	{
+
+					Intent i = new Intent(me, AuthActivity.class);
+					startActivity(i);
+					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					.show();
+					finish();
+					
 				} else {
 					project.setTask_list(tasks);
 					project.setMember_list(members);
@@ -658,4 +669,13 @@ public class ProjectActivity extends Activity {
 
 	}
 
+
+	@Override
+	protected void onPause() {
+		
+		super.onPause();
+		
+		if(wd != null)
+			wd.dismiss();
+	}
 }

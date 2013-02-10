@@ -5,7 +5,7 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="10" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -13,8 +13,7 @@
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
             android:name=".AuthActivity"
-            android:label="@string/title_activity_auth"
-            android:screenOrientation="portrait" >
+            android:label="@string/title_activity_auth">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,8 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity"
-            android:screenOrientation="portrait" >
+            android:name=".RegistrationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.REGISTER" />
 
@@ -31,8 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UserActivity"
-            android:screenOrientation="portrait" >
+            android:name=".UserActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.USER" />
 
@@ -40,8 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewProjectActivity"
-            android:screenOrientation="portrait" >
+            android:name=".NewProjectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_PROJECT" />
 
@@ -49,8 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TaskActivity"
-            android:screenOrientation="portrait" >
+            android:name=".TaskActivity">
             <intent-filter>
                 <action android:name="android.intent.action.TASK" />
 
@@ -58,8 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewTaskActivity"
-            android:screenOrientation="portrait" >
+            android:name=".NewTaskActivity">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_TASK" />
 
@@ -67,8 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProjectListActivity"
-            android:screenOrientation="portrait" >
+            android:name=".ProjectListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PROJECT_LIST" />
 
@@ -76,8 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProjectActivity"
-            android:screenOrientation="portrait" >
+            android:name=".ProjectActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PROJECT" />
 

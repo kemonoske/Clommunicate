@@ -40,7 +40,7 @@ import android.widget.Toast;
  * list, can access project by clicking on it or edit project data by long
  * pressing
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class ProjectListActivity extends Activity {
@@ -66,6 +66,7 @@ public class ProjectListActivity extends Activity {
 	private AbsListView project_list = null;
 	private ImageButton search_button = null;
 	private EditText search_field = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,16 +89,15 @@ public class ProjectListActivity extends Activity {
 		Animation animation = new AlphaAnimation(0.0f, 1.0f);
 		animation.setDuration(10);
 		set.addAnimation(animation);
-		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
-				0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-				Animation.RELATIVE_TO_SELF, -1.0f,
-				Animation.RELATIVE_TO_SELF, 0.0f);
+		animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+				Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+				-1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
 		animation.setDuration(200);
 		set.addAnimation(animation);
 		LayoutAnimationController controller = new LayoutAnimationController(
 				set, 0.5f);
 		project_list.setLayoutAnimation(controller);
-		
+
 		/*
 		 * Loading font from asserts
 		 */
@@ -217,8 +217,9 @@ public class ProjectListActivity extends Activity {
 				/*
 				 * Filter list view using text from search bar
 				 */
-				((ProjectListArrayAdapter) project_list.getAdapter())
-						.getFilter().filter(s);
+				if (project_list.getAdapter() != null)
+					((ProjectListArrayAdapter) project_list.getAdapter())
+							.getFilter().filter(s);
 
 			}
 
@@ -249,7 +250,7 @@ public class ProjectListActivity extends Activity {
 		/*
 		 * Wait Dialog will be displayed while project list loads
 		 */
-		final WaitDialog wd = new WaitDialog(me);
+		wd = new WaitDialog(me);
 
 		AsyncTask<Void, Void, Object[]> loadList = new AsyncTask<Void, Void, Object[]>() {
 
@@ -268,12 +269,17 @@ public class ProjectListActivity extends Activity {
 				res[1] = null;
 
 				try {
-					res[0] = ProjectDAO.getProjectList(User.user.getId(), partIn);
+					res[0] = ProjectDAO.getProjectList(User.user.getId(),
+							partIn);
 				} catch (NetworkErrorException e) {
 					res[1] = e;
 				} catch (WebAPIException e) {
 
 					res[1] = e;
+				} catch (NullPointerException e)	{
+					
+					res[1] = e;
+					
 				}
 
 				return res;
@@ -291,21 +297,30 @@ public class ProjectListActivity extends Activity {
 				 * If everything is ok the the adapter is set using data from
 				 * server otherwise an empty list is used to set adapter
 				 */
-				if (result == null)	{
+				if (result == null) {
 					project_list.setAdapter(new ProjectListArrayAdapter(me,
 							((ArrayList<Project>) res[0]), partIn));
 					project_list.startLayoutAnimation();
-				}	else if (result instanceof NetworkErrorException) {
-					/*project_list.setAdapter(new ProjectListArrayAdapter(me,
-							(new ArrayList<Project>(0)), partIn));
-					project_list.startLayoutAnimation();*/
+				} else if (result instanceof NetworkErrorException) {
+					/*
+					 * project_list.setAdapter(new ProjectListArrayAdapter(me,
+					 * (new ArrayList<Project>(0)), partIn));
+					 * project_list.startLayoutAnimation();
+					 */
 					Toast.makeText(getApplicationContext(),
 							"No internet connection.", Toast.LENGTH_SHORT)
 							.show();
-				} else if(result instanceof WebAPIException) {
+				} else if (result instanceof WebAPIException) {
 					Toast.makeText(getApplicationContext(),
-							result.getMessage(), Toast.LENGTH_SHORT)
-							.show();
+							result.getMessage(), Toast.LENGTH_SHORT).show();
+				} else if (result instanceof NullPointerException)	{
+
+					Intent i = new Intent(me, AuthActivity.class);
+					startActivity(i);
+					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					.show();
+					finish();
+					
 				}
 			}
 
@@ -315,10 +330,13 @@ public class ProjectListActivity extends Activity {
 
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		finish();
-	}
 
+	@Override
+	protected void onPause() {
+		
+		super.onPause();
+		
+		if(wd != null)
+			wd.dismiss();
+	}
 }

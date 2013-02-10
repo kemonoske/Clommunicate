@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class NewTaskActivity extends Activity {
@@ -64,6 +64,7 @@ public class NewTaskActivity extends Activity {
 	private ImageButton create_task = null;
 	private CheckBox delete = null;
 	private LinearLayout delete_layout = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +144,6 @@ public class NewTaskActivity extends Activity {
 
 				AsyncTask<Task, Void, Exception> create_project_task = new AsyncTask<Task, Void, Exception>() {
 
-					private WaitDialog wd = null;
-
 					@Override
 					protected void onPreExecute() {
 
@@ -184,26 +183,26 @@ public class NewTaskActivity extends Activity {
 						try {
 
 							switch (activity_type) {
-								case NEW_ACTIVITY:
-	
-									TaskDAO.addTask(params[0]);
-	
-									break;
-	
-								case EDIT_ACTIVITY:
-	
-									TaskDAO.updateTask(params[0]);
-	
-									break;
-	
-								case DELETE_ACTIVITY:
-	
-									TaskDAO.removeTask(task_id);
-	
-									break;
-	
-								default:
-									break;
+							case NEW_ACTIVITY:
+
+								TaskDAO.addTask(params[0]);
+
+								break;
+
+							case EDIT_ACTIVITY:
+
+								TaskDAO.updateTask(params[0]);
+
+								break;
+
+							case DELETE_ACTIVITY:
+
+								TaskDAO.removeTask(task_id);
+
+								break;
+
+							default:
+								break;
 							}
 
 						} catch (NetworkErrorException e) {
@@ -284,7 +283,19 @@ public class NewTaskActivity extends Activity {
 	protected void onResume() {
 
 		super.onResume();
-		WaitDialog wd = new WaitDialog(me);
+
+		if (User.user == null) {
+
+			Intent i = new Intent(me, AuthActivity.class);
+			startActivity(i);
+			Toast.makeText(me,
+					"You have been away for too long, please relogin.",
+					Toast.LENGTH_SHORT).show();
+			finish();
+
+		}
+
+		wd = new WaitDialog(me);
 		wd.setTitle(String.format("%-100s", "Loading project members..."));
 		wd.show();
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
@@ -331,7 +342,7 @@ public class NewTaskActivity extends Activity {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected void onPostExecute(Object[] result) {
-				WaitDialog wd = (WaitDialog) result[0];
+				wd = (WaitDialog) result[0];
 				ArrayList<User> members = (ArrayList<User>) result[1];
 				Task task = (Task) result[3];
 				Exception error = (Exception) result[2];
@@ -339,12 +350,14 @@ public class NewTaskActivity extends Activity {
 
 				if (error instanceof NetworkErrorException) {
 
-					Toast.makeText(me, "No internet connection.", Toast.LENGTH_SHORT).show();
-					
+					Toast.makeText(me, "No internet connection.",
+							Toast.LENGTH_SHORT).show();
+
 				} else if (error instanceof WebAPIException) {
 
-					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT).show();
-					
+					Toast.makeText(me, error.getMessage(), Toast.LENGTH_SHORT)
+							.show();
+
 				} else {
 
 					ArrayList<CharSequence> aux = new ArrayList<CharSequence>();
@@ -377,4 +390,12 @@ public class NewTaskActivity extends Activity {
 
 	}
 
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+
+		if (wd != null)
+			wd.dismiss();
+	}
 }

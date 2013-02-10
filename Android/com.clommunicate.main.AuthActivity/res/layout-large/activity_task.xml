@@ -19,8 +19,8 @@
 
             <ImageView
                 android:id="@+id/activity_task_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_margin="10dp"
                 android:padding="2dp"
                 android:src="@drawable/general_task_icon" />
@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
+                    android:minHeight="80dp"
                     android:paddingTop="10dp"
                     android:shadowColor="#FFFFFF"
                     android:shadowDx="2"
@@ -46,7 +47,7 @@
                     android:text="Task Name"
                     android:textColor="#6c6b68"
                     android:textColorHighlight="#6c6b68"
-                    android:textSize="15sp"
+                    android:textSize="30sp"
                     android:textStyle="normal" >
                 </TextView>
 
@@ -92,7 +93,7 @@
                 android:id="@+id/activity_task_finished"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
+                android:layout_margin="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -135,7 +136,7 @@
                     android:text="Sample"
                     android:textColor="#6c6b68"
                     android:textColorHighlight="#6c6b68"
-                    android:textSize="15sp"
+                    android:textSize="20sp"
                     android:textStyle="normal" >
                 </TextView>
 
@@ -152,15 +153,15 @@
                     android:text="Sample"
                     android:textColor="#6c6b68"
                     android:textColorHighlight="#6c6b68"
-                    android:textSize="10sp"
+                    android:textSize="15sp"
                     android:textStyle="normal" >
                 </TextView>
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/activity_task_asigned_photo"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/border_2dp"
                 android:padding="2dp"
@@ -170,7 +171,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="20dp"
         android:background="@drawable/top_mid_gradient" >
     </LinearLayout>
 
@@ -187,7 +188,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="20dp"
         android:background="@drawable/bottom_mid_gradient" >
     </LinearLayout>
 
@@ -197,12 +198,12 @@
         android:background="#f1eef4"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
-        android:padding="2dp" >
+        android:padding="10dp" >
 
         <ImageView
             android:id="@+id/activity_task_user_photo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:background="@drawable/border"
             android:padding="1dp"
             android:src="@drawable/user_icon" />

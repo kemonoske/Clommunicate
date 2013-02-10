@@ -8,13 +8,10 @@
 
     <ImageView
         android:id="@+id/add_list_item_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="30dp"
         android:scaleType="centerInside"
         android:src="@drawable/add_btn_norm" />
 
@@ -39,7 +36,7 @@
             android:text="Add New Member"
             android:textColor="#6c6b68"
             android:textColorHighlight="#6c6b68"
-            android:textSize="25sp"
+            android:textSize="35sp"
             android:textStyle="normal" >
 
         </TextView>
