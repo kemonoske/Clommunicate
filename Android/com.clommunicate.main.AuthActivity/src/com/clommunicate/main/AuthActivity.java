@@ -6,13 +6,16 @@ import com.clommunicate.utils.User;
 import com.clommunicate.utils.UserDAO;
 import com.clommunicate.utils.WebAPIException;
 
+import android.R.bool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +27,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +56,12 @@ public class AuthActivity extends Activity {
 	private TextView auth_label = null;
 	private Typeface font_zekton = null;
 	private WaitDialog wd = null;
+	SlidingDrawer m = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auth);
-
 		/*
 		 * Loading controls from content view
 		 */
@@ -264,9 +269,40 @@ public class AuthActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		getMenuInflater().inflate(R.menu.activity_auth, menu);
-
+		RelativeLayout main = (RelativeLayout) findViewById(R.id.activity_auth_main);
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		m = (SlidingDrawer) inflater.inflate(R.layout.main_menu,
+				main, false);
+		main.addView(m);
+		
 		return true;
+	}
+
+	/*@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		
+		if(m!=null)
+			m.animateOpen();
+		
+		return super.onMenuOpened(featureId, menu);
+	}
+
+	@Override
+	public void onOptionsMenuClosed(Menu menu) {
+
+		if(m!=null)
+			m.animateClose();
+		
+	}*/
+	
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+
+		if(m!=null)
+			m.animateOpen();
+		
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	@Override
@@ -288,10 +324,10 @@ public class AuthActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		
+
 		super.onPause();
-		
-		if(wd != null)
+
+		if (wd != null)
 			wd.dismiss();
 	}
 

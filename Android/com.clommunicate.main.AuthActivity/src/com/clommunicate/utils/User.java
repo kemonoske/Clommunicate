@@ -5,7 +5,6 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
