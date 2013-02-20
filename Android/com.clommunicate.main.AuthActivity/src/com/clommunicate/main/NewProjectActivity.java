@@ -15,6 +15,8 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.DatePicker;
@@ -56,6 +58,7 @@ public class NewProjectActivity extends Activity {
 	private EditText description = null;
 	private DatePicker deadline = null;
 	private WaitDialog wd = null;
+	private MainMenu main_menu = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -314,6 +317,27 @@ public class NewProjectActivity extends Activity {
 		NewProjectActivity.project = project;
 	}
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		main_menu =  new MainMenu(this, R.id.new_project_activity_main);
+		
+		return true;
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (main_menu != null)
+				main_menu.toggle();
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
 	@Override
 	protected void onPause() {
 

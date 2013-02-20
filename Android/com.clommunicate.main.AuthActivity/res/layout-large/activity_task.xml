@@ -1,228 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/task_activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#dfdfe1"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f1eef4"
-        android:gravity="center_vertical|center_horizontal"
+        android:layout_height="match_parent"
+        android:background="#dfdfe1"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/activity_task_icon"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_margin="10dp"
-                android:padding="2dp"
-                android:src="@drawable/general_task_icon" />
+            android:background="#f1eef4"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:gravity="center_vertical"
-                android:orientation="vertical" >
+                android:orientation="horizontal" >
 
-                <TextView
-                    android:id="@+id/activity_task_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@android:color/transparent"
-                    android:minHeight="80dp"
-                    android:paddingTop="10dp"
-                    android:shadowColor="#FFFFFF"
-                    android:shadowDx="2"
-                    android:shadowDy="-1"
-                    android:shadowRadius="2"
-                    android:text="Task Name"
-                    android:textColor="#6c6b68"
-                    android:textColorHighlight="#6c6b68"
-                    android:textSize="30sp"
-                    android:textStyle="normal" >
-                </TextView>
+                <ImageView
+                    android:id="@+id/activity_task_icon"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_margin="10dp"
+                    android:padding="2dp"
+                    android:src="@drawable/general_task_icon" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
 
                     <TextView
-                        android:id="@+id/activity_task_date_label"
+                        android:id="@+id/activity_task_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/transparent"
+                        android:minHeight="80dp"
+                        android:paddingTop="10dp"
                         android:shadowColor="#FFFFFF"
                         android:shadowDx="2"
                         android:shadowDy="-1"
                         android:shadowRadius="2"
-                        android:text="from"
+                        android:text="Task Name"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
-                        android:textSize="15sp" >
+                        android:textSize="30sp"
+                        android:textStyle="normal" >
                     </TextView>
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            android:id="@+id/activity_task_date_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@android:color/transparent"
+                            android:shadowColor="#FFFFFF"
+                            android:shadowDx="2"
+                            android:shadowDy="-1"
+                            android:shadowRadius="2"
+                            android:text="from"
+                            android:textColor="#6c6b68"
+                            android:textColorHighlight="#6c6b68"
+                            android:textSize="15sp" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/activity_task_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:background="@android:color/transparent"
+                            android:shadowColor="#FFFFFF"
+                            android:shadowDx="2"
+                            android:shadowDy="-1"
+                            android:shadowRadius="2"
+                            android:text="N/A"
+                            android:textColor="#6c6b68"
+                            android:textColorHighlight="#6c6b68"
+                            android:textSize="15sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/activity_task_finished"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/activity_task_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="7"
+                    android:paddingLeft="90dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="vertical"
+                    android:textColor="#6c6b68" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="100"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical" >
+
                     <TextView
-                        android:id="@+id/activity_task_date"
+                        android:id="@+id/activity_task_asigned_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical|right"
                         android:background="@android:color/transparent"
                         android:shadowColor="#FFFFFF"
                         android:shadowDx="2"
                         android:shadowDy="-1"
                         android:shadowRadius="2"
-                        android:text="N/A"
+                        android:text="Sample"
+                        android:textColor="#6c6b68"
+                        android:textColorHighlight="#6c6b68"
+                        android:textSize="20sp"
+                        android:textStyle="normal" >
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/activity_task_asigned_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:background="@android:color/transparent"
+                        android:shadowColor="#FFFFFF"
+                        android:shadowDx="2"
+                        android:shadowDy="-1"
+                        android:shadowRadius="2"
+                        android:text="Sample"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
                         android:textSize="15sp"
-                        android:textStyle="normal" />
+                        android:textStyle="normal" >
+                    </TextView>
                 </LinearLayout>
-            </LinearLayout>
 
-            <CheckBox
-                android:id="@+id/activity_task_finished"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp" />
+                <ImageView
+                    android:id="@+id/activity_task_asigned_photo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/border_2dp"
+                    android:padding="2dp"
+                    android:src="@drawable/user_icon" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="20dp"
+            android:background="@drawable/top_mid_gradient" >
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/activity_task_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="7"
-                android:paddingLeft="90dp"
-                android:paddingRight="10dp"
-                android:scrollbars="vertical"
-                android:textColor="#6c6b68" />
+        <ListView
+            android:id="@+id/activity_task_comment_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="100"
+            android:cacheColorHint="@android:color/transparent"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:drawSelectorOnTop="false" >
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@drawable/bottom_mid_gradient" >
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="100"
-                android:gravity="center_vertical"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/activity_task_asigned_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:background="@android:color/transparent"
-                    android:shadowColor="#FFFFFF"
-                    android:shadowDx="2"
-                    android:shadowDy="-1"
-                    android:shadowRadius="2"
-                    android:text="Sample"
-                    android:textColor="#6c6b68"
-                    android:textColorHighlight="#6c6b68"
-                    android:textSize="20sp"
-                    android:textStyle="normal" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/activity_task_asigned_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:background="@android:color/transparent"
-                    android:shadowColor="#FFFFFF"
-                    android:shadowDx="2"
-                    android:shadowDy="-1"
-                    android:shadowRadius="2"
-                    android:text="Sample"
-                    android:textColor="#6c6b68"
-                    android:textColorHighlight="#6c6b68"
-                    android:textSize="15sp"
-                    android:textStyle="normal" >
-                </TextView>
-            </LinearLayout>
+            android:background="#f1eef4"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            android:padding="10dp" >
 
             <ImageView
-                android:id="@+id/activity_task_asigned_photo"
+                android:id="@+id/activity_task_user_photo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/border_2dp"
-                android:padding="2dp"
+                android:background="@drawable/border"
+                android:padding="1dp"
                 android:src="@drawable/user_icon" />
+
+            <EditText
+                android:id="@+id/activity_task_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="100"
+                android:maxLines="3" />
+
+            <ImageButton
+                android:id="@+id/activity_task_submit_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/login_button" />
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/top_mid_gradient" >
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/activity_task_comment_list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="100"
-        android:cacheColorHint="@android:color/transparent"
-        android:choiceMode="singleChoice"
-        android:divider="@null"
-        android:drawSelectorOnTop="false" >
-    </ListView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="@drawable/bottom_mid_gradient" >
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f1eef4"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="horizontal"
-        android:padding="10dp" >
-
-        <ImageView
-            android:id="@+id/activity_task_user_photo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/border"
-            android:padding="1dp"
-            android:src="@drawable/user_icon" />
-
-        <EditText
-            android:id="@+id/activity_task_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="-3dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="100"
-            android:maxLines="3" />
-
-        <ImageButton
-            android:id="@+id/activity_task_submit_comment"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/login_button" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

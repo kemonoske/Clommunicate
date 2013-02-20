@@ -20,7 +20,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.text.method.ScrollingMovementMethod;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -91,6 +93,7 @@ public class ProjectActivity extends Activity {
 	private ListView task_list = null;
 	private ListView member_list = null;
 	private WaitDialog wd = null;
+	private MainMenu main_menu = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -670,6 +673,26 @@ public class ProjectActivity extends Activity {
 	}
 
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		main_menu =  new MainMenu(this, R.id.project_activity_main);
+		
+		return true;
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (main_menu != null)
+				main_menu.toggle();
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
 	@Override
 	protected void onPause() {
 		

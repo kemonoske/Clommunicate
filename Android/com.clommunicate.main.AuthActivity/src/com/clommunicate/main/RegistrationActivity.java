@@ -16,6 +16,8 @@ import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -38,6 +40,7 @@ public class RegistrationActivity extends Activity {
 	private WaitDialog wd = null;
 	private Activity me = this;
 	private User usr = null;
+	private MainMenu main_menu = null;
 
 	@Override
 	public void onBackPressed() {
@@ -273,6 +276,26 @@ public class RegistrationActivity extends Activity {
 	}
 
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		main_menu =  new MainMenu(this, R.id.registration_activity_main);
+		
+		return true;
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (main_menu != null)
+				main_menu.toggle();
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
 	@Override
 	protected void onPause() {
 		

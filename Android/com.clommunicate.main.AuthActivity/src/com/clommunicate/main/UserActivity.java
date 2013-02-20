@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -34,6 +36,7 @@ public class UserActivity extends Activity {
 	private Button new_project = null;
 	private ImageView avatar = null;
 	private Activity me = this;
+	private MainMenu main_menu = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,4 +181,25 @@ public class UserActivity extends Activity {
 
 	}
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		main_menu =  new MainMenu(this, R.id.user_activity_main);
+		
+		return true;
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (main_menu != null)
+				main_menu.toggle();
+			return true;
+		}
+
+		return super.onKeyUp(keyCode, event);
+	}
+	
 }

@@ -1,346 +1,349 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/project_activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-        android:background="#f1eef4"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:orientation="horizontal"
-        android:padding="2dp" >
-
-        <LinearLayout
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:background="@drawable/border_2dp"
-            android:fadingEdgeLength="2px"
-            android:gravity="center_vertical|center_horizontal"
-            android:padding="1dp" >
-
-            <TextView
-                android:id="@+id/activity_project_day_count"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:background="#6c6b68"
-                android:fadingEdge="horizontal|vertical"
-                android:fadingEdgeLength="2dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:shadowColor="#000000"
-                android:text="9999"
-                android:textColor="#f1eef4"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/activity_project_project_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="100"
-                android:paddingLeft="10dp"
-                android:text="Project Name"
-                android:textColor="#6c6b68"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="horizontal" >
-
-                <ImageButton
-                    android:id="@+id/activity_project_finish_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/finish_button"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
-
-                <ImageButton
-                    android:id="@+id/activity_project_quit_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/quit_button"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
-
-                <ImageButton
-                    android:id="@+id/activity_project_remove_project_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/exit_button"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false" />
-            </LinearLayout>
-		</LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/activity_project_project_description_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="Description:"
-            android:textColor="#6c6b68"
-            android:textSize="15sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/top_mid_gradient" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/mid_fill"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/activity_project_project_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:maxLines="3"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:scrollbars="vertical"
-                android:textColor="#6c6b68"
-                android:textSize="12sp"
-                android:visibility="visible" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@drawable/bottom_mid_gradient" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginTop="2dp"
-            android:background="#6c6b68" >
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="90" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="30"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="5dp" >
-
-                <TextView
-                    android:id="@+id/activity_project_start_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="N/A"
-                    android:textColor="#6c6b68"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/activity_project_start_date_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Start Date"
-                    android:textColor="#6c6b68"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#6c6b68" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="30"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="5dp" >
-
-                <TextView
-                    android:id="@+id/activity_project_deadline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="N/A"
-                    android:textColor="#6c6b68"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/activity_project_deadline_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Deadline"
-                    android:textColor="#6c6b68"
-                    android:textSize="12dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="1px"
-                android:layout_height="match_parent"
-                android:background="#6c6b68" >
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="30"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="5dp" >
-
-                <TextView
-                    android:id="@+id/activity_project_end_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="N/A"
-                    android:textColor="#6c6b68"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/activity_project_end_date_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Finished On"
-                    android:textColor="#6c6b68"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginBottom="5dp"
-            android:background="#6c6b68" >
-        </LinearLayout>
-    </LinearLayout>
-
-    <TabHost
-        android:id="@+id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@drawable/mid_fill" >
+        android:background="#f1eef4"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:orientation="horizontal"
+            android:padding="2dp" >
+
+            <LinearLayout
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:background="@drawable/border_2dp"
+                android:fadingEdgeLength="2px"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="1dp" >
+
+                <TextView
+                    android:id="@+id/activity_project_day_count"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:background="#6c6b68"
+                    android:fadingEdge="horizontal|vertical"
+                    android:fadingEdgeLength="2dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:shadowColor="#000000"
+                    android:text="9999"
+                    android:textColor="#f1eef4"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/activity_project_project_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="100"
+                    android:paddingLeft="10dp"
+                    android:text="Project Name"
+                    android:textColor="#6c6b68"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal" >
+
+                    <ImageButton
+                        android:id="@+id/activity_project_finish_project_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/finish_button"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+
+                    <ImageButton
+                        android:id="@+id/activity_project_quit_project_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/quit_button"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+
+                    <ImageButton
+                        android:id="@+id/activity_project_remove_project_button"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/exit_button"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-            </TabWidget>
+            <TextView
+                android:id="@+id/activity_project_project_description_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Description:"
+                android:textColor="#6c6b68"
+                android:textSize="15sp" />
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="10dp"
+                android:background="@drawable/top_mid_gradient" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/mid_fill"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/activity_project_project_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="3"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="vertical"
+                    android:textColor="#6c6b68"
+                    android:textSize="12sp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@drawable/bottom_mid_gradient" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="2dp"
+                android:background="#6c6b68" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="90" >
 
                 <LinearLayout
-                    android:id="@+id/activity_project_task_tab"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical" >
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="30"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp" >
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:background="@drawable/top_mid_gradient" >
-                    </LinearLayout>
-
-                    <ListView
-                        android:id="@+id/activity_project_task_list"
-                        android:layout_width="fill_parent"
+                    <TextView
+                        android:id="@+id/activity_project_start_date"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="100"
-                        android:cacheColorHint="@android:color/transparent"
-                        android:choiceMode="singleChoice"
-                        android:divider="@null"
-                        android:drawSelectorOnTop="false" >
-                    </ListView>
+                        android:layout_gravity="center_horizontal"
+                        android:text="N/A"
+                        android:textColor="#6c6b68"
+                        android:textSize="12sp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:background="@drawable/bottom_mid_gradient" >
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/activity_project_start_date_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Start Date"
+                        android:textColor="#6c6b68"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/activity_project_member_tab"
-                    android:layout_width="match_parent"
+                    android:layout_width="1px"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@drawable/top_mid_gradient" >
-                    </LinearLayout>
-
-                    <ListView
-                        android:id="@+id/activity_project_member_list"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="100"
-                        android:cacheColorHint="@android:color/transparent"
-                        android:choiceMode="singleChoice"
-                        android:divider="@null"
-                        android:drawSelectorOnTop="false"
-                        android:footerDividersEnabled="false"
-                        android:headerDividersEnabled="false" >
-
-                    </ListView>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@drawable/bottom_mid_gradient" >
-                    </LinearLayout>
+                    android:background="#6c6b68" >
                 </LinearLayout>
-            </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="30"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:id="@+id/activity_project_deadline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="N/A"
+                        android:textColor="#6c6b68"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/activity_project_deadline_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Deadline"
+                        android:textColor="#6c6b68"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:background="#6c6b68" >
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="30"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp" >
+
+                    <TextView
+                        android:id="@+id/activity_project_end_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="N/A"
+                        android:textColor="#6c6b68"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/activity_project_end_date_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Finished On"
+                        android:textColor="#6c6b68"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginBottom="5dp"
+                android:background="#6c6b68" >
+            </LinearLayout>
         </LinearLayout>
-    </TabHost>
 
-</LinearLayout>
+        <TabHost
+            android:id="@+id/tabhost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/mid_fill" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+                </TabWidget>
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <LinearLayout
+                        android:id="@+id/activity_project_task_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:background="@drawable/top_mid_gradient" >
+                        </LinearLayout>
+
+                        <ListView
+                            android:id="@+id/activity_project_task_list"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100"
+                            android:cacheColorHint="@android:color/transparent"
+                            android:choiceMode="singleChoice"
+                            android:divider="@null"
+                            android:drawSelectorOnTop="false" >
+                        </ListView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bottom_mid_gradient" >
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/activity_project_member_tab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:background="@drawable/top_mid_gradient" >
+                        </LinearLayout>
+
+                        <ListView
+                            android:id="@+id/activity_project_member_list"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="100"
+                            android:cacheColorHint="@android:color/transparent"
+                            android:choiceMode="singleChoice"
+                            android:divider="@null"
+                            android:drawSelectorOnTop="false"
+                            android:footerDividersEnabled="false"
+                            android:headerDividersEnabled="false" >
+                        </ListView>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:background="@drawable/bottom_mid_gradient" >
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </TabHost>
+    </LinearLayout>
+</RelativeLayout>

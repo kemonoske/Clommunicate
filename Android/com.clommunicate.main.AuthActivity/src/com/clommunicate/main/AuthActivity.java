@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,7 +57,7 @@ public class AuthActivity extends Activity {
 	private TextView auth_label = null;
 	private Typeface font_zekton = null;
 	private WaitDialog wd = null;
-	SlidingDrawer m = null;
+	private MainMenu main_menu = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -269,57 +270,21 @@ public class AuthActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		RelativeLayout main = (RelativeLayout) findViewById(R.id.activity_auth_main);
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		m = (SlidingDrawer) inflater.inflate(R.layout.main_menu,
-				main, false);
-		main.addView(m);
-		
+		main_menu = new MainMenu(this, R.id.activity_auth_main);
+
 		return true;
 	}
-
-	/*@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-		
-		if(m!=null)
-			m.animateOpen();
-		
-		return super.onMenuOpened(featureId, menu);
-	}
-
-	@Override
-	public void onOptionsMenuClosed(Menu menu) {
-
-		if(m!=null)
-			m.animateClose();
-		
-	}*/
 	
-
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
 
-		if(m!=null)
-			m.animateOpen();
-		
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-
-		case R.id.menu_about:
-
-			AboutDialog about = new AboutDialog(this);
-			about.show();
-
-			break;
-
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (main_menu != null)
+				main_menu.toggle();
+			return true;
 		}
 
-		return super.onOptionsItemSelected(item);
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override
