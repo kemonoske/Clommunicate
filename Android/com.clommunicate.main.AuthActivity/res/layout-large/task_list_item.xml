@@ -39,7 +39,7 @@
                 android:text="Sample"
                 android:textColor="#6c6b68"
                 android:textColorHighlight="#6c6b68"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textStyle="normal" >
 
             </TextView>

@@ -4,6 +4,11 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
+/**
+ * 
+ * @author Bostanica Ion
+ *
+ */
 public class Login{
 
 	public static String[] getDeviceAccounts(Context sender){

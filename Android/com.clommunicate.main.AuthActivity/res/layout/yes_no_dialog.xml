@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Email"
+            android:text="Sample"
             android:textColor="#6c6b68"
             android:textColorHighlight="#6c6b68"
             android:textSize="15sp" />

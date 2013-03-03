@@ -70,7 +70,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="999"
+                                android:text="0"
                                 android:textColor="#6c6b68"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -79,7 +79,7 @@
                                 android:id="@+id/user_projects_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Projects"
+                                android:text="@string/user_activity_projects"
                                 android:textColor="#6c6b68"
                                 android:textSize="18dp" />
                         </LinearLayout>
@@ -97,7 +97,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="999"
+                                android:text="0"
                                 android:textColor="#6c6b68"
                                 android:textSize="20dp"
                                 android:textStyle="bold" />
@@ -106,7 +106,7 @@
                                 android:id="@+id/user_part_in_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Part In"
+                                android:text="@string/user_activity_part_in"
                                 android:textColor="#6c6b68"
                                 android:textSize="18dp" />
                         </LinearLayout>
@@ -124,7 +124,7 @@
                 android:paddingLeft="40dp"
                 android:scaleType="fitStart"
                 android:src="@drawable/add_img_btn_norm"
-                android:text="New Project"
+                android:text="@string/user_activity_new_project"
                 android:textColor="#6c6b68"
                 android:textSize="20dp" />
         </LinearLayout>

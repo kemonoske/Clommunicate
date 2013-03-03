@@ -11,7 +11,7 @@
         android:id="@+id/regLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Registration"
+        android:text="Sample"
         android:textColor="#6c6b68"
         android:textColorHighlight="#6c6b68"
         android:textSize="35dp" />

@@ -23,7 +23,7 @@ import android.widget.TextView;
  * </ul>
  * 
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class AddMemberDialog extends Dialog {
@@ -48,16 +48,16 @@ public class AddMemberDialog extends Dialog {
 	/**
 	 * Result and other data
 	 */
-	private String result = "Cancelled by user.";
+	private String result = null;
 	private int action_type = LOCAL;
 
 	public AddMemberDialog(Context cont, ListView member_list,
 			MemberListArrayAdapter member_adapter, int add_type) {
-
+		
 		super(cont, R.style.cust_dialog);
 		setContentView(R.layout.add_member_dialog);
 		setCancelable(false);
-
+		
 		/*
 		 * Store arguments in private variables
 		 */
@@ -65,7 +65,9 @@ public class AddMemberDialog extends Dialog {
 		this.member_list = member_list;
 		this.member_adapter = member_adapter;
 		this.action_type = add_type;
-
+		
+		result = context.getResources().getString(R.string.add_member_dialog_result_cacelled);
+		
 		/*
 		 * Load font from asserts
 		 */
@@ -122,7 +124,7 @@ public class AddMemberDialog extends Dialog {
 
 			public void onClick(View v) {
 
-				result = "Cancelled by user.";
+				result = context.getResources().getString(R.string.add_member_dialog_result_cacelled);;
 				dismiss();
 
 			}
@@ -139,21 +141,21 @@ public class AddMemberDialog extends Dialog {
 
 			if (user == null) {
 
-				result = "User cannot be added to the list, maybe a server error.";
+				result = context.getResources().getString(R.string.add_member_dialog_result_cnnot_be_added);;
 
 			} else if (member_adapter.contains(user)) /*
 													 * We can't add same user 2
 													 * times
 													 */{
 
-				result = "This user is already a member of this project.";
+				result = context.getResources().getString(R.string.add_member_dialog_result_already_in_list);;
 
 			} else if (member_adapter.isOwner(user)) /*
 													 * We can't add owner to his
 													 * own project
 													 */{
 
-				result = "You don't have to add yourself, owner is a member by default.";
+				result = context.getResources().getString(R.string.add_member_dialog_result_owner_is_member);;
 
 			} else {
 				/*
@@ -169,7 +171,7 @@ public class AddMemberDialog extends Dialog {
 					 */
 					if (ProjectDAO.addMember(ProjectActivity.project.getId(),
 							user.getId())) {
-						result = "Member successfully added tot the project.";
+						result = context.getResources().getString(R.string.add_member_dialog_result_success);;
 						member_list.post(new Runnable() {
 							public void run() {
 
@@ -178,7 +180,7 @@ public class AddMemberDialog extends Dialog {
 							}
 						});
 					} else
-						result = "Error adding member to the project.";
+						result = context.getResources().getString(R.string.add_member_dialog_result_error);;
 
 				} else {
 
@@ -186,7 +188,7 @@ public class AddMemberDialog extends Dialog {
 					 * Set positive result message and add member to the adapter
 					 * using post on ListView control
 					 */
-					result = "Member successfully added tot the project.";
+					result = context.getResources().getString(R.string.add_member_dialog_result_success);;
 					member_list.post(new Runnable() {
 						public void run() {
 
@@ -200,7 +202,7 @@ public class AddMemberDialog extends Dialog {
 										 * if connection is lost or post request
 										 * returns null
 										 */{
-			result = "No internet connection.";
+			result = context.getResources().getString(R.string.error_no_internet_connection);;
 		} catch (WebAPIException e) {
 
 			result = e.getMessage();

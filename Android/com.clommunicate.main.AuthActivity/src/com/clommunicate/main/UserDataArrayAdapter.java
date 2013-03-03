@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 public class UserDataArrayAdapter extends ArrayAdapter<String> {

@@ -25,7 +25,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements
@@ -132,9 +132,8 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements
 
 					final YesNoDialog ynd = new YesNoDialog(context, projects
 							.get(position).getId(), User.user.getId(), partIn);
-					ynd.setTitle(String.format("%-100s",
-							"Confirm project romove..."));
-					ynd.setMessage("Do you really want to remove this project?");
+					ynd.setTitle(context.getResources().getString(R.string.project_list_array_adapter_yes_no_dialog_remove_title));
+					ynd.setMessage(context.getResources().getString(R.string.project_list_array_adapter_yes_no_dialog_remove_message));
 
 					ynd.setOnDismissListener(new OnDismissListener() {
 
@@ -166,9 +165,8 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements
 
 					final YesNoDialog ynd = new YesNoDialog(context, projects
 							.get(position).getId(), User.user.getId(), partIn);
-					ynd.setTitle(String.format("%-100s",
-							"Confirm project quit..."));
-					ynd.setMessage("Do you really want to quit from this project?");
+					ynd.setTitle(context.getResources().getString(R.string.project_list_array_adapter_yes_no_dialog_quit_title));
+					ynd.setMessage(context.getResources().getString(R.string.project_list_array_adapter_yes_no_dialog_quit_message));
 
 					ynd.setOnDismissListener(new OnDismissListener() {
 
@@ -248,7 +246,7 @@ public class ProjectListArrayAdapter extends ArrayAdapter<Project> implements
 	}
 
 	public void removeProject(int position) {
-		System.err.println("shit removed");
+		
 		projects.remove(position);
 		notifyDataSetChanged();
 

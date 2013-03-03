@@ -26,7 +26,7 @@ import android.widget.Toast;
 /**
  * Adapter for the comment list
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class CommentArrayAdapter extends ArrayAdapter<Comment> {
@@ -35,6 +35,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 	private ArrayList<Comment> comments = null;
 	private ArrayList<User> members = null;
 	private Typeface font_zekton = null;
+	private Typeface font_roboto = null;
 
 	public CommentArrayAdapter(Context context, ArrayList<Comment> comments,
 			ArrayList<User> members) {
@@ -48,6 +49,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 		 */
 		font_zekton = Typeface.createFromAsset(context.getAssets(),
 				"fonts/zekton.ttf");
+		font_roboto = Typeface.createFromAsset(context.getAssets(),
+				"fonts/roboto_regular.ttf");
 
 	}
 
@@ -81,7 +84,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 		 */
 		name.setTypeface(font_zekton);
 		timestamp.setTypeface(font_zekton);
-		text.setTypeface(font_zekton);
+		text.setTypeface(font_roboto);
 
 		/*
 		 * Associating comment with the author
@@ -117,8 +120,8 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 					 * Yes/No dialog to confirm removal
 					 */
 					final YesNoDialog ynd = new YesNoDialog(context);
-					ynd.setTitle("Confirm comment remove...");
-					ynd.setMessage("Do you really want to remove this comment?");
+					ynd.setTitle(context.getResources().getString(R.string.comment_array_adapter_yes_no_dialog_title));
+					ynd.setMessage(context.getResources().getString(R.string.comment_array_adapter_yes_no_dialog_message));
 
 					/*
 					 * When yes/no dialog is dissmissed
@@ -138,7 +141,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 								 * removing the comment
 								 */
 								WaitDialog wd = new WaitDialog(context);
-								wd.setTitle("Loading task data...");
+								wd.setTitle(context.getResources().getString(R.string.comment_array_adapter_wait_dialog_title));
 								wd.show();
 
 								AsyncTask<WaitDialog, Void, Object[]> removeComment = new AsyncTask<WaitDialog, Void, Object[]>() {
@@ -194,13 +197,13 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 										 */
 										if (e == null) {
 
-											text = "Comment removed.";
+											text = context.getResources().getString(R.string.comment_array_adapter_result);
 											comments.remove(position);
 											notifyDataSetChanged();
 
 										}	else if( e instanceof NetworkErrorException)	{
 											
-											text = "NO internet connection";
+											text = context.getResources().getString(R.string.error_no_internet_connection);
 											
 										}	else if(e instanceof WebAPIException)	{
 											

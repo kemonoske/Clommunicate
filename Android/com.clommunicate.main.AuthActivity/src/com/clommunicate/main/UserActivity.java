@@ -37,6 +37,7 @@ public class UserActivity extends Activity {
 	private ImageView avatar = null;
 	private Activity me = this;
 	private MainMenu main_menu = null;
+	private WaitDialog wd = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +73,7 @@ public class UserActivity extends Activity {
 				case 3: {
 
 					Intent i = new Intent(me, ProjectListActivity.class);
-					i.putExtra("activityTitle", "Created Projects");
+					i.putExtra("activityTitle", getResources().getString(R.string.user_activity_extra_projects));
 					startActivity(i);
 
 				}
@@ -80,7 +81,7 @@ public class UserActivity extends Activity {
 				case 4: {
 
 					Intent i = new Intent(me, ProjectListActivity.class);
-					i.putExtra("activityTitle", "Projects");
+					i.putExtra("activityTitle", getResources().getString(R.string.user_activity_extra_part_in));
 					i.putExtra("partIn", true);
 					startActivity(i);
 
@@ -112,8 +113,16 @@ public class UserActivity extends Activity {
 
 		super.onResume();
 
+		wd = new WaitDialog(me);
+		
 		AsyncTask<Void, Void, Exception> loadUser = new AsyncTask<Void, Void, Exception>() {
 
+			@Override
+			protected void onPreExecute() {
+				wd.setTitle(getResources().getString(R.string.user_activity_wait_dialog_title));
+				wd.show();
+			}
+			
 			@Override
 			protected Exception doInBackground(Void... params) {
 
@@ -134,7 +143,7 @@ public class UserActivity extends Activity {
 			protected void onPostExecute(Exception result) {
 				if (result instanceof NetworkErrorException) {
 					onBackPressed();
-					Toast.makeText(me, "No internet connection.",
+					Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection),
 							Toast.LENGTH_SHORT).show();
 					return;
 				} else if (result instanceof WebAPIException) {
@@ -148,7 +157,7 @@ public class UserActivity extends Activity {
 
 					Intent i = new Intent(me, AuthActivity.class);
 					startActivity(i);
-					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
 					.show();
 					finish();
 					
@@ -163,8 +172,12 @@ public class UserActivity extends Activity {
 							User.user.getGender().toString(), User.user.getLocale(),
 							String.valueOf(User.user.getProjects()),
 							String.valueOf(User.user.getPartIn()) };
-					String[] userDataTitles = { "Email", "Gender", "Locale",
-							"Projects Created", "Projects Part In" };
+					String[] userDataTitles = { "Email", 
+							getResources().getString(R.string.user_activity_meny_gender), 
+							getResources().getString(R.string.user_activity_meny_locale),
+							getResources().getString(R.string.user_activity_meny_projects_created), 
+							getResources().getString(R.string.user_activity_meny_projects_part_in)
+							};
 					int[] userDataIcons = { R.drawable.email_icon,
 							R.drawable.gender_icon, R.drawable.locale_icon,
 							R.drawable.owner_icon, R.drawable.part_in_icon };
@@ -173,6 +186,10 @@ public class UserActivity extends Activity {
 							me, userData, userDataTitles, userDataIcons);
 					userDataList.setAdapter(userDataAdapter);
 				}
+				
+
+				wd.dismiss();
+				
 			}
 
 		};
@@ -200,6 +217,15 @@ public class UserActivity extends Activity {
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	@Override
+	protected void onPause() {
+		
+		super.onPause();
+		
+		if(wd != null)
+			wd.dismiss();
 	}
 	
 }

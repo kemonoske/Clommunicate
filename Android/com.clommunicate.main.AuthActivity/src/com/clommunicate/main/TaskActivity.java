@@ -95,6 +95,8 @@ public class TaskActivity extends Activity {
 
 		Typeface typeface = Typeface.createFromAsset(getAssets(),
 				"fonts/zekton.ttf");
+		Typeface typeface_roboto = Typeface.createFromAsset(getAssets(),
+				"fonts/roboto_regular.ttf");
 
 		task_name.setTypeface(typeface);
 		task_date_label.setTypeface(typeface);
@@ -103,7 +105,7 @@ public class TaskActivity extends Activity {
 		if (asigned_name != null) {
 			asigned_name.setTypeface(typeface);
 			asigned_email.setTypeface(typeface);
-			user_comment.setTypeface(typeface);
+			user_comment.setTypeface(typeface_roboto);
 		}
 
 	}
@@ -113,7 +115,7 @@ public class TaskActivity extends Activity {
 
 		super.onResume();
 		wd = new WaitDialog(me);
-		wd.setTitle(String.format("%-100s", "Loading task data..."));
+		wd.setTitle(getResources().getString(R.string.task_activity_load_waid_dialog_title));
 		wd.show();
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
 
@@ -168,7 +170,7 @@ public class TaskActivity extends Activity {
 						startActivity(i);
 						Toast.makeText(
 								me,
-								"You have been away for too long, please relogin.",
+								getResources().getString(R.string.error_please_relogin),
 								Toast.LENGTH_SHORT).show();
 						finish();
 					}
@@ -277,8 +279,7 @@ public class TaskActivity extends Activity {
 								 * performing request
 								 */
 								wd = new WaitDialog(me);
-								wd.setTitle(String.format("%-100s",
-										"Updating task..."));
+								wd.setTitle(getResources().getString(R.string.task_activity_update_wait_dialog_title));
 								wd.show();
 							}
 
@@ -314,7 +315,7 @@ public class TaskActivity extends Activity {
 								String text = null;
 
 								if (result == null) {
-									text = "Task updated.";
+									text = getResources().getString(R.string.task_activity_update_text_result_success);
 									task.setCompleted(isChecked);
 									Time t = new Time();
 									t.setToNow();
@@ -327,7 +328,7 @@ public class TaskActivity extends Activity {
 								} else if (result instanceof WebAPIException) {
 									text = result.getMessage();
 								} else if (result instanceof NetworkErrorException) {
-									text = "No internet connection.";
+									text = getResources().getString(R.string.error_no_internet_connection);
 								}
 								Toast.makeText(getApplicationContext(), text,
 										Toast.LENGTH_SHORT).show();
@@ -364,7 +365,7 @@ public class TaskActivity extends Activity {
 					protected void onPreExecute() {
 
 						wd = new WaitDialog(me);
-						wd.setTitle("Adding comment...");
+						wd.setTitle(getResources().getString(R.string.task_activity_add_comment_wait_dialog_title));
 						wd.show();
 					}
 
@@ -394,13 +395,13 @@ public class TaskActivity extends Activity {
 						String text = null;
 
 						if (result == null) {
-							text = "Comment added.";
+							text = getResources().getString(R.string.task_activity_add_comment_text_result_success);
 							user_comment.setText("");
 							onResume();
 						} else if (result instanceof WebAPIException) {
 							text = result.getMessage();
 						} else
-							text = "No internet connection.";
+							text = getResources().getString(R.string.error_no_internet_connection);
 
 						Toast.makeText(getApplicationContext(), text,
 								Toast.LENGTH_SHORT).show();

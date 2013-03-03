@@ -3,6 +3,11 @@ package com.clommunicate.utils;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 
+ * @author Bostanica Ion
+ *
+ */
 public class WebApi {
 	
 	public static final String API = "http://api-clommunicate.rhcloud.com/api";

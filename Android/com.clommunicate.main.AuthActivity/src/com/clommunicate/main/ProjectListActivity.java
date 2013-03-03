@@ -259,7 +259,7 @@ public class ProjectListActivity extends Activity {
 
 			@Override
 			protected void onPreExecute() {
-				wd.setTitle("Project list loading...");
+				wd.setTitle(getResources().getString(R.string.project_list_activity_wait_dialog_title));
 				wd.show();
 			}
 
@@ -311,7 +311,7 @@ public class ProjectListActivity extends Activity {
 					 * project_list.startLayoutAnimation();
 					 */
 					Toast.makeText(getApplicationContext(),
-							"No internet connection.", Toast.LENGTH_SHORT)
+							getResources().getString(R.string.error_no_internet_connection), Toast.LENGTH_SHORT)
 							.show();
 				} else if (result instanceof WebAPIException) {
 					Toast.makeText(getApplicationContext(),
@@ -320,7 +320,7 @@ public class ProjectListActivity extends Activity {
 
 					Intent i = new Intent(me, AuthActivity.class);
 					startActivity(i);
-					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
 					.show();
 					finish();
 					

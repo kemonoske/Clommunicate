@@ -144,7 +144,7 @@ public class ProjectActivity extends Activity {
 		ImageView iv = (ImageView) view.findViewById(R.id.tab_item_icon);
 		iv.setBackgroundResource(R.drawable.tasks_tab_norm);
 		TextView tv = (TextView) view.findViewById(R.id.tab_item_title);
-		tv.setText("Project Tasks");
+		tv.setText(getResources().getString(R.string.project_activity_tasks_tab));
 		tv.setTypeface(font_zekton);
 		th.addTab(th.newTabSpec("1").setIndicator(view)
 				.setContent(R.id.activity_project_task_tab));
@@ -155,7 +155,7 @@ public class ProjectActivity extends Activity {
 		iv = (ImageView) view.findViewById(R.id.tab_item_icon);
 		iv.setBackgroundResource(R.drawable.members_tab_norm);
 		tv = (TextView) view.findViewById(R.id.tab_item_title);
-		tv.setText("Project Members");
+		tv.setText(getResources().getString(R.string.project_activity_members_tab));
 		tv.setTypeface(font_zekton);
 		th.addTab(th.newTabSpec("2").setIndicator(view)
 				.setContent(R.id.activity_project_member_tab));
@@ -211,7 +211,7 @@ public class ProjectActivity extends Activity {
 						 */
 						AddMemberDialog amd = new AddMemberDialog(me,
 								member_list, adapter, AddMemberDialog.REMOTE);
-						amd.setTitle("Add new member to project.");
+						amd.setTitle(getResources().getString(R.string.project_activity_add_member_dialog_title));
 						amd.show();
 						/*
 						 * Happens after AddMemberDialog dialog is dismissed
@@ -352,9 +352,8 @@ public class ProjectActivity extends Activity {
 					// project removal
 					final YesNoDialog ynd = new YesNoDialog(me,
 							project.getId(), User.user.getId(), false);
-					ynd.setTitle(String.format("%-100s",
-							"Confirm project romove..."));
-					ynd.setMessage("Do you really want to remove this project?");
+					ynd.setTitle(getResources().getString(R.string.project_activity_yes_no_dialog_remove_title));
+					ynd.setMessage(getResources().getString(R.string.project_activity_yes_no_dialog_remove_message));
 
 					/*
 					 * Happens after yes/no dialog is dismissed
@@ -398,9 +397,8 @@ public class ProjectActivity extends Activity {
 					 * Yes/No dialog is displayed to confirm project removal
 					 */
 					final YesNoDialog ynd = new YesNoDialog(me, project.getId());
-					ynd.setTitle(String.format("%-100s",
-							"Confirm project completion..."));
-					ynd.setMessage("Do you want to mark this project: completed?");
+					ynd.setTitle(getResources().getString(R.string.project_activity_yes_no_dialog_finish_title));
+					ynd.setMessage(getResources().getString(R.string.project_activity_yes_no_dialog_finish_message));
 
 					ynd.setOnDismissListener(new OnDismissListener() {
 
@@ -462,9 +460,8 @@ public class ProjectActivity extends Activity {
 					 */
 					final YesNoDialog ynd = new YesNoDialog(me,
 							project.getId(), User.user.getId(), true);
-					ynd.setTitle(String.format("%-100s",
-							"Confirm project quit..."));
-					ynd.setMessage("Do you really want to quit from this project?");
+					ynd.setTitle(getResources().getString(R.string.project_activity_yes_no_dialog_quit_title));
+					ynd.setMessage(getResources().getString(R.string.project_activity_yes_no_dialog_quit_message));
 
 					/*
 					 * Happens after yes/no dialog is dismissed
@@ -564,7 +561,7 @@ public class ProjectActivity extends Activity {
 		 * Dialog will be displayed while data loads
 		 */
 		wd = new WaitDialog(me);
-		wd.setTitle(String.format("%-100s", "Loading project data..."));
+		wd.setTitle(getResources().getString(R.string.project_activity_wait_dialog_title));
 		wd.show();
 
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
@@ -628,7 +625,7 @@ public class ProjectActivity extends Activity {
 				 */
 				if (error instanceof NetworkErrorException) {
 
-					Toast.makeText(me, "No internet connection.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection), Toast.LENGTH_SHORT).show();
 					finish();
 
 				} else if (error instanceof WebAPIException) {
@@ -639,7 +636,7 @@ public class ProjectActivity extends Activity {
 
 					Intent i = new Intent(me, AuthActivity.class);
 					startActivity(i);
-					Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+					Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
 					.show();
 					finish();
 					

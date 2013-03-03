@@ -8,7 +8,7 @@ import android.widget.ListView;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class GUIFixes {

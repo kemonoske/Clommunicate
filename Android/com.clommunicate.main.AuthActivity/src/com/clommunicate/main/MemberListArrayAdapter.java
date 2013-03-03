@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 public class MemberListArrayAdapter extends ArrayAdapter<User> {
@@ -34,7 +34,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 		super(context, R.layout.member_list_item);
 		this.context = context;
-		type = Typeface.createFromAsset(context.getAssets(), "fonts/asen.ttf");
+		type = Typeface.createFromAsset(context.getAssets(), "fonts/roboto_light.ttf");
 
 	}
 
@@ -57,7 +57,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 			View item = inf.inflate(R.layout.add_list_item, parent, false);
 			TextView tv = (TextView)item.findViewById(R.id.add_list_item_tag);
-			tv.setText("Add New Member");
+			tv.setText(context.getResources().getString(R.string.member_list_array_adapter_add_member));
 			tv.setTypeface(type);
 			if (ProjectActivity.project.getEnd_date().compareToIgnoreCase("null") != 0)
 				item.setEnabled(false);
@@ -107,9 +107,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 							final YesNoDialog ynd = new YesNoDialog(context,
 									ProjectActivity.project.getId(), members
 											.get(pos).getId(), true);
-							ynd.setTitle(String.format("%-100s",
-									"Confirm member quit..."));
-							ynd.setMessage("Do you really want to to discard member from this project?");
+							ynd.setTitle(context.getResources().getString(R.string.member_list_array_adapter_yes_no_dialog_title));
+							ynd.setMessage(context.getResources().getString(R.string.member_list_array_adapter_yes_no_dialog_message));
 
 							ynd.setOnDismissListener(new OnDismissListener() {
 

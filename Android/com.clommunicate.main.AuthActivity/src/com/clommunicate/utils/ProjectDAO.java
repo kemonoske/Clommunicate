@@ -22,7 +22,7 @@ import android.accounts.NetworkErrorException;
 /**
  * Clasa e destinata pentru interactiunea cu Entitatea Projects din API
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class ProjectDAO {

@@ -37,7 +37,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="Created Projects"
+                        android:text="Projects"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
                         android:textSize="30sp" />

@@ -20,7 +20,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * Contine un set de metode statice destinate executiei requesturilor Http toate
  * metodele returneaza HttpEntity ce contine raspunsul la request
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class HttpRequest {

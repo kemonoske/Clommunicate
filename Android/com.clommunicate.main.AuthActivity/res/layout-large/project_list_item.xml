@@ -27,7 +27,7 @@
             android:gravity="center_horizontal|center_vertical"
             android:shadowColor="#000000"
             android:shadowRadius="4"
-            android:text="9999"
+            android:text="0"
             android:textColor="#f1eef4"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -110,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Start Date"
+                    android:text="@string/project_activity_start_date"
                     android:textColor="#6c6b68"
                     android:textSize="15dp" />
 
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Deadline"
+                    android:text="@string/project_activity_deadline"
                     android:textColor="#6c6b68"
                     android:textSize="15dp" />
 
@@ -180,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Finished On"
+                    android:text="@string/project_activity_finished"
                     android:textColor="#6c6b68"
                     android:textSize="15dp" />
 

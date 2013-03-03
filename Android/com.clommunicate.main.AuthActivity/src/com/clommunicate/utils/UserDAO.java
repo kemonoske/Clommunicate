@@ -19,7 +19,7 @@ import android.accounts.NetworkErrorException;
 /**
  * Clasa utilizata pentru interactiunea cu entitatea User din API
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class UserDAO {

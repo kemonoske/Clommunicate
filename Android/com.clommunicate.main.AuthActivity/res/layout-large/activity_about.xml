@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="Author: Bostanica Ion"
+                android:text="@string/about_activity_author"
                 android:textColor="#6c6b68"
                 android:textColorHighlight="#6c6b68"
                 android:textSize="20sp" />

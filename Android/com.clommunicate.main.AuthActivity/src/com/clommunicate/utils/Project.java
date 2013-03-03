@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Container class for project fields
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class Project {

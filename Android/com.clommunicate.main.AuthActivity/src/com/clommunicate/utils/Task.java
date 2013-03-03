@@ -1,5 +1,10 @@
 package com.clommunicate.utils;
 
+/**
+ * 
+ * @author Bostanica Ion
+ *
+ */
 public class Task {
 
 	public final static int GENERAL = 1;

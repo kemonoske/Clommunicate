@@ -37,7 +37,7 @@
                         android:id="@+id/new_project_activity_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="New project"
+                        android:text="@string/new_project_activity_title"
                         android:textColor="#6c6b68"
                         android:textColorHighlight="#6c6b68"
                         android:textSize="25sp" />
@@ -74,7 +74,7 @@
                                 android:id="@+id/new_project_name_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Name"
+                                android:text="@string/new_project_activity_name"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="20sp" />
@@ -109,7 +109,7 @@
                                     android:id="@+id/new_project_description_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Description"
+                                    android:text="@string/new_project_activity_description"
                                     android:textColor="#6c6b68"
                                     android:textColorHighlight="#6c6b68"
                                     android:textSize="20sp" />
@@ -150,7 +150,7 @@
                                 android:id="@+id/new_project_end_date_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Deadline"
+                                android:text="@string/new_project_activity_deadline"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="20sp" />
@@ -221,7 +221,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="100"
-                                android:text="Members"
+                                android:text="@string/new_project_activity_members"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="20sp" />

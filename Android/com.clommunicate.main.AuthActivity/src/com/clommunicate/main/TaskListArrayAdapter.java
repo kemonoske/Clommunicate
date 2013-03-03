@@ -27,7 +27,7 @@ import android.widget.TextView;
  * Adapter for task list, contains an array list of Task objects that provide
  * data for the list
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class TaskListArrayAdapter extends ArrayAdapter<Task> {
@@ -55,7 +55,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 		 * Load font from Asserts
 		 */
 		font_asen = Typeface.createFromAsset(context.getAssets(),
-				"fonts/asen.ttf");
+				"fonts/roboto_light.ttf");
 
 	}
 
@@ -85,7 +85,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 			View item = inf.inflate(R.layout.add_list_item, parent, false);
 
 			TextView tv = (TextView) item.findViewById(R.id.add_list_item_tag);
-			tv.setText("Add New Task");
+			tv.setText(context.getResources().getString(R.string.task_list_array_adapter_add_task));
 			tv.setTypeface(font_asen);
 
 			/*
@@ -188,7 +188,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 						 * request
 						 */
 						wd = new WaitDialog(context);
-						wd.setTitle(String.format("%-100s", "Updating task..."));
+						wd.setTitle(context.getResources().getString(R.string.task_list_array_adapter_update_wait_dialog_title));
 						wd.show();
 					}
 
@@ -224,13 +224,13 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 						String text = null;
 
 						if (result == null) {
-							text = "Task updated.";
+							text = context.getResources().getString(R.string.task_list_array_adapter_update_text_result_success);
 							tasks.get(position).setCompleted(isChecked);
 							notifyDataSetChanged();
 						} else if (result instanceof WebAPIException) {
 							text = result.getMessage();
 						} else {
-							text = "No internet connection.";
+							text = context.getResources().getString(R.string.error_no_internet_connection);
 						}
 						Toast.makeText(context.getApplicationContext(), text,
 								Toast.LENGTH_SHORT).show();

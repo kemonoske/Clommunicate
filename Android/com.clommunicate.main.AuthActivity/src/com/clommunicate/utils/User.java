@@ -8,6 +8,11 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+/**
+ * 
+ * @author Bostanica Ion
+ *
+ */
 public class User {
 
 	private int id = 0;

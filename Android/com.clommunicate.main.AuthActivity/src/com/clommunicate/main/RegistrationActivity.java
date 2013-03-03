@@ -91,8 +91,7 @@ public class RegistrationActivity extends Activity {
 					@Override
 					protected void onPreExecute() {
 
-						wd.setTitle(String.format("%-100s",
-								"User registration."));
+						wd.setTitle(getResources().getString(R.string.registration_activity_wait_dialog_register_title));
 						wd.show();
 
 					}
@@ -121,7 +120,7 @@ public class RegistrationActivity extends Activity {
 						String text = null;
 
 						if (result == null) {
-							text = "Registration success.";
+							text = getResources().getString(R.string.registration_activity_register_text_result_success);
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
 							User.user = usr;
@@ -131,7 +130,7 @@ public class RegistrationActivity extends Activity {
 							text = result.getMessage();
 							onBackPressed();
 						} else if(result instanceof NetworkErrorException){
-							text = "No internet connection.";
+							text = getResources().getString(R.string.error_no_internet_connection);
 							onBackPressed();
 						}
 						Toast.makeText(getApplicationContext(), text,
@@ -156,8 +155,7 @@ public class RegistrationActivity extends Activity {
 			protected void onPreExecute() {
 				super.onPreExecute();
 				wd = new WaitDialog(me);
-				wd.setTitle(String.format("%-100s",
-						"Loading oAuth information..."));
+				wd.setTitle(getResources().getString(R.string.registration_activity_wait_dialog_oAuth_title));
 				wd.show();
 			}
 
@@ -234,7 +232,7 @@ public class RegistrationActivity extends Activity {
 
 				String text;
 				if (result == 1) {
-					text = "oAuth data loaded.";
+					text = getResources().getString(R.string.registration_activity_load_text_result_success);
 					name.setText(usr.getName());
 					name.setEnabled(false);
 					email.setText(usr.getEmail());
@@ -246,11 +244,11 @@ public class RegistrationActivity extends Activity {
 					if(usr.getPicture() != null)
 						picture.setImageBitmap(usr.getPicture());
 				} else if (result == 0)
-					text = "Failed to load oAuth data.";
+					text = getResources().getString(R.string.registration_activity_load_text_result_fail);
 				else if (result == 2){
-					text = "Waiting for confirmation.";
+					text = getResources().getString(R.string.registration_activity_load_text_result_no_confirmation);
 				}	else
-					text = "No internet connection.";
+					text = getResources().getString(R.string.error_no_internet_connection);
 
 				Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
 			}
@@ -266,9 +264,9 @@ public class RegistrationActivity extends Activity {
 		if(requestCode == 0)	{
 			if(resultCode == RESULT_CANCELED)	{
 				onBackPressed();
-				Toast.makeText(me, "Access denied by user..", Toast.LENGTH_SHORT).show();
+				Toast.makeText(me, getResources().getString(R.string.registration_activity_activity_result_denied), Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(me, "Access granted..", Toast.LENGTH_SHORT).show();
+				Toast.makeText(me, getResources().getString(R.string.registration_activity_activity_result_granted), Toast.LENGTH_SHORT).show();
 				loadUserData();
 			}
 		}

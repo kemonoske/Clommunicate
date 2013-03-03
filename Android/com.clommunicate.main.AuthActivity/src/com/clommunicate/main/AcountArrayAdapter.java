@@ -14,7 +14,7 @@ import android.widget.TextView;
  * 
  * Adapter used for list of accounts in AuthActivity
  * 
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 public class AcountArrayAdapter extends ArrayAdapter<String> {

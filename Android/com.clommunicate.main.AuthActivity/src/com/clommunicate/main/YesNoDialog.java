@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  * 
  */
 public class YesNoDialog extends Dialog {
@@ -24,11 +24,12 @@ public class YesNoDialog extends Dialog {
 	private int uid = 0;
 	private boolean status = false;
 	private String msg = null;
+	private Context context = null;
 
-	protected YesNoDialog(Context context, int p_id, int u_id,
+	protected YesNoDialog(Context contex, int p_id, int u_id,
 			final boolean partIn) {
 
-		super(context, R.style.cust_dialog);
+		super(contex, R.style.cust_dialog);
 		setContentView(R.layout.yes_no_dialog);
 		setCancelable(false);
 
@@ -38,12 +39,13 @@ public class YesNoDialog extends Dialog {
 
 		this.pid = p_id;
 		this.uid = u_id;
-
+		this.context = contex;
+		
 		cancel.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				msg = "Operation cancelled by user.";
+				msg = context.getResources().getString(R.string.yes_no_dialog_cancelled_by_user);
 				dismiss();
 
 			}
@@ -63,12 +65,12 @@ public class YesNoDialog extends Dialog {
 								status = ProjectDAO.removeMember(pid, uid);
 							else
 								status = ProjectDAO.removeProject(pid);
-							msg = (status) ? ((partIn) ? "You are no longer a member of the project."
-									: "Project removed.")
-									: "Operation failed, possible server problem.";
+							msg = (status) ? ((partIn) ? context.getResources().getString(R.string.yes_no_dialog_remove_member_text_result_success)
+									: context.getResources().getString(R.string.yes_no_dialog_remove_project_text_result_success))
+									: context.getResources().getString(R.string.yes_no_dialog_remove_text_result_fail);
 						} catch (NetworkErrorException e) {
 
-							msg = "No internet connection.";
+							msg = context.getResources().getString(R.string.error_no_internet_connection);
 
 						} catch (WebAPIException e) {
 
@@ -86,9 +88,9 @@ public class YesNoDialog extends Dialog {
 
 	}
 
-	protected YesNoDialog(Context context, int p_id) {
+	protected YesNoDialog(Context contex, int p_id) {
 
-		super(context, R.style.cust_dialog);
+		super(contex, R.style.cust_dialog);
 		setContentView(R.layout.yes_no_dialog);
 		setCancelable(false);
 
@@ -97,12 +99,13 @@ public class YesNoDialog extends Dialog {
 		cancel = (ImageButton) findViewById(R.id.yes_no_dialog_cancel_button);
 
 		this.pid = p_id;
-
+		this.context = contex;
+		
 		cancel.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				msg = "Operation cancelled by user.";
+				msg = context.getResources().getString(R.string.yes_no_dialog_cancelled_by_user);
 				dismiss();
 
 			}
@@ -120,11 +123,11 @@ public class YesNoDialog extends Dialog {
 						try {
 
 							status = ProjectDAO.markProjectCompleted(pid);
-							msg = (status) ? "This project is now completed."
-									: "Operation failed, possible server problem.";
+							msg = (status) ? context.getResources().getString(R.string.yes_no_dialog_finish_text_result_success)
+									: context.getResources().getString(R.string.yes_no_dialog_remove_text_result_fail);
 						} catch (NetworkErrorException e) {
 
-							msg = "No internet connection.";
+							msg = context.getResources().getString(R.string.error_no_internet_connection);
 
 						} catch (WebAPIException e) {
 
@@ -142,9 +145,9 @@ public class YesNoDialog extends Dialog {
 
 	}
 
-	protected YesNoDialog(Context context) {
+	protected YesNoDialog(Context contex) {
 
-		super(context, R.style.cust_dialog);
+		super(contex, R.style.cust_dialog);
 		setContentView(R.layout.yes_no_dialog);
 		setCancelable(false);
 
@@ -152,11 +155,13 @@ public class YesNoDialog extends Dialog {
 		ok = (ImageButton) findViewById(R.id.yes_no_dialog_yes_button);
 		cancel = (ImageButton) findViewById(R.id.yes_no_dialog_cancel_button);
 
+		this.context = contex;
+		
 		cancel.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				msg = "Operation cancelled by user.";
+				msg = context.getResources().getString(R.string.yes_no_dialog_cancelled_by_user);
 				dismiss();
 
 			}

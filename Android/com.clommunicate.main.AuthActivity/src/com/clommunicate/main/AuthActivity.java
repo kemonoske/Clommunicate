@@ -183,7 +183,7 @@ public class AuthActivity extends Activity {
 
 					@Override
 					protected void onPreExecute() {
-						wd.setTitle("User Authentification...");
+						wd.setTitle(getResources().getString(R.string.auth_activity_wait_dialog_title));
 						wd.show();
 					}
 
@@ -250,11 +250,11 @@ public class AuthActivity extends Activity {
 																			 * null
 																			 */
 							Toast.makeText(me.getApplicationContext(),
-									"No internet connection.",
+									getResources().getString(R.string.error_no_internet_connection),
 									Toast.LENGTH_SHORT).show();
 						} else
 							Toast.makeText(me.getApplicationContext(),
-									"Unknown exception.", Toast.LENGTH_SHORT)
+									getResources().getString(R.string.error_unknown), Toast.LENGTH_SHORT)
 									.show();
 					}
 

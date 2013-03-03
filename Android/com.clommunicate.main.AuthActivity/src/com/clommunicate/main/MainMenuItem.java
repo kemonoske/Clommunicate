@@ -8,6 +8,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * 
+ * @author Bostanica Ion
+ *
+ */
 public class MainMenuItem extends LinearLayout {
 
 	private LinearLayout item = null;

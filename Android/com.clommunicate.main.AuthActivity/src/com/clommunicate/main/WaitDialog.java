@@ -7,7 +7,7 @@ import android.content.Context;
 
 /**
  * 
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 public class WaitDialog extends Dialog {

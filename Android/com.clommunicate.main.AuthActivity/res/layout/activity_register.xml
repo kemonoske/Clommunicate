@@ -22,7 +22,7 @@
                 android:id="@+id/regLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Registration"
+                android:text="@string/registration_activity_title"
                 android:textColor="#6c6b68"
                 android:textColorHighlight="#6c6b68"
                 android:textSize="35dp" />
@@ -64,7 +64,7 @@
                             android:id="@+id/reg_name_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Name"
+                            android:text="@string/registration_activity_name"
                             android:textColor="#6c6b68"
                             android:textColorHighlight="#6c6b68"
                             android:textSize="25sp" />
@@ -94,7 +94,7 @@
                             android:id="@+id/reg_email_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Email"
+                            android:text="@string/registration_activity_email"
                             android:textColor="#6c6b68"
                             android:textColorHighlight="#6c6b68"
                             android:textSize="25sp" />
@@ -124,7 +124,7 @@
                             android:id="@+id/reg_location_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Locale"
+                            android:text="@string/registration_activity_locale"
                             android:textColor="#6c6b68"
                             android:textColorHighlight="#6c6b68"
                             android:textSize="25sp" />
@@ -154,7 +154,7 @@
                             android:id="@+id/reg_gender_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gender"
+                            android:text="@string/registration_activity_gender"
                             android:textColor="#6c6b68"
                             android:textColorHighlight="#6c6b68"
                             android:textSize="25sp" />
@@ -195,7 +195,7 @@
                             android:id="@+id/reg_photo_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Photo"
+                            android:text="@string/registration_activity_photo"
                             android:textColor="#6c6b68"
                             android:textColorHighlight="#6c6b68"
                             android:textSize="25sp" />

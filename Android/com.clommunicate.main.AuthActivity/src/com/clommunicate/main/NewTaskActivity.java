@@ -97,7 +97,7 @@ public class NewTaskActivity extends Activity {
 		delete_layout = (LinearLayout) findViewById(R.id.new_task_delete_layout);
 
 		if (activity_type == EDIT_ACTIVITY) {
-			activity_title.setText("Edit Task");
+			activity_title.setText(getResources().getString(R.string.new_task_activity_title_update));
 			delete_layout.setVisibility(View.VISIBLE);
 		}
 
@@ -126,13 +126,13 @@ public class NewTaskActivity extends Activity {
 				if (name.getText().toString().trim().length() == 0) {
 
 					Toast.makeText(me.getApplicationContext(),
-							"Specify project name.", Toast.LENGTH_SHORT).show();
+							getResources().getString(R.string.new_task_activity_task_name_not_specified), Toast.LENGTH_SHORT).show();
 					return;
 
 				} else if (description.getText().toString().trim().length() == 0) {
 
 					Toast.makeText(me.getApplicationContext(),
-							"Specify project description.", Toast.LENGTH_SHORT)
+							getResources().getString(R.string.new_task_activity_task_description_not_specified), Toast.LENGTH_SHORT)
 							.show();
 					return;
 				}
@@ -155,22 +155,19 @@ public class NewTaskActivity extends Activity {
 						switch (activity_type) {
 						case NEW_ACTIVITY:
 
-							wd.setTitle(String.format("%-100s",
-									"Creating new task..."));
+							wd.setTitle(getResources().getString(R.string.new_task_activity_create_wait_dialog_title));
 
 							break;
 
 						case EDIT_ACTIVITY:
 
-							wd.setTitle(String.format("%-100s",
-									"Updating task info..."));
+							wd.setTitle(getResources().getString(R.string.new_task_activity_update_wait_dialog_title));
 
 							break;
 
 						case DELETE_ACTIVITY:
 
-							wd.setTitle(String.format("%-100s",
-									"Deleting task..."));
+							wd.setTitle(getResources().getString(R.string.new_task_activity_delete_wait_dialog_title));
 
 							break;
 						default:
@@ -230,39 +227,39 @@ public class NewTaskActivity extends Activity {
 						case NEW_ACTIVITY:
 
 							if (result == null) {
-								text = "Task created.";
+								text = getResources().getString(R.string.new_task_activity_create_text_result_success);
 								finish();
 							} else if (result instanceof WebAPIException) {
 								text = result.getMessage();
 								finish();
 							} else
-								text = "No internet connection.";
+								text = getResources().getString(R.string.error_no_internet_connection);
 
 							break;
 
 						case EDIT_ACTIVITY:
 
 							if (result == null) {
-								text = "Task updated.";
+								text = getResources().getString(R.string.new_task_activity_update_text_result_success);
 								finish();
 							} else if (result instanceof WebAPIException) {
 								text = result.getMessage();
 								finish();
 							} else
-								text = "No internet connection.";
+								text = getResources().getString(R.string.error_no_internet_connection);
 
 							break;
 
 						case DELETE_ACTIVITY:
 
 							if (result == null) {
-								text = "Task Deleted.";
+								text = getResources().getString(R.string.new_task_activity_delete_text_result_success);
 								finish();
 							} else if (result instanceof WebAPIException) {
 								text = result.getLocalizedMessage();
 								finish();
 							} else
-								text = "No internet connection.";
+								text = getResources().getString(R.string.error_no_internet_connection);
 
 							break;
 
@@ -292,14 +289,14 @@ public class NewTaskActivity extends Activity {
 			Intent i = new Intent(me, AuthActivity.class);
 			startActivity(i);
 			Toast.makeText(me,
-					"You have been away for too long, please relogin.",
+					getResources().getString(R.string.error_please_relogin),
 					Toast.LENGTH_SHORT).show();
 			finish();
 
 		}
 
 		wd = new WaitDialog(me);
-		wd.setTitle(String.format("%-100s", "Loading project members..."));
+		wd.setTitle(getResources().getString(R.string.new_task_activity_loading_wait_dialog_title));
 		wd.show();
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
 
@@ -353,7 +350,7 @@ public class NewTaskActivity extends Activity {
 
 				if (error instanceof NetworkErrorException) {
 
-					Toast.makeText(me, "No internet connection.",
+					Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection),
 							Toast.LENGTH_SHORT).show();
 
 				} else if (error instanceof WebAPIException) {

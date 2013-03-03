@@ -104,7 +104,7 @@ public class NewProjectActivity extends Activity {
 
 				Intent i = new Intent(me, AuthActivity.class);
 				startActivity(i);
-				Toast.makeText(me, "You have been away for too long, please relogin.", Toast.LENGTH_SHORT)
+				Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
 				.show();
 				finish();
 				
@@ -129,7 +129,7 @@ public class NewProjectActivity extends Activity {
 				 */
 				final AddMemberDialog amd = new AddMemberDialog(me,
 						member_list, member_list_adapter, AddMemberDialog.LOCAL);
-				amd.setTitle("Add new member to project.");
+				amd.setTitle(getResources().getString(R.string.new_project_activity_add_member_dialog_title));
 				amd.show();
 				amd.setOnDismissListener(new OnDismissListener() {
 
@@ -161,13 +161,13 @@ public class NewProjectActivity extends Activity {
 				if (name.getText().toString().trim().length() == 0) {
 
 					Toast.makeText(me.getApplicationContext(),
-							"Specify project name.", Toast.LENGTH_SHORT).show();
+							getResources().getString(R.string.new_project_activity_project_name_not_specified), Toast.LENGTH_SHORT).show();
 					return;
 
 				} else if (description.getText().toString().trim().length() == 0) {
 
 					Toast.makeText(me.getApplicationContext(),
-							"Specify project description.", Toast.LENGTH_SHORT)
+							getResources().getString(R.string.new_project_activity_project_description_not_specified), Toast.LENGTH_SHORT)
 							.show();
 					return;
 				}
@@ -209,9 +209,9 @@ public class NewProjectActivity extends Activity {
 						 */
 						wd = new WaitDialog(me);
 						if (activity_type == NEW_PROJECT)
-							wd.setTitle("Creating new project...");
+							wd.setTitle(getResources().getString(R.string.new_project_activity_wait_dialog_title_create));
 						else
-							wd.setTitle("Updating project...");
+							wd.setTitle(getResources().getString(R.string.new_project_activity_wait_dialog_title_update));
 						wd.show();
 					}
 
@@ -251,12 +251,12 @@ public class NewProjectActivity extends Activity {
 						wd.dismiss();
 						String text = null;
 						if (result == null)
-							text = (activity_type == NEW_PROJECT) ? "Project created"
-									: "Project updated";
+							text = (activity_type == NEW_PROJECT) ? getResources().getString(R.string.new_project_activity_create_result_text_success)
+									: getResources().getString(R.string.new_project_activity_update_text_result_success);
 						else if (result instanceof WebAPIException)
 							text = result.getMessage();
 						else
-							text = "No internet connection.";
+							text = getResources().getString(R.string.error_no_internet_connection);
 
 						Toast.makeText(getApplicationContext(), text,
 								Toast.LENGTH_LONG).show();

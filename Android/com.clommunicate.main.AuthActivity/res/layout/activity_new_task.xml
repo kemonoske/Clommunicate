@@ -21,7 +21,7 @@
                 android:id="@+id/new_task_activity_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New task"
+                android:text="@string/new_task_activity_title_create"
                 android:textColor="#6c6b68"
                 android:textColorHighlight="#6c6b68"
                 android:textSize="35dp" />
@@ -73,7 +73,7 @@
                                 android:id="@+id/new_task_name_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Name"
+                                android:text="@string/new_task_activity_name"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="25dp" />
@@ -118,7 +118,7 @@
                                     android:id="@+id/new_task_description_label"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Description"
+                                    android:text="@string/new_task_activity_description"
                                     android:textColor="#6c6b68"
                                     android:textColorHighlight="#6c6b68"
                                     android:textSize="25dp" />
@@ -159,7 +159,7 @@
                                 android:id="@+id/new_task_type_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Type"
+                                android:text="@string/new_task_activity_type"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="25sp" />
@@ -201,7 +201,7 @@
                                 android:id="@+id/new_task_asigned_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Asigned To"
+                                android:text="@string/new_task_activity_assigned"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="25dp" />
@@ -245,7 +245,7 @@
                                 android:id="@+id/new_task_delete_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Mark for deletion"
+                                android:text="@string/new_project_activity_deletion"
                                 android:textColor="#6c6b68"
                                 android:textColorHighlight="#6c6b68"
                                 android:textSize="25dp" />

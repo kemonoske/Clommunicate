@@ -43,12 +43,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:background="@drawable/border"
+                android:padding="2dp"
                 android:singleLine="true"
                 android:textColor="#6c6b68"
-                android:textColorHighlight="#6c6b68"
-                android:textSize="25dp"
-                android:background="@drawable/border"
-                android:padding="2dp" />
+                android:textSize="25dp" />
+
         </LinearLayout>
     </LinearLayout>
 
