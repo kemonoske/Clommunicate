@@ -279,6 +279,17 @@ public class RegistrationActivity extends Activity {
 
 		main_menu =  new MainMenu(this, R.id.registration_activity_main);
 		
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				onResume();
+				main_menu.close();
+				
+			}
+		});
+		
 		return true;
 	}
 

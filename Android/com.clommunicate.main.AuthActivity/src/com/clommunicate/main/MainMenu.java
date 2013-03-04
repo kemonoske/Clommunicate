@@ -49,6 +49,7 @@ public class MainMenu {
 
 		content.addView(about, 0);
 
+
 	}
 
 	public void open() {
@@ -67,6 +68,17 @@ public class MainMenu {
 
 		menu.animateToggle();
 
+	}
+	
+	public void addMenuItem(int icon, CharSequence name, OnClickListener listener)	{
+		
+		MainMenuItem aux = new MainMenuItem(context,
+				icon, name);
+		
+		aux.setOnClickListener(listener);
+		
+		content.addView(aux, 0);
+		
 	}
 
 }

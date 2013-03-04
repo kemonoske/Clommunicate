@@ -13,6 +13,8 @@
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <activity
             android:name=".AuthActivity"
+            android:launchMode="singleTask"
+            android:clearTaskOnLaunch="true"
             android:windowSoftInputMode="stateHidden" 
             android:label="@string/title_activity_auth">
             <intent-filter>

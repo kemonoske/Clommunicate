@@ -63,7 +63,7 @@
     <string name="task_activity_update_text_result_success">Task data successfully updated.</string>
     <string name="task_activity_add_comment_wait_dialog_title">Add comment.</string>
     <string name="task_activity_add_comment_text_result_success">Comment successfully added.</string>
-    <string name="task_list_array_adapter_add_task">Add new task.</string>
+    <string name="task_list_array_adapter_add_task">Add new task</string>
     <string name="task_list_array_adapter_update_wait_dialog_title">Înoirea datelor însărcinării.</string>
     <string name="task_list_array_adapter_update_text_result_success">Task data successfully updated.</string>
     <string name="user_activity_meny_gender">Gender</string>
@@ -107,6 +107,8 @@
     <string name="user_activity_new_project">New Project</string>
     <string name="main_menu_about">About</string>
     <string name="error_unknown">Check your connection.</string>
+    <string name="main_menu_refresh">Refresh</string>
+    <string name="main_menu_logout">Logout</string>
     
     
 </resources>

@@ -675,6 +675,29 @@ public class ProjectActivity extends Activity {
 
 		main_menu =  new MainMenu(this, R.id.project_activity_main);
 		
+		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources().getString(R.string.main_menu_logout), new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent i = new Intent(me, AuthActivity.class);
+				startActivity(i);
+				finish();
+				
+			}
+		});
+		
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				onResume();
+				main_menu.close();
+				
+			}
+		});
+		
 		return true;
 	}
 

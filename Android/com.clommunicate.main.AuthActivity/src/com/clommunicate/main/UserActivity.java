@@ -6,6 +6,7 @@ import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -203,6 +204,29 @@ public class UserActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		main_menu =  new MainMenu(this, R.id.user_activity_main);
+		
+		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources().getString(R.string.main_menu_logout), new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent i = new Intent(me, AuthActivity.class);
+				startActivity(i);
+				finish();
+				
+			}
+		});
+		
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				onResume();
+				main_menu.close();
+				
+			}
+		});
 		
 		return true;
 	}

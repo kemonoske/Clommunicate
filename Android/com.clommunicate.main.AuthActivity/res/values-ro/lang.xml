@@ -101,11 +101,13 @@
     <string name="registration_activity_photo">Foto</string>
     <string name="user_activity_projects">Proiecte</string>
     <string name="user_activity_part_in">Membru</string>
-    <string name="user_activity_wait_dialog_title">Loading user data.</string>
+    <string name="user_activity_wait_dialog_title">Încărcarea datelor utilizatorului.</string>
     <string name="user_activity_extra_projects">Proiecte Create</string>
     <string name="user_activity_extra_part_in">Membru la Proiecte</string>
     <string name="user_activity_new_project">Proiect Nou</string>
     <string name="main_menu_about">Despre</string>
     <string name="error_unknown">Controlați conexiunea la rețea.</string>
+    <string name="main_menu_refresh">Actualizare</string>
+    <string name="main_menu_logout">Delogare</string>
     
 </resources>
