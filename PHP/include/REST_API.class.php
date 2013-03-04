@@ -3,7 +3,7 @@
 /**
  * This class parses URL and choses action based
  * on REST standart
- * @author Akira
+ * @author Bostanica Ion
  *
  */
 class REST_API {

@@ -284,7 +284,7 @@ public class RegistrationActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				onResume();
+				loadUserData();
 				main_menu.close();
 				
 			}

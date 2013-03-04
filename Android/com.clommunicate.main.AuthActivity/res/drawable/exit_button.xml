@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
  <selector xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:state_pressed="true"
-        android:drawable="@drawable/no_btn_pressed"/>
-    <item android:state_enabled="false"
-        android:drawable="@drawable/no_btn_inactive"/>
-    <item  android:drawable="@drawable/no_btn_norm"></item>
-
+    <!-- Inactive button -->
+    <item android:drawable="@drawable/no_btn_inactive" android:state_enabled="false"/>
+    <!-- Pressed button -->
+    <item android:drawable="@drawable/no_btn_pressed" android:state_pressed="true"/>
+    <!-- Selected button (using d-pad) -->
+    <item android:drawable="@drawable/no_btn_selected" android:state_focused="true"/>
+    <!-- Active Button -->
+    <item android:drawable="@drawable/no_btn_norm"/>
 </selector>
