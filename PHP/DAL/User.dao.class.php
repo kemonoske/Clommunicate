@@ -195,10 +195,10 @@ class UserDAO {
 	}
 
 	/**
-	 * User to add user object to Users table
+	 * Used to add user object to Users table
 	 * @param User $user - user object containing field data
-	 * @throws Exception - if something off happens
-	 * @return boolean - i adding succeed
+	 * @throws Exception - if something odd happens
+	 * @return boolean - if adding succeed
 	 */
 	static function addUser($user)	{
 
@@ -219,6 +219,56 @@ class UserDAO {
 			$error = $statement->errorInfo();
 			throw new Exception($error[2]);
 		}
+
+		return true;
+
+	}
+
+	/**
+	 * Used to remove User from Users table
+	 * @param int $uid - user id
+	 * @throws Exception - if something odd happens
+	 * @return boolean - if adding succeed
+	 */
+	static function removeUser($uid)	{
+
+		require_once 'DBO.class.php';
+		require_once 'DAL/Project.dao.class.php';
+
+		$db = DBO::getInstance();
+		
+		$db->beginTransaction();
+		
+		$statement = $db->prepare('
+				SELECT id_proj
+				FROM project_group
+				WHERE id_usr = :uid');
+		$statement->execute(array(
+				':uid' => $uid));
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+		
+		while($pid = $statement->fetch())	{
+			ProjectDAO::removeProjectMemberunSafe($pid[id_proj], $uid);
+		}
+
+		$db = DBO::getInstance();
+		$statement = $db->prepare('
+				DELETE 
+				FROM users
+				WHERE id = :uid');
+		
+		$statement->execute(array(
+				':uid' => $uid));
+		
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+		
+		$db->commit();
 
 		return true;
 

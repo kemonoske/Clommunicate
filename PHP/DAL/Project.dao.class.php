@@ -250,6 +250,50 @@ class ProjectDAO {
 		return true;
 
 	}
+
+	/**
+	 * Removes a member from the project and reasign no security
+	 * all his tasks to project owner
+	 * @param int $pid - project id
+	 * @param int $uid - member id
+	 * @throws Exception
+	 * @return boolean
+	 */
+	static function removeProjectMemberUnSafe($pid, $uid){
+
+		require_once 'DBO.class.php';
+
+		$db = DBO::getInstance();
+
+		$statement = $db->prepare('DELETE
+				FROM project_group
+				WHERE id_usr = :uid AND id_proj = :pid');
+		$statement->execute(array(
+				':pid' => $pid,
+				':uid' => $uid));
+
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+
+		$statement = $db->prepare('UPDATE tasks
+				SET assigned = (SELECT owner
+				FROM projects
+				WHERE id = :pid)
+				WHERE assigned = :uid');
+		$statement->execute(array(
+				':pid' => $pid,
+				':uid' => $uid));
+
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+
+		return true;
+
+	}
 	/**
 	 * Gets all projects that user is member of
 	 * @param int $uid - member id

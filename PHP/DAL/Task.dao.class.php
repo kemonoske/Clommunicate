@@ -174,6 +174,7 @@ class TaskDAO {
 		$statement = $db->prepare('SELECT *
 				FROM tasks
 				WHERE owner = :pid
+				ORDER BY id DESC
 				LIMIT 0,9999
 				');
 		$statement->execute(array(

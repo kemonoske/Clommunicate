@@ -3,7 +3,7 @@
 /**
  * This class parses URL and choses action based
  * on REST standart
- * @author Bostanica Ion
+ * @author Akira
  *
  */
 class REST_API {
@@ -187,12 +187,6 @@ class REST_API {
 
 			switch ($current_entity){
 
-				/*case 'AUTHOR':
-
-				//N/A
-
-				break;*/
-
 				default:
 
 					$response = new Response(
@@ -342,7 +336,7 @@ class REST_API {
 				//GET: return user details
 				//PUT: update user details
 				//POST: N/A maybe create new project but its bullshit
-				//DELETE: delete user probably N/A
+				//DELETE: delete user
 
 				switch($this->request_type){
 
@@ -451,11 +445,42 @@ class REST_API {
 							
 						break;*/
 
-						/*case 'DELETE':
+						case 'DELETE':
 
-						//N/A
+							$uid = $id;
+							
+							if(isset($uid) && intval($uid) != 0)	{
+								try {
+										
+									$status = UserDAO::removeUser($uid);
+									$response = new Response(
+											$status,
+											($status)?null:"Can't remove User.",
+											null);
+							
+								} catch (Exception $e) {
+							
+									$response = new Response(
+											false,
+											$e->getMessage(),
+											null);
+							
+								}
+							
+							}	else {
+							
+								$response = new Response(
+										false,
+										"Some or all of required parameters are invalid or missing.",
+										null);
+							
+							}
+								
+							echo $response->respond();
+								
+							break;
 
-						break;*/
+						break;
 
 					default:
 
@@ -1427,11 +1452,59 @@ class REST_API {
 
 				switch($this->request_type){
 
-					/*case 'GET':
+					case 'GET':
+	
+						echo 'sdfgfsd';
+						if(!strcmp($id,'LAST_COMMENT')){
+						
+							require_once 'DAL/Comment.class.php';
+							require_once 'DAL/Comment.dao.class.php';
+								
+							if(isset($owner_id))	{
+									
+								$tid = $owner_id;
+									
+								try {
+										
+									$comment = CommentDAO::getLastComment($tid);
+										
+									$response = new Response(
+											true,
+											null,
+											$comment);
+										
+								} catch (Exception $e) {
+										
+									$response = new Response(
+											false,
+											$e->getMessage(),
+											null);
+										
+								}
+									
+									
+							}	else {
+									
+								$response = new Response(
+										false,
+										"Resource not found.",
+										null);
+									
+									
+							}
+								
+						}	else	{
+									
+								$response = new Response(
+										false,
+										"operation not supported.",
+										null);
+							
+						}
+						
+						echo $response->respond();
 
-					N/A
-
-					break;*/
+					break;
 
 					/*case 'PUT':
 
@@ -1482,6 +1555,8 @@ class REST_API {
 
 					default:
 
+						
+						
 						$response = new Response(
 						false,
 						"Operation not supported.",
@@ -1511,6 +1586,33 @@ class REST_API {
 
 				$id = $this->url[1];
 
+				if(!strcmp($this->request_type,'GET') && isset($owner_id) && intval($id) && !strcmp($this->url[2],'COUNT_AFTER')){
+				
+					$tid = $owner_id;
+				
+					try {
+				
+						$count = CommentDAO::countAfter($id, $tid);
+				
+						$response = new Response(
+								true,
+								null,
+								$count);
+				
+					} catch (Exception $e) {
+				
+						$response = new Response(
+								false,
+								$e->getMessage(),
+								null);
+				
+					}
+					
+					echo $response->respond();
+					
+					return;
+				
+				}
 				if(CommentDAO::exists($id))	{
 
 					$this->url = array_slice($this->url, 2);

@@ -133,5 +133,90 @@ class CommentDAO {
 		return $comments;
 		
 	}
+
+	/**
+	 * return last comment in a task
+	 * @param int $tid - task id
+	 * @throws Exception
+	 * @return boolean
+	 */
+	static function getLastComment($tid){
+	
+		require_once 'DBO.class.php';
+		require_once 'Comment.class.php';
+	
+		$db = DBO::getInstance();
+	
+		$statement = $db->prepare('
+				SELECT *
+				FROM comments
+				WHERE id = (
+					SELECT MAX(id)
+					FROM comments
+					WHERE owner = :tid
+				)');
+		$statement->execute(array(
+				':tid' => $tid));
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+	
+		if($row = $statement->fetch())	{
+	
+			$comment = new Comment(
+					$row[id],
+					$row[owner],
+					$row[text],
+					$row[author],
+					$row[time]);
+				
+			$comment = Comment::serialize($comment);
+				
+		}
+	
+		return $comment;
+	
+	}
+	
+	
+	/**
+	 * return number of coments that apeared 
+	 * after coment id received
+	 * @param int $cid - comment id
+	 * @param int $tid - task id
+	 * @throws Exception
+	 * @return boolean
+	 */
+	static function countAfter($cid, $tid){
+		
+		require_once 'DBO.class.php';
+		require_once 'Comment.class.php';
+		
+		$db = DBO::getInstance();
+		
+		$statement = $db->prepare('
+			SELECT COUNT(*) count
+			FROM comments
+			WHERE id > :cid
+			AND owner = :tid');
+		$statement->execute(array(
+				':cid' => $cid,
+				':tid' => $tid));
+		
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+		
+		if($row = $statement->fetch())	{
+		
+			$count = $row[count];
+			
+		}
+		
+		return $count;
+		
+	}
 	
 }
