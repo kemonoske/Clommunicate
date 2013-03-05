@@ -133,5 +133,47 @@ class CommentDAO {
 		return $comments;
 		
 	}
+	/**
+	 * return last comment
+	 * @param int $tid - task id
+	 * @throws Exception
+	 * @return boolean
+	 */
+	static function lastComment($tid){
+		
+		require_once 'DBO.class.php';
+		require_once 'Comment.class.php';
+		
+		$db = DBO::getInstance();
+		
+		$statement = $db->prepare('
+				SELECT *
+				FROM comments
+				WHERE id = (
+						SELECT MAX(id)
+						FROM comments
+						WHERE owner = :tid
+					)');
+		$statement->execute(array(
+				':tid' => $tid));
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+
+		if($row = $statement->fetch())	{
+		
+			$comment = new Comment(
+					$row[id],
+					$row[owner], 
+					$row[text], 
+					$row[author], 
+					$row[time]);
+					
+		}
+		
+		return $comment;
+		
+	}
 	
 }
