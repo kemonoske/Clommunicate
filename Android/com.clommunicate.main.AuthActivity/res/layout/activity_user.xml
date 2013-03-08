@@ -121,11 +121,13 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/add_btn_long"
+                android:focusableInTouchMode="false"
                 android:scaleType="fitStart"
                 android:src="@drawable/add_img_btn_norm"
                 android:text="@string/user_activity_new_project"
                 android:textColor="#6c6b68"
                 android:textSize="20dp" />
+
         </LinearLayout>
 
         <LinearLayout

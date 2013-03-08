@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
@@ -143,6 +144,75 @@ public class UserDAO {
 			}
 
 			JSONObject jo = new JSONObject(sb.toString());
+			if (jo.getBoolean("status")) {
+
+				return true;
+
+			} else {
+
+				throw new WebAPIException(jo.getString("message"));
+
+			}
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
+	/**
+	 * Deletes User from DB
+	 * 
+	 * @param id
+	 *            user id
+	 * @return true if user is removed
+	 * @throws NetworkErrorException
+	 *             if there is no internet connection
+	 * @throws WebAPIException
+	 *             if a server side error is thrown
+	 */
+	public static boolean removeUser(int id) throws NetworkErrorException,
+			WebAPIException {
+
+		ArrayList<NameValuePair> parameter_list = new ArrayList<NameValuePair>(
+				0);
+		HttpDelete hd = new HttpDelete(WebApi.API + "/users/" + id);
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = HttpRequest.doDelete(parameter_list, hd);
+
+		if (he == null)
+			throw new NetworkErrorException();
+
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+
 			if (jo.getBoolean("status")) {
 
 				return true;

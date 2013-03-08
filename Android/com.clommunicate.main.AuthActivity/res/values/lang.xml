@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="about_dialog_title">About</string>
     <string name="add_member_dialog_result_cacelled">Operation cancelled by user.</string>
     <string name="add_member_dialog_result_cnnot_be_added">User cannot be added to the list.</string>
@@ -66,10 +67,16 @@
     <string name="task_list_array_adapter_add_task">Add new task</string>
     <string name="task_list_array_adapter_update_wait_dialog_title">Înoirea datelor însărcinării.</string>
     <string name="task_list_array_adapter_update_text_result_success">Task data successfully updated.</string>
-    <string name="user_activity_meny_gender">Gender</string>
-    <string name="user_activity_meny_locale">Locale</string>
-    <string name="user_activity_meny_projects_created">Projects Created</string>
-    <string name="user_activity_meny_projects_part_in">Projects Part In</string>
+    <string name="user_activity_menu_gender">Gender</string>
+    <string name="user_activity_menu_locale">Locale</string>
+    <string name="user_activity_menu_projects_created">Projects Created</string>
+    <string name="user_activity_menu_projects_part_in">Projects Part In</string>
+    <string name="user_activity_menu_delete_account">Delete Account</string>
+    <string name="user_activity_menu_delete_account_value">Delete All User Data And Projects</string>
+    <string name="user_activity_yes_no_dialog_title">Delete user account.</string>
+    <string name="user_activity_yes_no_dialog_message">All your user data including created projects will be removed, you will be removed from all projects that you are part in and all task assigned to you will be reasigned to project owners. Are you sure you want to remove your account?</string>
+    <string name="user_activity_remove_wait_dialog_title">Removing user account.</string>
+    <string name="user_activity_remove_text_result_successfull">User account successfully removed.</string>
     <string name="yes_no_dialog_cancelled_by_user">Operation cancelled by the user.</string>
     <string name="yes_no_dialog_remove_text_result_fail">Operation failed, possible server issues.</string>
     <string name="yes_no_dialog_remove_member_text_result_success">Member has been removed from the project.</string>
@@ -109,6 +116,5 @@
     <string name="error_unknown">Check your connection.</string>
     <string name="main_menu_refresh">Refresh</string>
     <string name="main_menu_logout">Logout</string>
-    
-    
+
 </resources>

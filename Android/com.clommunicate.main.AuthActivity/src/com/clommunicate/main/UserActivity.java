@@ -7,6 +7,8 @@ import com.clommunicate.utils.WebAPIException;
 import android.accounts.NetworkErrorException;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -85,6 +87,93 @@ public class UserActivity extends Activity {
 					i.putExtra("activityTitle", getResources().getString(R.string.user_activity_extra_part_in));
 					i.putExtra("partIn", true);
 					startActivity(i);
+
+				}
+					break;
+				case 5: {
+
+					final YesNoDialog ynd = new YesNoDialog(UserActivity.this);
+					
+					ynd.setTitle(getResources().getString(R.string.user_activity_yes_no_dialog_title));
+					ynd.setMessage(getResources().getString(R.string.user_activity_yes_no_dialog_message));
+					
+					ynd.show();
+					
+					ynd.setOnDismissListener(new OnDismissListener() {
+						
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+							
+							wd = new WaitDialog(me);
+							
+							AsyncTask<Void, Void, Exception> removeUser = new AsyncTask<Void, Void, Exception>() {
+
+								@Override
+								protected void onPreExecute() {
+									wd.setTitle(getResources().getString(R.string.user_activity_remove_wait_dialog_title));
+									wd.show();
+								}
+								
+								@Override
+								protected Exception doInBackground(Void... params) {
+
+									try {
+										UserDAO.removeUser(User.user.getId());
+									} catch (NetworkErrorException e) {
+										return e;
+									} catch (WebAPIException e) {
+										return e;
+									} catch (NullPointerException e)	{
+										return e;
+									}
+
+									return null;
+								}
+
+								@Override
+								protected void onPostExecute(Exception result) {
+									if (result instanceof NetworkErrorException) {
+										onBackPressed();
+										Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection),
+												Toast.LENGTH_SHORT).show();
+										return;
+									} else if (result instanceof WebAPIException) {
+
+										onBackPressed();
+										Toast.makeText(me, result.getMessage(), Toast.LENGTH_SHORT)
+												.show();
+										return;
+
+									} else if (result instanceof NullPointerException)	{
+
+										Intent i = new Intent(me, AuthActivity.class);
+										startActivity(i);
+										Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
+										.show();
+										finish();
+										
+									} else {
+
+										Intent i = new Intent(me, AuthActivity.class);
+										startActivity(i);
+										Toast.makeText(me, getResources().getString(R.string.user_activity_remove_text_result_successfull), Toast.LENGTH_SHORT)
+										.show();
+										finish();
+										
+									}
+									
+
+									wd.dismiss();
+									
+								}
+
+							};
+
+							if(ynd.getStatus())
+								removeUser.execute();
+							
+						}
+					});
 
 				}
 					break;
@@ -172,16 +261,19 @@ public class UserActivity extends Activity {
 					String[] userData = { User.user.getEmail(),
 							User.user.getGender().toString(), User.user.getLocale(),
 							String.valueOf(User.user.getProjects()),
-							String.valueOf(User.user.getPartIn()) };
+							String.valueOf(User.user.getPartIn()),
+							getResources().getString(R.string.user_activity_menu_delete_account_value)};
 					String[] userDataTitles = { "Email", 
-							getResources().getString(R.string.user_activity_meny_gender), 
-							getResources().getString(R.string.user_activity_meny_locale),
-							getResources().getString(R.string.user_activity_meny_projects_created), 
-							getResources().getString(R.string.user_activity_meny_projects_part_in)
+							getResources().getString(R.string.user_activity_menu_gender), 
+							getResources().getString(R.string.user_activity_menu_locale),
+							getResources().getString(R.string.user_activity_menu_projects_created), 
+							getResources().getString(R.string.user_activity_menu_projects_part_in),
+							getResources().getString(R.string.user_activity_menu_delete_account)
 							};
 					int[] userDataIcons = { R.drawable.email_icon,
 							R.drawable.gender_icon, R.drawable.locale_icon,
-							R.drawable.owner_icon, R.drawable.part_in_icon };
+							R.drawable.owner_icon, R.drawable.part_in_icon,
+							R.drawable.remove_user_icon};
 
 					UserDataArrayAdapter userDataAdapter = new UserDataArrayAdapter(
 							me, userData, userDataTitles, userDataIcons);
