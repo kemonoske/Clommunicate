@@ -1,8 +1,12 @@
 package com.clommunicate.main;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import com.clommunicate.utils.CommentDAO;
 import com.clommunicate.utils.Project;
 import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
@@ -585,6 +589,15 @@ public class ProjectActivity extends Activity {
 					members = ProjectDAO.getProjectMembers(project.getId());
 					tasks = TaskDAO.getTaskList(project.getId());
 
+					Map<Integer, Integer> task_list = new TreeMap<Integer, Integer>();
+					int i = 0;
+					
+					for(Task a : tasks)
+						task_list.put(a.getId(), 0);
+
+
+					CommentDAO.getLastComment(task_list);
+					
 				} catch (NetworkErrorException e) {
 					/*
 					 * When there is no internet connection, or postRequest

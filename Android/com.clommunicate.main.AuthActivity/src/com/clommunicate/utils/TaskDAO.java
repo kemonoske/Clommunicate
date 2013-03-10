@@ -236,6 +236,7 @@ public class TaskDAO {
 
 		/* Receptionarea entitatii din raspuns shi decodarea JSON */
 		HttpEntity he = HttpRequest.doGet(hg);
+		
 
 		if (he == null)
 			throw new NetworkErrorException();

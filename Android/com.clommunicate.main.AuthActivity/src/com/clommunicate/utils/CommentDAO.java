@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -29,10 +31,14 @@ public class CommentDAO {
 
 	/**
 	 * Adaugarea unui comentariu in BD
-	 * @param comment obiectul POJO ce contine datele comenatriului
+	 * 
+	 * @param comment
+	 *            obiectul POJO ce contine datele comenatriului
 	 * @return true in caz de succes si false in caz de eroare
-	 * @throws NetworkErrorException daca lipseste conexiunea la internet
-	 * @throws WebAPIException daca apare o eroare pe partea server a aplicatiei
+	 * @throws NetworkErrorException
+	 *             daca lipseste conexiunea la internet
+	 * @throws WebAPIException
+	 *             daca apare o eroare pe partea server a aplicatiei
 	 */
 	public static boolean addComment(Comment comment)
 			throws NetworkErrorException, WebAPIException {
@@ -97,11 +103,15 @@ public class CommentDAO {
 	}
 
 	/**
-	 * Primirea comentariilor la un task 
-	 * @param id id'ul taskului
+	 * Primirea comentariilor la un task
+	 * 
+	 * @param id
+	 *            id'ul taskului
 	 * @return ArrayList<Coment> lista de Obiecte POJO ce reprezinta comentarii
-	 * @throws NetworkErrorException daca lipseste conexiunea la internet
-	 * @throws WebAPIException daca a avul loc o eroare pe server
+	 * @throws NetworkErrorException
+	 *             daca lipseste conexiunea la internet
+	 * @throws WebAPIException
+	 *             daca a avul loc o eroare pe server
 	 */
 	public static ArrayList<Comment> getCommentList(int id)
 			throws NetworkErrorException, WebAPIException {
@@ -173,10 +183,14 @@ public class CommentDAO {
 
 	/**
 	 * Stergerea unui comentariu din BD
-	 * @param id id'ul comentariului
+	 * 
+	 * @param id
+	 *            id'ul comentariului
 	 * @return true in caz de succes si false in caz contrar
-	 * @throws NetworkErrorException daca lipseste conexiunea la internet
-	 * @throws WebAPIException daca a avut loc o eroare pe server
+	 * @throws NetworkErrorException
+	 *             daca lipseste conexiunea la internet
+	 * @throws WebAPIException
+	 *             daca a avut loc o eroare pe server
 	 */
 	public static boolean removeComment(int id) throws NetworkErrorException,
 			WebAPIException {
@@ -235,4 +249,84 @@ public class CommentDAO {
 		return false;
 
 	}
+
+	public static boolean getLastComment(Map<Integer, Integer> tasks)
+			throws NetworkErrorException, WebAPIException {
+
+		StringBuilder aux = new StringBuilder();
+		aux.append(WebApi.API + "/comments/LAST_COMMENT?");
+		
+		Set<Integer> keys = tasks.keySet();
+		
+		int index = 0;
+		
+		for(Integer key : keys)	{
+			
+			aux.append("tasks[" + index + "]=" + String.valueOf(key)
+					+ "&");
+			index++;
+			
+		}
+		
+		HttpGet hg = new HttpGet(aux.toString());
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = HttpRequest.doGet(hg);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+
+			if (jo.getBoolean("status")) {
+
+				JSONArray ja = jo.getJSONArray("data");
+				JSONObject jo1 = null;
+
+				for (int i = 0; i < ja.length(); i++) {
+
+					jo1 = ja.getJSONObject(i);
+
+					tasks.put(jo1.getInt("tid"), jo1.getInt("cid"));
+
+				}
+
+			} else {
+
+				throw new WebAPIException(jo.getString("message"));
+
+			}
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return false;
+
+	}
+
 }

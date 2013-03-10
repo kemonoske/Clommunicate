@@ -11,7 +11,7 @@ import android.graphics.BitmapFactory;
 /**
  * 
  * @author Bostanica Ion
- *
+ * 
  */
 public class User {
 

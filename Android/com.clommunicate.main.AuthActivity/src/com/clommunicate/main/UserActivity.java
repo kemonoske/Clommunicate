@@ -76,7 +76,10 @@ public class UserActivity extends Activity {
 				case 3: {
 
 					Intent i = new Intent(me, ProjectListActivity.class);
-					i.putExtra("activityTitle", getResources().getString(R.string.user_activity_extra_projects));
+					i.putExtra(
+							"activityTitle",
+							getResources().getString(
+									R.string.user_activity_extra_projects));
 					startActivity(i);
 
 				}
@@ -84,7 +87,10 @@ public class UserActivity extends Activity {
 				case 4: {
 
 					Intent i = new Intent(me, ProjectListActivity.class);
-					i.putExtra("activityTitle", getResources().getString(R.string.user_activity_extra_part_in));
+					i.putExtra(
+							"activityTitle",
+							getResources().getString(
+									R.string.user_activity_extra_part_in));
 					i.putExtra("partIn", true);
 					startActivity(i);
 
@@ -93,29 +99,34 @@ public class UserActivity extends Activity {
 				case 5: {
 
 					final YesNoDialog ynd = new YesNoDialog(UserActivity.this);
-					
-					ynd.setTitle(getResources().getString(R.string.user_activity_yes_no_dialog_title));
-					ynd.setMessage(getResources().getString(R.string.user_activity_yes_no_dialog_message));
-					
+
+					ynd.setTitle(getResources().getString(
+							R.string.user_activity_yes_no_dialog_title));
+					ynd.setMessage(getResources().getString(
+							R.string.user_activity_yes_no_dialog_message));
+
 					ynd.show();
-					
+
 					ynd.setOnDismissListener(new OnDismissListener() {
-						
+
 						@Override
 						public void onDismiss(DialogInterface dialog) {
-							
+
 							wd = new WaitDialog(me);
-							
+
 							AsyncTask<Void, Void, Exception> removeUser = new AsyncTask<Void, Void, Exception>() {
 
 								@Override
 								protected void onPreExecute() {
-									wd.setTitle(getResources().getString(R.string.user_activity_remove_wait_dialog_title));
+									wd.setTitle(getResources()
+											.getString(
+													R.string.user_activity_remove_wait_dialog_title));
 									wd.show();
 								}
-								
+
 								@Override
-								protected Exception doInBackground(Void... params) {
+								protected Exception doInBackground(
+										Void... params) {
 
 									try {
 										UserDAO.removeUser(User.user.getId());
@@ -123,7 +134,7 @@ public class UserActivity extends Activity {
 										return e;
 									} catch (WebAPIException e) {
 										return e;
-									} catch (NullPointerException e)	{
+									} catch (NullPointerException e) {
 										return e;
 									}
 
@@ -134,44 +145,57 @@ public class UserActivity extends Activity {
 								protected void onPostExecute(Exception result) {
 									if (result instanceof NetworkErrorException) {
 										onBackPressed();
-										Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection),
+										Toast.makeText(
+												me,
+												getResources()
+														.getString(
+																R.string.error_no_internet_connection),
 												Toast.LENGTH_SHORT).show();
 										return;
 									} else if (result instanceof WebAPIException) {
 
 										onBackPressed();
-										Toast.makeText(me, result.getMessage(), Toast.LENGTH_SHORT)
-												.show();
+										Toast.makeText(me, result.getMessage(),
+												Toast.LENGTH_SHORT).show();
 										return;
 
-									} else if (result instanceof NullPointerException)	{
+									} else if (result instanceof NullPointerException) {
 
-										Intent i = new Intent(me, AuthActivity.class);
+										Intent i = new Intent(me,
+												AuthActivity.class);
 										startActivity(i);
-										Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
-										.show();
+										Toast.makeText(
+												me,
+												getResources()
+														.getString(
+																R.string.error_please_relogin),
+												Toast.LENGTH_SHORT).show();
 										finish();
-										
+
 									} else {
 
-										Intent i = new Intent(me, AuthActivity.class);
+										Intent i = new Intent(me,
+												AuthActivity.class);
 										startActivity(i);
-										Toast.makeText(me, getResources().getString(R.string.user_activity_remove_text_result_successfull), Toast.LENGTH_SHORT)
-										.show();
+										Toast.makeText(
+												me,
+												getResources()
+														.getString(
+																R.string.user_activity_remove_text_result_successfull),
+												Toast.LENGTH_SHORT).show();
 										finish();
-										
+
 									}
-									
 
 									wd.dismiss();
-									
+
 								}
 
 							};
 
-							if(ynd.getStatus())
+							if (ynd.getStatus())
 								removeUser.execute();
-							
+
 						}
 					});
 
@@ -204,15 +228,16 @@ public class UserActivity extends Activity {
 		super.onResume();
 
 		wd = new WaitDialog(me);
-		
+
 		AsyncTask<Void, Void, Exception> loadUser = new AsyncTask<Void, Void, Exception>() {
 
 			@Override
 			protected void onPreExecute() {
-				wd.setTitle(getResources().getString(R.string.user_activity_wait_dialog_title));
+				wd.setTitle(getResources().getString(
+						R.string.user_activity_wait_dialog_title));
 				wd.show();
 			}
-			
+
 			@Override
 			protected Exception doInBackground(Void... params) {
 
@@ -222,7 +247,7 @@ public class UserActivity extends Activity {
 					return e;
 				} catch (WebAPIException e) {
 					return e;
-				} catch (NullPointerException e)	{
+				} catch (NullPointerException e) {
 					return e;
 				}
 
@@ -233,7 +258,10 @@ public class UserActivity extends Activity {
 			protected void onPostExecute(Exception result) {
 				if (result instanceof NetworkErrorException) {
 					onBackPressed();
-					Toast.makeText(me, getResources().getString(R.string.error_no_internet_connection),
+					Toast.makeText(
+							me,
+							getResources().getString(
+									R.string.error_no_internet_connection),
 							Toast.LENGTH_SHORT).show();
 					return;
 				} else if (result instanceof WebAPIException) {
@@ -243,46 +271,61 @@ public class UserActivity extends Activity {
 							.show();
 					return;
 
-				} else if (result instanceof NullPointerException)	{
+				} else if (result instanceof NullPointerException) {
 
 					Intent i = new Intent(me, AuthActivity.class);
 					startActivity(i);
-					Toast.makeText(me, getResources().getString(R.string.error_please_relogin), Toast.LENGTH_SHORT)
-					.show();
+					Toast.makeText(
+							me,
+							getResources().getString(
+									R.string.error_please_relogin),
+							Toast.LENGTH_SHORT).show();
 					finish();
-					
+
 				} else {
-		
+
 					name.setText(User.user.getName());
 					if (User.user.getPicture() != null)
 						avatar.setImageBitmap(User.user.getPicture());
-					projects_count.setText(String.valueOf(User.user.getProjects()));
-					part_in__count.setText(String.valueOf(User.user.getPartIn()));
-					String[] userData = { User.user.getEmail(),
-							User.user.getGender().toString(), User.user.getLocale(),
+					projects_count.setText(String.valueOf(User.user
+							.getProjects()));
+					part_in__count
+							.setText(String.valueOf(User.user.getPartIn()));
+					String[] userData = {
+							User.user.getEmail(),
+							User.user.getGender().toString(),
+							User.user.getLocale(),
 							String.valueOf(User.user.getProjects()),
 							String.valueOf(User.user.getPartIn()),
-							getResources().getString(R.string.user_activity_menu_delete_account_value)};
-					String[] userDataTitles = { "Email", 
-							getResources().getString(R.string.user_activity_menu_gender), 
-							getResources().getString(R.string.user_activity_menu_locale),
-							getResources().getString(R.string.user_activity_menu_projects_created), 
-							getResources().getString(R.string.user_activity_menu_projects_part_in),
-							getResources().getString(R.string.user_activity_menu_delete_account)
-							};
+							getResources()
+									.getString(
+											R.string.user_activity_menu_delete_account_value) };
+					String[] userDataTitles = {
+							"Email",
+							getResources().getString(
+									R.string.user_activity_menu_gender),
+							getResources().getString(
+									R.string.user_activity_menu_locale),
+							getResources()
+									.getString(
+											R.string.user_activity_menu_projects_created),
+							getResources()
+									.getString(
+											R.string.user_activity_menu_projects_part_in),
+							getResources().getString(
+									R.string.user_activity_menu_delete_account) };
 					int[] userDataIcons = { R.drawable.email_icon,
 							R.drawable.gender_icon, R.drawable.locale_icon,
 							R.drawable.owner_icon, R.drawable.part_in_icon,
-							R.drawable.remove_user_icon};
+							R.drawable.remove_user_icon };
 
 					UserDataArrayAdapter userDataAdapter = new UserDataArrayAdapter(
 							me, userData, userDataTitles, userDataIcons);
 					userDataList.setAdapter(userDataAdapter);
 				}
-				
 
 				wd.dismiss();
-				
+
 			}
 
 		};
@@ -291,35 +334,36 @@ public class UserActivity extends Activity {
 
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		main_menu =  new MainMenu(this, R.id.user_activity_main);
-		
-		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources().getString(R.string.main_menu_logout), new OnClickListener() {
-			
+		main_menu = new MainMenu(this, R.id.user_activity_main);
+
+		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources()
+				.getString(R.string.main_menu_logout), new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				
+
 				Intent i = new Intent(me, AuthActivity.class);
 				startActivity(i);
 				finish();
-				
+
 			}
 		});
-		
-		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
-			
+
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources()
+				.getString(R.string.main_menu_refresh), new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				
+
 				onResume();
 				main_menu.close();
-				
+
 			}
 		});
-		
+
 		return true;
 	}
 
@@ -337,11 +381,11 @@ public class UserActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		
+
 		super.onPause();
-		
-		if(wd != null)
+
+		if (wd != null)
 			wd.dismiss();
 	}
-	
+
 }
