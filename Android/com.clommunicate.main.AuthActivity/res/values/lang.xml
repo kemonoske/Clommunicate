@@ -5,7 +5,7 @@
     <string name="add_member_dialog_result_cacelled">Operation cancelled by user.</string>
     <string name="add_member_dialog_result_cnnot_be_added">User cannot be added to the list.</string>
     <string name="add_member_dialog_result_already_in_list">User is already member of this project.</string>
-    <string name="add_member_dialog_result_owner_is_member">You donțt have to add yourself.</string>
+    <string name="add_member_dialog_result_owner_is_member">You dont have to add yourself.</string>
     <string name="add_member_dialog_result_success">User successfully added.</string>
     <string name="add_member_dialog_result_error">An error occurred while trying to add user to the list.</string>
     <string name="error_no_internet_connection">No internet connection.</string>

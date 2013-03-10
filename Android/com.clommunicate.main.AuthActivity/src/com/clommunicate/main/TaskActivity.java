@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
@@ -116,7 +117,8 @@ public class TaskActivity extends Activity {
 
 		super.onResume();
 		wd = new WaitDialog(me);
-		wd.setTitle(getResources().getString(R.string.task_activity_load_waid_dialog_title));
+		wd.setTitle(getResources().getString(
+				R.string.task_activity_load_waid_dialog_title));
 		wd.show();
 		AsyncTask<WaitDialog, Void, Object[]> loadMembers = new AsyncTask<WaitDialog, Void, Object[]>() {
 
@@ -171,7 +173,8 @@ public class TaskActivity extends Activity {
 						startActivity(i);
 						Toast.makeText(
 								me,
-								getResources().getString(R.string.error_please_relogin),
+								getResources().getString(
+										R.string.error_please_relogin),
 								Toast.LENGTH_SHORT).show();
 						finish();
 					}
@@ -245,34 +248,40 @@ public class TaskActivity extends Activity {
 		if (asigned_name != null) {
 			asigned_name.setText(task.getAsigned().getName());
 			asigned_email.setText(task.getAsigned().getEmail());
-			
-			if (task.getAsigned().getPictureURL() != "null" && task.getAsigned().getPictureURL() != null)	{
+
+			if (task.getAsigned().getPictureURL() != "null"
+					&& task.getAsigned().getPictureURL() != null) {
+				final ViewAnimator va = (ViewAnimator) findViewById(R.id.activity_task_asigned_photo_sw);
+
+				va.showNext();
 				Runnable r = new Runnable() {
-					
+
 					@Override
 					public void run() {
 						try {
-							task.getAsigned().setPicture(task.getAsigned().getPictureURL());
+							task.getAsigned().setPicture(
+									task.getAsigned().getPictureURL());
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						asigned_photo.post(new Runnable() {
-							
+
 							@Override
 							public void run() {
-								
-								if(task.getAsigned().getPicture() != null)
-									asigned_photo.setImageBitmap(task.getAsigned().getPicture());
-								
+
+								if (task.getAsigned().getPicture() != null)
+									asigned_photo.setImageBitmap(task
+											.getAsigned().getPicture());
+								va.showPrevious();
 							}
 						});
 					}
 				};
-				
+
 				new Thread(r).start();
 			}
-			
+
 			if (User.user.getPicture() != null)
 				user_photo.setImageBitmap(User.user.getPicture());
 		}
@@ -306,7 +315,9 @@ public class TaskActivity extends Activity {
 								 * performing request
 								 */
 								wd = new WaitDialog(me);
-								wd.setTitle(getResources().getString(R.string.task_activity_update_wait_dialog_title));
+								wd.setTitle(getResources()
+										.getString(
+												R.string.task_activity_update_wait_dialog_title));
 								wd.show();
 							}
 
@@ -342,7 +353,9 @@ public class TaskActivity extends Activity {
 								String text = null;
 
 								if (result == null) {
-									text = getResources().getString(R.string.task_activity_update_text_result_success);
+									text = getResources()
+											.getString(
+													R.string.task_activity_update_text_result_success);
 									task.setCompleted(isChecked);
 									Time t = new Time();
 									t.setToNow();
@@ -355,7 +368,9 @@ public class TaskActivity extends Activity {
 								} else if (result instanceof WebAPIException) {
 									text = result.getMessage();
 								} else if (result instanceof NetworkErrorException) {
-									text = getResources().getString(R.string.error_no_internet_connection);
+									text = getResources()
+											.getString(
+													R.string.error_no_internet_connection);
 								}
 								Toast.makeText(getApplicationContext(), text,
 										Toast.LENGTH_SHORT).show();
@@ -392,7 +407,9 @@ public class TaskActivity extends Activity {
 					protected void onPreExecute() {
 
 						wd = new WaitDialog(me);
-						wd.setTitle(getResources().getString(R.string.task_activity_add_comment_wait_dialog_title));
+						wd.setTitle(getResources()
+								.getString(
+										R.string.task_activity_add_comment_wait_dialog_title));
 						wd.show();
 					}
 
@@ -422,13 +439,16 @@ public class TaskActivity extends Activity {
 						String text = null;
 
 						if (result == null) {
-							text = getResources().getString(R.string.task_activity_add_comment_text_result_success);
+							text = getResources()
+									.getString(
+											R.string.task_activity_add_comment_text_result_success);
 							user_comment.setText("");
 							onResume();
 						} else if (result instanceof WebAPIException) {
 							text = result.getMessage();
 						} else
-							text = getResources().getString(R.string.error_no_internet_connection);
+							text = getResources().getString(
+									R.string.error_no_internet_connection);
 
 						Toast.makeText(getApplicationContext(), text,
 								Toast.LENGTH_SHORT).show();
@@ -450,35 +470,36 @@ public class TaskActivity extends Activity {
 
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		main_menu =  new MainMenu(this, R.id.task_activity_main);
-		
-		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources().getString(R.string.main_menu_logout), new OnClickListener() {
-			
+		main_menu = new MainMenu(this, R.id.task_activity_main);
+
+		main_menu.addMenuItem(R.drawable.main_menu_logout, getResources()
+				.getString(R.string.main_menu_logout), new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				
+
 				Intent i = new Intent(me, AuthActivity.class);
 				startActivity(i);
 				finish();
-				
+
 			}
 		});
-		
-		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
-			
+
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources()
+				.getString(R.string.main_menu_refresh), new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				
+
 				onResume();
 				main_menu.close();
-				
+
 			}
 		});
-		
+
 		return true;
 	}
 
@@ -493,7 +514,7 @@ public class TaskActivity extends Activity {
 
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	@Override
 	protected void onPause() {
 

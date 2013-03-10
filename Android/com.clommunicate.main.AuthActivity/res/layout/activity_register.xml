@@ -206,15 +206,24 @@
                             android:layout_gravity="right"
                             android:orientation="vertical" >
 
-                            <ImageView
-                                android:id="@+id/reg_foto"
+                            <ViewAnimator
+                                android:id="@+id/reg_foto_sw"
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:layout_gravity="right"
                                 android:background="@drawable/border_2dp"
-                                android:padding="2dp"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/user_icon" />
+                                android:padding="2dp" >
+
+                                <ImageView
+                                    android:id="@+id/reg_foto"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/user_icon" />
+
+                                <ProgressBar
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+                            </ViewAnimator>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

@@ -595,7 +595,6 @@ public class ProjectActivity extends Activity {
 					for(Task a : tasks)
 						task_list.put(a.getId(), 0);
 
-
 					CommentDAO.getLastComment(task_list);
 					
 				} catch (NetworkErrorException e) {

@@ -163,14 +163,26 @@
                     </TextView>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/activity_task_asigned_photo"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                
+                <ViewAnimator
+                    android:id="@+id/activity_task_asigned_photo_sw"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/border_2dp"
-                    android:padding="2dp"
-                    android:src="@drawable/user_icon" />
+                    android:padding="2dp" >
+
+                    <ImageView
+                        android:id="@+id/activity_task_asigned_photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/user_icon" />
+
+                    <ProgressBar
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical|center_horizontal" />
+                </ViewAnimator>
             </LinearLayout>
         </LinearLayout>
 

@@ -24,13 +24,24 @@
             android:paddingBottom="5dp"
             android:paddingLeft="10dp" >
 
-            <ImageView
-                android:id="@+id/comment_item_avatar"
+            <ViewAnimator
+                android:id="@+id/comment_item_avatar_sw"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/border"
-                android:padding="1dp"
-                android:src="@drawable/user_icon" />
+                android:padding="1dp" >
+
+                <ImageView
+                    android:id="@+id/comment_item_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/user_icon" />
+
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical|center_horizontal" />
+            </ViewAnimator>
 
             <TextView
                 android:id="@+id/comment_item_name"

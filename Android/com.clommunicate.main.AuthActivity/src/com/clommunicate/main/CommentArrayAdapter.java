@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 /**
  * Adapter for the comment list
@@ -99,6 +100,9 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 				/*if (i.getPicture() != null)
 					avatar.setImageBitmap(i.getPicture());*/
 				if (i.getPictureURL() != "null" && i.getPictureURL() != null)	{
+					final ViewAnimator va = (ViewAnimator) view.findViewById(R.id.comment_item_avatar_sw);
+
+					va.showNext();
 					Runnable r = new Runnable() {
 						
 						@Override
@@ -117,7 +121,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 									
 									if(i.getPicture() != null)
 										avatar.setImageBitmap(i.getPicture());
-									
+									va.showPrevious();
 								}
 							});
 						}

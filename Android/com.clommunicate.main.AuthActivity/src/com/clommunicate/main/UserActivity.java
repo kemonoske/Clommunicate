@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 /**
  * 
@@ -290,6 +291,10 @@ public class UserActivity extends Activity {
 				} else {
 
 					name.setText(User.user.getName());
+					
+					final ViewAnimator va = (ViewAnimator)findViewById(R.id.user_avatar_sw);
+
+					va.showNext();
 					if (User.user.getPictureURL() != "null" && User.user.getPictureURL() != null)	{
 						Runnable r = new Runnable() {
 							
@@ -305,9 +310,9 @@ public class UserActivity extends Activity {
 									
 									@Override
 									public void run() {
-
 										if(User.user.getPicture() != null)
 											avatar.setImageBitmap(User.user.getPicture());
+										va.showPrevious();
 										
 									}
 								});

@@ -1,5 +1,7 @@
 package com.clommunicate.main;
 
+import java.io.IOException;
+
 import com.clommunicate.main.R;
 import com.clommunicate.oAuth2.AuthUtils;
 import com.clommunicate.utils.User;
@@ -25,11 +27,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 /**
  * 
  * @author Bostanica Ion
- *
+ * 
  */
 public class RegistrationActivity extends Activity {
 	private TextView name = null;
@@ -91,7 +94,9 @@ public class RegistrationActivity extends Activity {
 					@Override
 					protected void onPreExecute() {
 
-						wd.setTitle(getResources().getString(R.string.registration_activity_wait_dialog_register_title));
+						wd.setTitle(getResources()
+								.getString(
+										R.string.registration_activity_wait_dialog_register_title));
 						wd.show();
 
 					}
@@ -100,10 +105,10 @@ public class RegistrationActivity extends Activity {
 					protected Exception doInBackground(Void... params) {
 
 						try {
-							
+
 							if (UserDAO.register(usr))
 								return null;
-							
+
 						} catch (Exception e) {
 
 							return e;
@@ -120,7 +125,9 @@ public class RegistrationActivity extends Activity {
 						String text = null;
 
 						if (result == null) {
-							text = getResources().getString(R.string.registration_activity_register_text_result_success);
+							text = getResources()
+									.getString(
+											R.string.registration_activity_register_text_result_success);
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
 							User.user = usr;
@@ -129,8 +136,9 @@ public class RegistrationActivity extends Activity {
 						} else if (result instanceof WebAPIException) {
 							text = result.getMessage();
 							onBackPressed();
-						} else if(result instanceof NetworkErrorException){
-							text = getResources().getString(R.string.error_no_internet_connection);
+						} else if (result instanceof NetworkErrorException) {
+							text = getResources().getString(
+									R.string.error_no_internet_connection);
 							onBackPressed();
 						}
 						Toast.makeText(getApplicationContext(), text,
@@ -155,7 +163,8 @@ public class RegistrationActivity extends Activity {
 			protected void onPreExecute() {
 				super.onPreExecute();
 				wd = new WaitDialog(me);
-				wd.setTitle(getResources().getString(R.string.registration_activity_wait_dialog_oAuth_title));
+				wd.setTitle(getResources().getString(
+						R.string.registration_activity_wait_dialog_oAuth_title));
 				wd.show();
 			}
 
@@ -195,11 +204,11 @@ public class RegistrationActivity extends Activity {
 				edit.commit();
 				edit = null;
 				// System.err.println("before");
-				
+
 				int error = 0;
 				try {
 					error = AuthUtils.refreshAuthToken(me, acc);
-						
+
 				} catch (NetworkErrorException e1) {
 					return -1;
 				}
@@ -232,7 +241,9 @@ public class RegistrationActivity extends Activity {
 
 				String text;
 				if (result == 1) {
-					text = getResources().getString(R.string.registration_activity_load_text_result_success);
+					text = getResources()
+							.getString(
+									R.string.registration_activity_load_text_result_success);
 					name.setText(usr.getName());
 					name.setEnabled(false);
 					email.setText(usr.getEmail());
@@ -241,14 +252,50 @@ public class RegistrationActivity extends Activity {
 					locale.setEnabled(false);
 					gender.setText(usr.getGender().toString());
 					gender.setEnabled(false);
-					if(usr.getPicture() != null)
-						picture.setImageBitmap(usr.getPicture());
+
+					if (usr.getPictureURL() != "null"
+							&& usr.getPictureURL() != null) {
+						final ViewAnimator va = (ViewAnimator) findViewById(R.id.reg_foto_sw);
+
+						va.showNext();
+						Runnable r = new Runnable() {
+
+							@Override
+							public void run() {
+								try {
+									usr.setPicture(usr.getPictureURL());
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								picture.post(new Runnable() {
+
+									@Override
+									public void run() {
+
+										if (usr.getPicture() != null)
+											picture.setImageBitmap(usr
+													.getPicture());
+										va.showPrevious();
+									}
+								});
+							}
+						};
+
+						new Thread(r).start();
+					}
+
 				} else if (result == 0)
-					text = getResources().getString(R.string.registration_activity_load_text_result_fail);
-				else if (result == 2){
-					text = getResources().getString(R.string.registration_activity_load_text_result_no_confirmation);
-				}	else
-					text = getResources().getString(R.string.error_no_internet_connection);
+					text = getResources()
+							.getString(
+									R.string.registration_activity_load_text_result_fail);
+				else if (result == 2) {
+					text = getResources()
+							.getString(
+									R.string.registration_activity_load_text_result_no_confirmation);
+				} else
+					text = getResources().getString(
+							R.string.error_no_internet_connection);
 
 				Toast.makeText(me, text, Toast.LENGTH_SHORT).show();
 			}
@@ -260,36 +307,46 @@ public class RegistrationActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		if(requestCode == 0)	{
-			if(resultCode == RESULT_CANCELED)	{
+
+		if (requestCode == 0) {
+			if (resultCode == RESULT_CANCELED) {
 				onBackPressed();
-				Toast.makeText(me, getResources().getString(R.string.registration_activity_activity_result_denied), Toast.LENGTH_SHORT).show();
+				Toast.makeText(
+						me,
+						getResources()
+								.getString(
+										R.string.registration_activity_activity_result_denied),
+						Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(me, getResources().getString(R.string.registration_activity_activity_result_granted), Toast.LENGTH_SHORT).show();
+				Toast.makeText(
+						me,
+						getResources()
+								.getString(
+										R.string.registration_activity_activity_result_granted),
+						Toast.LENGTH_SHORT).show();
 				loadUserData();
 			}
 		}
-		
-	}
 
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		main_menu =  new MainMenu(this, R.id.registration_activity_main);
-		
-		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources().getString(R.string.main_menu_refresh), new OnClickListener() {
-			
+		main_menu = new MainMenu(this, R.id.registration_activity_main);
+
+		main_menu.addMenuItem(R.drawable.main_menu_refresh, getResources()
+				.getString(R.string.main_menu_refresh), new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
-				
+
 				loadUserData();
 				main_menu.close();
-				
+
 			}
 		});
-		
+
 		return true;
 	}
 
@@ -304,13 +361,13 @@ public class RegistrationActivity extends Activity {
 
 		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	@Override
 	protected void onPause() {
-		
+
 		super.onPause();
-		
-		if(wd != null)
+
+		if (wd != null)
 			wd.dismiss();
 	}
 

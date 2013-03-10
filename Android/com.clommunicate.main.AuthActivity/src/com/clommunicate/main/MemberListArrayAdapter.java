@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.clommunicate.utils.User;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 /**
  * 
@@ -83,6 +85,9 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 			photo.setImageBitmap(members.get(position).getPicture());
 		*/
 		if (members.get(position).getPictureURL() != "null" && members.get(position).getPictureURL() != null)	{
+			final ViewAnimator va = (ViewAnimator) item.findViewById(R.id.member_list_item_photo_sw);
+
+			va.showNext();
 			Runnable r = new Runnable() {
 				
 				@Override
@@ -100,7 +105,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 							
 							if(members.get(position).getPicture() != null)
 								photo.setImageBitmap(members.get(position).getPicture());
-							
+							va.showPrevious();
 						}
 					});
 				}
