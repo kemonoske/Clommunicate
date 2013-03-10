@@ -1,5 +1,6 @@
 package com.clommunicate.main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Comment;
@@ -70,7 +71,7 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 		/*
 		 * Load controls from inflated view
 		 */
-		ImageView avatar = (ImageView) view
+		final ImageView avatar = (ImageView) view
 				.findViewById(R.id.comment_item_avatar);
 		TextView name = (TextView) view.findViewById(R.id.comment_item_name);
 		TextView timestamp = (TextView) view
@@ -89,14 +90,40 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 		/*
 		 * Associating comment with the author
 		 */
-		for (User i : members)
+		for (final User i : members)
 			if (i.getId() == comments.get(position).getAuthor()) {
 				/*
 				 * Set author name and avatar in titlebar of the comment
 				 */
 				name.setText(i.getName());
-				if (i.getPicture() != null)
-					avatar.setImageBitmap(i.getPicture());
+				/*if (i.getPicture() != null)
+					avatar.setImageBitmap(i.getPicture());*/
+				if (i.getPictureURL() != "null" && i.getPictureURL() != null)	{
+					Runnable r = new Runnable() {
+						
+						@Override
+						public void run() {
+							try {
+								if(i.getPicture() == null)
+									i.setPicture(i.getPictureURL());
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							avatar.post(new Runnable() {
+								
+								@Override
+								public void run() {
+									
+									if(i.getPicture() != null)
+										avatar.setImageBitmap(i.getPicture());
+									
+								}
+							});
+						}
+					};
+					new Thread(r).start();
+				}
 			}
 
 		/*

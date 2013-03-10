@@ -1,5 +1,6 @@
 package com.clommunicate.main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.User;
@@ -48,7 +49,7 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		
 		if(context instanceof ProjectActivity && position == members.size()){
 
@@ -76,10 +77,36 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 		name.setTypeface(type);
 		email.setText(members.get(position).getEmail());
 		email.setTypeface(type);
-		ImageView photo = (ImageView) item
+		final ImageView photo = (ImageView) item
 				.findViewById(R.id.member_list_item_photo);
-		if (members.get(position).getPicture() != null)
+		/*if (members.get(position).getPicture() != null)
 			photo.setImageBitmap(members.get(position).getPicture());
+		*/
+		if (members.get(position).getPictureURL() != "null" && members.get(position).getPictureURL() != null)	{
+			Runnable r = new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						members.get(position).setPicture(members.get(position).getPictureURL());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					photo.post(new Runnable() {
+						
+						@Override
+						public void run() {
+							
+							if(members.get(position).getPicture() != null)
+								photo.setImageBitmap(members.get(position).getPicture());
+							
+						}
+					});
+				}
+			};
+			new Thread(r).start();
+		}
 		ImageButton remove = (ImageButton) item
 				.findViewById(R.id.member_list_item_remove_button);
 

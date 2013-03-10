@@ -1,6 +1,7 @@
 package com.clommunicate.utils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class User {
 
 		setId(id);
 		setName(name);
-		setPicture(picture);
+		//setPicture(picture);
 		setPictureURL((picture == null) ? "null" : picture);
 
 	}
@@ -44,7 +45,7 @@ public class User {
 		setId(id);
 		setEmail(email);
 		setName(name);
-		setPicture(picture);
+		//setPicture(picture);
 		setPictureURL((picture == null) ? "null" : picture);
 
 	}
@@ -56,7 +57,7 @@ public class User {
 		setName(name);
 		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
-		setPicture(picture);
+		//setPicture(picture);
 		setPictureURL((picture == null) ? "null" : picture);
 
 	}
@@ -68,7 +69,7 @@ public class User {
 		setName(name);
 		setGender((gender) ? Gender.Male : Gender.Female);
 		setLocale(locale);
-		setPicture(picture);
+		//setPicture(picture);
 		setPictureURL((picture == null) ? "null" : picture);
 		setProjects(projects);
 		setPartIn(partIn);
@@ -143,12 +144,30 @@ public class User {
 		return picture;
 	}
 
-	public void setPicture(String picture) throws IOException {
-		if (picture != null && picture.compareToIgnoreCase("null") != 0) {
-			URL u = new URL(picture);
-			this.picture = BitmapFactory.decodeStream(u.openConnection()
-					.getInputStream());
-		}
+	public void setPicture(final String pictur) throws IOException {
+		
+		/*Runnable r = new Runnable() {
+			
+			@Override
+			public void run() {*/
+				if (pictur != null && pictur.compareToIgnoreCase("null") != 0) {
+					URL u = null;
+					try {
+						u = new URL(pictur);
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						picture = BitmapFactory.decodeStream(u.openConnection()
+								.getInputStream());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}/*
+			}
+		};*/
 	}
 
 	public static User deserialize(JSONObject jo) {
@@ -197,7 +216,7 @@ public class User {
 		}
 
 		try {
-			aux.setPicture(jo.getString("photo"));
+			//aux.setPicture(jo.getString("photo"));
 			aux.setPictureURL(jo.getString("photo"));
 		} catch (Exception e) {
 

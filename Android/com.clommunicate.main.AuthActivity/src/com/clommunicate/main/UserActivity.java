@@ -1,5 +1,9 @@
 package com.clommunicate.main;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.UserDAO;
 import com.clommunicate.utils.WebAPIException;
@@ -10,6 +14,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -285,8 +290,32 @@ public class UserActivity extends Activity {
 				} else {
 
 					name.setText(User.user.getName());
-					if (User.user.getPicture() != null)
-						avatar.setImageBitmap(User.user.getPicture());
+					if (User.user.getPictureURL() != "null" && User.user.getPictureURL() != null)	{
+						Runnable r = new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									User.user.setPicture(User.user.getPictureURL());
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								avatar.post(new Runnable() {
+									
+									@Override
+									public void run() {
+
+										if(User.user.getPicture() != null)
+											avatar.setImageBitmap(User.user.getPicture());
+										
+									}
+								});
+							}
+						};
+						
+						new Thread(r).start();
+					}
 					projects_count.setText(String.valueOf(User.user
 							.getProjects()));
 					part_in__count

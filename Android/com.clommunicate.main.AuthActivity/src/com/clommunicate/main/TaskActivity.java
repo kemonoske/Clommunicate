@@ -1,5 +1,6 @@
 package com.clommunicate.main;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.clommunicate.utils.Comment;
@@ -244,8 +245,34 @@ public class TaskActivity extends Activity {
 		if (asigned_name != null) {
 			asigned_name.setText(task.getAsigned().getName());
 			asigned_email.setText(task.getAsigned().getEmail());
-			if (task.getAsigned().getPicture() != null)
-				asigned_photo.setImageBitmap(task.getAsigned().getPicture());
+			
+			if (task.getAsigned().getPictureURL() != "null" && task.getAsigned().getPictureURL() != null)	{
+				Runnable r = new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							task.getAsigned().setPicture(task.getAsigned().getPictureURL());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						asigned_photo.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								
+								if(task.getAsigned().getPicture() != null)
+									asigned_photo.setImageBitmap(task.getAsigned().getPicture());
+								
+							}
+						});
+					}
+				};
+				
+				new Thread(r).start();
+			}
+			
 			if (User.user.getPicture() != null)
 				user_photo.setImageBitmap(User.user.getPicture());
 		}
