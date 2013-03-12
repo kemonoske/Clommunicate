@@ -218,5 +218,42 @@ class CommentDAO {
 		return $count;
 		
 	}
+
+
+
+	/**
+	 * return number of coments
+	 * @param int $tid - task id
+	 * @throws Exception
+	 * @return boolean
+	 */
+	static function count($tid){
+	
+		require_once 'DBO.class.php';
+		require_once 'Comment.class.php';
+	
+		$db = DBO::getInstance();
+	
+		$statement = $db->prepare('
+			SELECT COUNT(*) count
+			FROM comments
+			WHERE owner = :tid');
+		$statement->execute(array(
+				':tid' => $tid));
+	
+		if($statement->errorCode() != 0)	{
+			$error = $statement->errorInfo();
+			throw new Exception($error[2]);
+		}
+	
+		if($row = $statement->fetch())	{
+	
+			$count = $row[count];
+				
+		}
+	
+		return $count;
+	
+	}
 	
 }

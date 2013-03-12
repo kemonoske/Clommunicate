@@ -445,40 +445,40 @@ class REST_API {
 							
 						break;*/
 
-						case 'DELETE':
+					case 'DELETE':
 
-							$uid = $id;
+						$uid = $id;
 							
-							if(isset($uid) && intval($uid) != 0)	{
-								try {
-										
-									$status = UserDAO::removeUser($uid);
-									$response = new Response(
-											$status,
-											($status)?null:"Can't remove User.",
-											null);
-							
-								} catch (Exception $e) {
-							
-									$response = new Response(
-											false,
-											$e->getMessage(),
-											null);
-							
-								}
-							
-							}	else {
-							
+						if(isset($uid) && intval($uid) != 0)	{
+							try {
+
+								$status = UserDAO::removeUser($uid);
+								$response = new Response(
+										$status,
+										($status)?null:"Can't remove User.",
+										null);
+									
+							} catch (Exception $e) {
+									
 								$response = new Response(
 										false,
-										"Some or all of required parameters are invalid or missing.",
+										$e->getMessage(),
 										null);
-							
+									
 							}
-								
-							echo $response->respond();
-								
-							break;
+
+						}	else {
+
+							$response = new Response(
+									false,
+									"Some or all of required parameters are invalid or missing.",
+									null);
+
+						}
+
+						echo $response->respond();
+
+						break;
 
 						break;
 
@@ -766,11 +766,11 @@ class REST_API {
 
 						if(!ProjectDAO::exists($pid))	{
 
-								$response = new Response(
-										false,
-										"No projects with such id.",
-										null);
-							
+							$response = new Response(
+									false,
+									"No projects with such id.",
+									null);
+
 						} else if(isset($complete) && isset($pid) && intval($pid) != 0)	{
 
 							try {
@@ -1133,13 +1133,13 @@ class REST_API {
 
 						if(!TaskDAO::exists($tid))	{
 
-								$response = new Response(
-										false,
-										"No task with such id.",
-										null);
-							
+							$response = new Response(
+									false,
+									"No task with such id.",
+									null);
+
 						} else if(isset($complete) && isset($tid) && intval($tid) != 0)	{
-							
+
 							try {
 
 								$status = TaskDAO::markCompleted($tid, $complete);
@@ -1156,7 +1156,7 @@ class REST_API {
 										null);
 
 							}
-								
+
 						} else if(isset($name) && isset($description) &&
 								isset($tid) && intval($tid) != 0 &&
 								isset($type) && intval($type) != 0 &&
@@ -1453,33 +1453,32 @@ class REST_API {
 				switch($this->request_type){
 
 					case 'GET':
-	
-						echo 'sdfgfsd';
+
 						if(!strcmp($id,'LAST_COMMENT')){
-						
+
 							require_once 'DAL/Comment.class.php';
 							require_once 'DAL/Comment.dao.class.php';
-								
+
 							if(isset($owner_id))	{
 									
 								$tid = $owner_id;
 									
 								try {
-										
+
 									$comment = CommentDAO::getLastComment($tid);
-										
+
 									$response = new Response(
 											true,
 											null,
 											$comment);
-										
+
 								} catch (Exception $e) {
-										
+
 									$response = new Response(
 											false,
 											$e->getMessage(),
 											null);
-										
+
 								}
 									
 									
@@ -1492,31 +1491,53 @@ class REST_API {
 									
 									
 							}
-								
-						}	else	{
-									
+
+						} else if(isset($owner_id) &&!strcmp($id,'COUNT')){
+
+							$tid = $owner_id;
+
+							try {
+
+								$count = CommentDAO::count($tid);
+
+								$response = new Response(
+										true,
+										null,
+										$count);
+
+							} catch (Exception $e) {
+
 								$response = new Response(
 										false,
-										"operation not supported.",
+										$e->getMessage(),
 										null);
-							
+
+							}
+
+						}	else	{
+								
+							$response = new Response(
+									false,
+									"operation not supported.",
+									null);
+								
 						}
-						
+
 						echo $response->respond();
 
-					break;
+						break;
 
-					/*case 'PUT':
+						/*case 'PUT':
 
-					N/A
+						N/A
 
-					break;*/
+						break;*/
 
-					/*case 'POST':
+						/*case 'POST':
 
-					N/A
+						N/A
 
-					break;*/
+						break;*/
 
 					case 'DELETE':
 
@@ -1555,8 +1576,8 @@ class REST_API {
 
 					default:
 
-						
-						
+
+
 						$response = new Response(
 						false,
 						"Operation not supported.",
@@ -1587,31 +1608,31 @@ class REST_API {
 				$id = $this->url[1];
 
 				if(!strcmp($this->request_type,'GET') && isset($owner_id) && intval($id) && !strcmp($this->url[2],'COUNT_AFTER')){
-				
+
 					$tid = $owner_id;
-				
+
 					try {
-				
+
 						$count = CommentDAO::countAfter($id, $tid);
-				
+
 						$response = new Response(
 								true,
 								null,
 								$count);
-				
+
 					} catch (Exception $e) {
-				
+
 						$response = new Response(
 								false,
 								$e->getMessage(),
 								null);
-				
+
 					}
-					
+
 					echo $response->respond();
-					
+
 					return;
-				
+
 				}
 				if(CommentDAO::exists($id))	{
 

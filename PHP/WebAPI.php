@@ -6,8 +6,6 @@
  *
  * @author Akira
  */
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 require_once 'include/Entities.enum.php';
 
