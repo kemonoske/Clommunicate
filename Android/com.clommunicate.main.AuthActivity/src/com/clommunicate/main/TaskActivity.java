@@ -8,6 +8,7 @@ import com.clommunicate.utils.CommentDAO;
 import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
 import com.clommunicate.utils.TaskDAO;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebAPIException;
 
@@ -136,6 +137,17 @@ public class TaskActivity extends Activity {
 
 						members = ProjectDAO.getProjectMembers(task.getOwner());
 						comments = CommentDAO.getCommentList(task.getId());
+						
+						TaskStatsDAO tsd = new TaskStatsDAO(me);
+
+						tsd.open();
+
+						if(tsd.exists(task_id) && comments.size() > 0){
+							tsd.nullify(task_id,comments.get(comments.size() - 1).getId());
+							System.err.println(tsd.get(task_id).getLast_comment());
+						}
+						tsd.close();
+						
 
 					}
 				} catch (NetworkErrorException e) {

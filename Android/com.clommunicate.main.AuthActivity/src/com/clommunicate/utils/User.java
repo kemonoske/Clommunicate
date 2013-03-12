@@ -105,7 +105,7 @@ public class User {
 	}
 
 	public void setPictureURL(String pictureURL) {
-		this.pictureURL = pictureURL;
+		this.pictureURL = (pictureURL == null) ? "null" : pictureURL;
 	}
 
 	public String getEmail() {

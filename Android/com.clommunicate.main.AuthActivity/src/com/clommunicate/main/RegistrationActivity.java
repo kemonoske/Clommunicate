@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.clommunicate.main.R;
 import com.clommunicate.oAuth2.AuthUtils;
+import com.clommunicate.utils.ClommunicateSQLiteHelper;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.UserDAO;
 import com.clommunicate.utils.WebAPIException;
@@ -131,6 +133,18 @@ public class RegistrationActivity extends Activity {
 							Intent i = new Intent(getApplicationContext(),
 									UserActivity.class);
 							User.user = usr;
+
+							ClommunicateSQLiteHelper.TABLE = "tasks"
+									+ User.user.getId();
+							TaskStatsDAO tsd = new TaskStatsDAO(me);
+							tsd.open();
+							try {
+								tsd.create();
+							} catch (Exception e) {
+
+							}
+							tsd.close();
+							
 							startActivity(i);
 							finish();
 						} else if (result instanceof WebAPIException) {

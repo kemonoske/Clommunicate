@@ -250,25 +250,10 @@ public class CommentDAO {
 
 	}
 
-	public static boolean getLastComment(Map<Integer, Integer> tasks)
+	public static int getLastComment(int id)
 			throws NetworkErrorException, WebAPIException {
-
-		StringBuilder aux = new StringBuilder();
-		aux.append(WebApi.API + "/comments/LAST_COMMENT?");
 		
-		Set<Integer> keys = tasks.keySet();
-		
-		int index = 0;
-		
-		for(Integer key : keys)	{
-			
-			aux.append("tasks[" + index + "]=" + String.valueOf(key)
-					+ "&");
-			index++;
-			
-		}
-		
-		HttpGet hg = new HttpGet(aux.toString());
+		HttpGet hg = new HttpGet(WebApi.API + "/tasks/" + id + "/comments/LAST_COMMENT");
 
 		/* Receptionarea entitatii din raspuns shi decodarea JSON */
 		HttpEntity he = HttpRequest.doGet(hg);
@@ -294,16 +279,9 @@ public class CommentDAO {
 
 			if (jo.getBoolean("status")) {
 
-				JSONArray ja = jo.getJSONArray("data");
-				JSONObject jo1 = null;
-
-				for (int i = 0; i < ja.length(); i++) {
-
-					jo1 = ja.getJSONObject(i);
-
-					tasks.put(jo1.getInt("tid"), jo1.getInt("cid"));
-
-				}
+				jo = jo.getJSONObject("data");
+				
+				return jo.getInt("id");
 
 			} else {
 
@@ -325,7 +303,117 @@ public class CommentDAO {
 
 		}
 
-		return false;
+		return 0;
+
+	}
+	
+	public static int getCountAfter(int tid, int cid)
+			throws NetworkErrorException, WebAPIException {
+		
+		HttpGet hg = new HttpGet(WebApi.API + "/tasks/" + tid + "/comments/" + cid +"/COUNT_AFTER");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = HttpRequest.doGet(hg);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+
+			if (jo.getBoolean("status")) {
+
+				return jo.getInt("data");
+
+			} else {
+
+				return 0;
+
+			}
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return 0;
+
+	}
+	
+	public static int getCount(int tid)
+			throws NetworkErrorException, WebAPIException {
+		
+		HttpGet hg = new HttpGet(WebApi.API + "/tasks/" + tid + "/comments/COUNT");
+
+		/* Receptionarea entitatii din raspuns shi decodarea JSON */
+		HttpEntity he = HttpRequest.doGet(hg);
+
+		if (he == null)
+			throw new NetworkErrorException();
+		try {
+
+			InputStream is = he.getContent();
+			he = null;
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					is, "utf-8"), 8);
+			StringBuilder sb = new StringBuilder();
+
+			String line = null;
+
+			while ((line = reader.readLine()) != null) {
+
+				sb.append(line + "\n");
+			}
+
+			JSONObject jo = new JSONObject(sb.toString());
+
+			if (jo.getBoolean("status")) {
+
+				return jo.getInt("data");
+
+			} else {
+
+				return 0;
+
+			}
+
+		} catch (IllegalStateException e) {
+
+			e.printStackTrace();
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+
+		}
+
+		return 0;
 
 	}
 

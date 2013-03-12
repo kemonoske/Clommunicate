@@ -24,7 +24,7 @@ import android.widget.ViewAnimator;
 /**
  * 
  * @author Bostanica Ion
- *
+ * 
  */
 public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
@@ -37,7 +37,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 		super(context, R.layout.member_list_item);
 		this.context = context;
-		type = Typeface.createFromAsset(context.getAssets(), "fonts/roboto_light.ttf");
+		type = Typeface.createFromAsset(context.getAssets(),
+				"fonts/roboto_light.ttf");
 
 	}
 
@@ -52,21 +53,23 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		
-		if(context instanceof ProjectActivity && position == members.size()){
+
+		if (context instanceof ProjectActivity && position == members.size()) {
 
 			LayoutInflater inf = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			View item = inf.inflate(R.layout.add_list_item, parent, false);
-			TextView tv = (TextView)item.findViewById(R.id.add_list_item_tag);
-			tv.setText(context.getResources().getString(R.string.member_list_array_adapter_add_member));
+			TextView tv = (TextView) item.findViewById(R.id.add_list_item_tag);
+			tv.setText(context.getResources().getString(
+					R.string.member_list_array_adapter_add_member));
 			tv.setTypeface(type);
-			if (ProjectActivity.project.getEnd_date().compareToIgnoreCase("null") != 0)
+			if (ProjectActivity.project.getEnd_date().compareToIgnoreCase(
+					"null") != 0)
 				item.setEnabled(false);
 			return item;
-		}	
-		
+		}
+
 		LayoutInflater inf = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -81,36 +84,44 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 		email.setTypeface(type);
 		final ImageView photo = (ImageView) item
 				.findViewById(R.id.member_list_item_photo);
-		/*if (members.get(position).getPicture() != null)
-			photo.setImageBitmap(members.get(position).getPicture());
-		*/
-		if (members.get(position).getPictureURL() != "null" && members.get(position).getPictureURL() != null)	{
-			final ViewAnimator va = (ViewAnimator) item.findViewById(R.id.member_list_item_photo_sw);
+		/*
+		 * if (members.get(position).getPicture() != null)
+		 * photo.setImageBitmap(members.get(position).getPicture());
+		 */
+		if ( members.get(position).getPictureURL().compareToIgnoreCase("null") != 0
+				&& members.get(position).getPictureURL() != null
+				&& members.get(position).getPicture() == null) {
+			final ViewAnimator va = (ViewAnimator) item
+					.findViewById(R.id.member_list_item_photo_sw);
 
 			va.showNext();
 			Runnable r = new Runnable() {
-				
+
 				@Override
 				public void run() {
 					try {
-						members.get(position).setPicture(members.get(position).getPictureURL());
+						members.get(position).setPicture(
+								members.get(position).getPictureURL());
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					photo.post(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							
-							if(members.get(position).getPicture() != null)
-								photo.setImageBitmap(members.get(position).getPicture());
+
+							if (members.get(position).getPicture() != null)
+								photo.setImageBitmap(members.get(position)
+										.getPicture());
 							va.showPrevious();
 						}
 					});
 				}
 			};
 			new Thread(r).start();
+		} else if (members.get(position).getPicture() != null) {
+			photo.setImageBitmap(members.get(position).getPicture());
 		}
 		ImageButton remove = (ImageButton) item
 				.findViewById(R.id.member_list_item_remove_button);
@@ -139,8 +150,14 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 							final YesNoDialog ynd = new YesNoDialog(context,
 									ProjectActivity.project.getId(), members
 											.get(pos).getId(), true);
-							ynd.setTitle(context.getResources().getString(R.string.member_list_array_adapter_yes_no_dialog_title));
-							ynd.setMessage(context.getResources().getString(R.string.member_list_array_adapter_yes_no_dialog_message));
+							ynd.setTitle(context
+									.getResources()
+									.getString(
+											R.string.member_list_array_adapter_yes_no_dialog_title));
+							ynd.setMessage(context
+									.getResources()
+									.getString(
+											R.string.member_list_array_adapter_yes_no_dialog_message));
 
 							ynd.setOnDismissListener(new OnDismissListener() {
 
@@ -179,8 +196,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 	@Override
 	public int getCount() {
-		if(context instanceof ProjectActivity)
-			return members.size() +1 ;
+		if (context instanceof ProjectActivity)
+			return members.size() + 1;
 		return members.size();
 	}
 
@@ -194,8 +211,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 		members.add(member);
 		notifyDataSetChanged();
-		if(context instanceof NewProjectActivity)
-			((NewProjectActivity)context).resizeList();
+		if (context instanceof NewProjectActivity)
+			((NewProjectActivity) context).resizeList();
 
 	}
 
@@ -203,8 +220,8 @@ public class MemberListArrayAdapter extends ArrayAdapter<User> {
 
 		members.remove(position);
 		notifyDataSetChanged();
-		if(context instanceof NewProjectActivity)
-			((NewProjectActivity)context).resizeList();
+		if (context instanceof NewProjectActivity)
+			((NewProjectActivity) context).resizeList();
 
 	}
 

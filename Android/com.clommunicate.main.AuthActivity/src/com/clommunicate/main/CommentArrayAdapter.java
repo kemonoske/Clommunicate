@@ -97,36 +97,43 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 				 * Set author name and avatar in titlebar of the comment
 				 */
 				name.setText(i.getName());
-				/*if (i.getPicture() != null)
-					avatar.setImageBitmap(i.getPicture());*/
-				if (i.getPictureURL() != "null" && i.getPictureURL() != null)	{
-					final ViewAnimator va = (ViewAnimator) view.findViewById(R.id.comment_item_avatar_sw);
+				/*
+				 * if (i.getPicture() != null)
+				 * avatar.setImageBitmap(i.getPicture());
+				 */
+				if (i.getPictureURL().compareToIgnoreCase("null") != 0
+						&& i.getPictureURL() != null && i.getPicture() == null) {
+					final ViewAnimator va = (ViewAnimator) view
+							.findViewById(R.id.comment_item_avatar_sw);
 
 					va.showNext();
+
 					Runnable r = new Runnable() {
-						
+
 						@Override
 						public void run() {
 							try {
-								if(i.getPicture() == null)
-									i.setPicture(i.getPictureURL());
+								i.setPicture(i.getPictureURL());
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 							avatar.post(new Runnable() {
-								
+
 								@Override
 								public void run() {
-									
-									if(i.getPicture() != null)
+
+									if (i.getPicture() != null) {
 										avatar.setImageBitmap(i.getPicture());
+									}
 									va.showPrevious();
 								}
 							});
 						}
 					};
 					new Thread(r).start();
+				} else if (i.getPicture() != null) {
+					avatar.setImageBitmap(i.getPicture());
 				}
 			}
 
@@ -151,8 +158,12 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 					 * Yes/No dialog to confirm removal
 					 */
 					final YesNoDialog ynd = new YesNoDialog(context);
-					ynd.setTitle(context.getResources().getString(R.string.comment_array_adapter_yes_no_dialog_title));
-					ynd.setMessage(context.getResources().getString(R.string.comment_array_adapter_yes_no_dialog_message));
+					ynd.setTitle(context.getResources().getString(
+							R.string.comment_array_adapter_yes_no_dialog_title));
+					ynd.setMessage(context
+							.getResources()
+							.getString(
+									R.string.comment_array_adapter_yes_no_dialog_message));
 
 					/*
 					 * When yes/no dialog is dissmissed
@@ -172,7 +183,10 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 								 * removing the comment
 								 */
 								WaitDialog wd = new WaitDialog(context);
-								wd.setTitle(context.getResources().getString(R.string.comment_array_adapter_wait_dialog_title));
+								wd.setTitle(context
+										.getResources()
+										.getString(
+												R.string.comment_array_adapter_wait_dialog_title));
 								wd.show();
 
 								AsyncTask<WaitDialog, Void, Object[]> removeComment = new AsyncTask<WaitDialog, Void, Object[]>() {
@@ -199,12 +213,12 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 
 										} catch (NetworkErrorException e) {
 
-											aux[1] = e;	
-											
+											aux[1] = e;
+
 										} catch (WebAPIException e) {
 
 											aux[1] = e;
-										
+
 										}
 
 										aux[0] = wd;
@@ -228,18 +242,24 @@ public class CommentArrayAdapter extends ArrayAdapter<Comment> {
 										 */
 										if (e == null) {
 
-											text = context.getResources().getString(R.string.comment_array_adapter_result);
+											text = context
+													.getResources()
+													.getString(
+															R.string.comment_array_adapter_result);
 											comments.remove(position);
 											notifyDataSetChanged();
 
-										}	else if( e instanceof NetworkErrorException)	{
-											
-											text = context.getResources().getString(R.string.error_no_internet_connection);
-											
-										}	else if(e instanceof WebAPIException)	{
-											
+										} else if (e instanceof NetworkErrorException) {
+
+											text = context
+													.getResources()
+													.getString(
+															R.string.error_no_internet_connection);
+
+										} else if (e instanceof WebAPIException) {
+
 											text = e.getMessage();
-											
+
 										}
 
 										Toast.makeText(context, text,

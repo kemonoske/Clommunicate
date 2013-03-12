@@ -11,6 +11,8 @@ import com.clommunicate.utils.Project;
 import com.clommunicate.utils.ProjectDAO;
 import com.clommunicate.utils.Task;
 import com.clommunicate.utils.TaskDAO;
+import com.clommunicate.utils.TaskStats;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.WebAPIException;
 
@@ -589,13 +591,17 @@ public class ProjectActivity extends Activity {
 					members = ProjectDAO.getProjectMembers(project.getId());
 					tasks = TaskDAO.getTaskList(project.getId());
 
-					Map<Integer, Integer> task_list = new TreeMap<Integer, Integer>();
-					int i = 0;
+					//Map<Integer, Integer> task_list = new TreeMap<Integer, Integer>();
+					//int i = 0;
 					
-					for(Task a : tasks)
-						task_list.put(a.getId(), 0);
+					//for(Task a : tasks)
+					//	task_list.put(a.getId(), 0);
 
-					CommentDAO.getLastComment(task_list);
+					//CommentDAO.getLastComment(task_list);
+					
+
+					
+					
 					
 				} catch (NetworkErrorException e) {
 					/*

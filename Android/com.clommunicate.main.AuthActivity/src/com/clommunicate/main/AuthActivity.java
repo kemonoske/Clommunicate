@@ -1,7 +1,11 @@
 package com.clommunicate.main;
 
 import com.clommunicate.main.R;
+import com.clommunicate.utils.ClommunicateSQLiteHelper;
 import com.clommunicate.utils.Login;
+import com.clommunicate.utils.TaskDAO;
+import com.clommunicate.utils.TaskStats;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.UserDAO;
 import com.clommunicate.utils.WebAPIException;
@@ -63,6 +67,7 @@ public class AuthActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_auth);
+		
 		/*
 		 * Loading controls from content view
 		 */
@@ -198,6 +203,17 @@ public class AuthActivity extends Activity {
 							 */
 							User.user = UserDAO.login(params[0]);
 
+							ClommunicateSQLiteHelper.TABLE = "tasks"
+									+ User.user.getId();
+							TaskStatsDAO tsd = new TaskStatsDAO(me);
+							tsd.open();
+							try {
+								tsd.create();
+							} catch (Exception e) {
+
+							}
+							tsd.close();
+							
 						} catch (NetworkErrorException e) {
 
 							return e;

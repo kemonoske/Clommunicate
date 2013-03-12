@@ -1,12 +1,18 @@
 package com.clommunicate.main;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
+import com.clommunicate.utils.CommentDAO;
 import com.clommunicate.utils.Task;
 import com.clommunicate.utils.TaskDAO;
+import com.clommunicate.utils.TaskStats;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.WebAPIException;
 
 import android.accounts.NetworkErrorException;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -17,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
@@ -37,6 +44,8 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 	 */
 	private Context context = null;
 	private ArrayList<Task> tasks = null;
+	private Map<Integer, Integer> task_notifications = null;
+	private TaskListArrayAdapter me = this;
 
 	/**
 	 * GUI Elements
@@ -46,17 +55,91 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 	private CheckBox completed = null;
 	private Typeface font_asen = null;
 
-	public TaskListArrayAdapter(Context context, ArrayList<Task> tasks) {
-		super(context, R.layout.task_list_item);
-		this.context = context;
+	public TaskListArrayAdapter(Context contex, ArrayList<Task> tasks) {
+		super(contex, R.layout.task_list_item);
+		this.context = contex;
 		this.tasks = tasks;
+		this.task_notifications = new TreeMap<Integer, Integer>();
 
+		for (int i = 0; i < tasks.size(); i++)
+			task_notifications.put(tasks.get(i).getId(), -1);
 		/*
 		 * Load font from Asserts
 		 */
 		font_asen = Typeface.createFromAsset(context.getAssets(),
 				"fonts/roboto_light.ttf");
 
+		try {
+
+			for (final Task a : tasks) {
+
+				Runnable r = new Runnable() {
+
+					@Override
+					public void run() {
+						TaskStatsDAO tsd = new TaskStatsDAO(context);
+						tsd.open();
+						if (tsd.exists(a.getId())
+								&& tsd.get(a.getId()).getLast_comment() != 0) {
+							try {
+								task_notifications.put(a.getId(), CommentDAO
+										.getCountAfter(a.getId(),
+												tsd.get(a.getId())
+														.getLast_comment()));
+								((Activity) context)
+										.runOnUiThread(new Runnable() {
+
+											@Override
+											public void run() {
+												me.notifyDataSetChanged();
+											}
+										});
+							} catch (NetworkErrorException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (WebAPIException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else if (tsd.exists(a.getId())
+								&& tsd.get(a.getId()).getLast_comment() == 0) {
+
+							try {
+								task_notifications.put(a.getId(),
+										CommentDAO.getCount(a.getId()));
+							} catch (NetworkErrorException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (WebAPIException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						} else {
+							int last_comment = 0;
+							try {
+								last_comment = CommentDAO.getLastComment(a
+										.getId());
+							} catch (NetworkErrorException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (WebAPIException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							tsd.add(new TaskStats(a.getId(), 0, last_comment));
+						}
+
+						tsd.close();
+					}
+				};
+
+				new Thread(r).start();
+			}
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -77,6 +160,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 		/*
 		 * If position higher tham max index then it's the add task item
 		 */
+
 		if (position == tasks.size()) {
 
 			/*
@@ -85,7 +169,8 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 			View item = inf.inflate(R.layout.add_list_item, parent, false);
 
 			TextView tv = (TextView) item.findViewById(R.id.add_list_item_tag);
-			tv.setText(context.getResources().getString(R.string.task_list_array_adapter_add_task));
+			tv.setText(context.getResources().getString(
+					R.string.task_list_array_adapter_add_task));
 			tv.setTypeface(font_asen);
 
 			/*
@@ -99,7 +184,51 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 		/*
 		 * inflate Task list item
 		 */
-		View item = inf.inflate(R.layout.task_list_item, parent, false);
+		final View item = inf.inflate(R.layout.task_list_item, parent, false);
+
+		final TextView tv = (TextView) item
+				.findViewById(R.id.task_list_item_comment_count);
+		final LinearLayout ll = (LinearLayout) item
+				.findViewById(R.id.task_list_item_notification);
+
+		/*
+		 * if (task_notifications.get(tasks.get(position).getId()) == -1) {
+		 * Runnable r = new Runnable() {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * synchronized (task_notifications) {
+		 * 
+		 * while (task_notifications.get(tasks.get(position) .getId()) == -1);
+		 * 
+		 * if (task_notifications.get(tasks.get(position).getId()) > 0) {
+		 * tv.post(new Runnable() {
+		 * 
+		 * @Override public void run() { tv.setText(String
+		 * .valueOf(task_notifications .get(tasks.get(position) .getId())));
+		 * 
+		 * } });
+		 * 
+		 * ((Activity)context).runOnUiThread(new Runnable() {
+		 * 
+		 * @Override public void run() { ll.setVisibility(LinearLayout.VISIBLE);
+		 * 
+		 * } }); }
+		 * 
+		 * task_notifications.notify();
+		 * 
+		 * }
+		 * 
+		 * } };
+		 * 
+		 * new Thread(r).start();
+		 * 
+		 * } else
+		 */if (task_notifications.get(tasks.get(position).getId()) > 0) {
+			tv.setText(String.valueOf(task_notifications.get(tasks
+					.get(position).getId())));
+			ll.setVisibility(LinearLayout.VISIBLE);
+		}
 
 		/*
 		 * Locate all controls in item view by id
@@ -188,7 +317,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 						 * request
 						 */
 						wd = new WaitDialog(context);
-						wd.setTitle(context.getResources().getString(R.string.task_list_array_adapter_update_wait_dialog_title));
+						wd.setTitle(context
+								.getResources()
+								.getString(
+										R.string.task_list_array_adapter_update_wait_dialog_title));
 						wd.show();
 					}
 
@@ -205,13 +337,13 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 									.getId(), (isChecked ? 1 : 0));
 
 						} catch (NetworkErrorException e) {
-							
+
 							return e;
-							
+
 						} catch (WebAPIException e) {
-							
+
 							return e;
-							
+
 						}
 
 						return null;
@@ -224,13 +356,17 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 						String text = null;
 
 						if (result == null) {
-							text = context.getResources().getString(R.string.task_list_array_adapter_update_text_result_success);
+							text = context
+									.getResources()
+									.getString(
+											R.string.task_list_array_adapter_update_text_result_success);
 							tasks.get(position).setCompleted(isChecked);
 							notifyDataSetChanged();
 						} else if (result instanceof WebAPIException) {
 							text = result.getMessage();
 						} else {
-							text = context.getResources().getString(R.string.error_no_internet_connection);
+							text = context.getResources().getString(
+									R.string.error_no_internet_connection);
 						}
 						Toast.makeText(context.getApplicationContext(), text,
 								Toast.LENGTH_SHORT).show();
@@ -251,6 +387,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<Task> {
 
 		return this.tasks.get(position);
 
+	}
+
+	@Override
+	public void notifyDataSetChanged() {
+		super.notifyDataSetChanged();
 	}
 
 }
