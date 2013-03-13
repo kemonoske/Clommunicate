@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.clommunicate.utils.ClommunicateSQLiteHelper;
+import com.clommunicate.utils.TaskStatsDAO;
 import com.clommunicate.utils.User;
 import com.clommunicate.utils.UserDAO;
 import com.clommunicate.utils.WebAPIException;
@@ -136,6 +138,16 @@ public class UserActivity extends Activity {
 
 									try {
 										UserDAO.removeUser(User.user.getId());
+										TaskStatsDAO tsd = new TaskStatsDAO(me);
+										tsd.open();
+										try {
+											tsd.drop();
+										} catch (Exception e) {
+
+										}
+										tsd.close();
+										
+
 									} catch (NetworkErrorException e) {
 										return e;
 									} catch (WebAPIException e) {
@@ -249,6 +261,16 @@ public class UserActivity extends Activity {
 
 				try {
 					User.user = UserDAO.login(User.user.getEmail());
+					ClommunicateSQLiteHelper.TABLE = "tasks"
+							+ User.user.getId();
+					TaskStatsDAO tsd = new TaskStatsDAO(me);
+					tsd.open();
+					try {
+						tsd.create();
+					} catch (Exception e) {
+
+					}
+					tsd.close();
 				} catch (NetworkErrorException e) {
 					return e;
 				} catch (WebAPIException e) {
@@ -289,7 +311,15 @@ public class UserActivity extends Activity {
 					finish();
 
 				} else {
-
+					ClommunicateSQLiteHelper.TABLE = "tasks"
+							+ User.user.getId();
+					TaskStatsDAO tsd = new TaskStatsDAO(me);
+					tsd.open();
+					try {
+						tsd.create();
+					} catch (Exception e) {
+					}
+					tsd.close();
 					name.setText(User.user.getName());
 					
 					final ViewAnimator va = (ViewAnimator)findViewById(R.id.user_avatar_sw);

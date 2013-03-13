@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ClommunicateSQLiteHelper extends SQLiteOpenHelper {
 	
-	public static String TABLE = "tasks" + User.user.getId();
+	public static String TABLE = "";
 
 	private static final String DATABASE_NAME = "stats.db";
 	private static final int DATABASE_VERSION = 1;

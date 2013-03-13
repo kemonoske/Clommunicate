@@ -12,9 +12,6 @@ public class TaskStatsDAO {
 	private SQLiteDatabase database;
 	private ClommunicateSQLiteHelper dbHelper;
 	private String[] columns = { "id", "count", "last_comment" };
-	private static final String DATABASE_CREATE = "CREATE TABLE "
-			+ ClommunicateSQLiteHelper.TABLE
-			+ " ( id INTEGER PRIMARY KEY AUTOINCREMENT, count INTEGER, last_comment INTEGER)";
 
 	public TaskStatsDAO(Context context) {
 		dbHelper = new ClommunicateSQLiteHelper(context);
@@ -30,7 +27,16 @@ public class TaskStatsDAO {
 
 	public void create() {
 
-		database.execSQL(DATABASE_CREATE);
+		database.execSQL("CREATE TABLE "
+				+ ClommunicateSQLiteHelper.TABLE
+				+ " ( id INTEGER PRIMARY KEY AUTOINCREMENT, count INTEGER, last_comment INTEGER)");
+
+	}
+
+	public void drop() {
+
+		database.execSQL("DROP TABLE "
+				+ ClommunicateSQLiteHelper.TABLE);
 
 	}
 

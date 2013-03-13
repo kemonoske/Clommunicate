@@ -108,8 +108,10 @@ public class RegistrationActivity extends Activity {
 
 						try {
 
-							if (UserDAO.register(usr))
+							if (UserDAO.register(usr)) {
+								
 								return null;
+							}
 
 						} catch (Exception e) {
 
@@ -134,17 +136,6 @@ public class RegistrationActivity extends Activity {
 									UserActivity.class);
 							User.user = usr;
 
-							ClommunicateSQLiteHelper.TABLE = "tasks"
-									+ User.user.getId();
-							TaskStatsDAO tsd = new TaskStatsDAO(me);
-							tsd.open();
-							try {
-								tsd.create();
-							} catch (Exception e) {
-
-							}
-							tsd.close();
-							
 							startActivity(i);
 							finish();
 						} else if (result instanceof WebAPIException) {

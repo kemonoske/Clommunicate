@@ -203,16 +203,6 @@ public class AuthActivity extends Activity {
 							 */
 							User.user = UserDAO.login(params[0]);
 
-							ClommunicateSQLiteHelper.TABLE = "tasks"
-									+ User.user.getId();
-							TaskStatsDAO tsd = new TaskStatsDAO(me);
-							tsd.open();
-							try {
-								tsd.create();
-							} catch (Exception e) {
-
-							}
-							tsd.close();
 							
 						} catch (NetworkErrorException e) {
 
