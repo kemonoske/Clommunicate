@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.clommunicate.main"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="Raw Incompleteness" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -15,7 +15,7 @@
             android:name=".AuthActivity"
             android:launchMode="singleTask"
             android:clearTaskOnLaunch="true"
-            android:windowSoftInputMode="stateHidden" 
+            android:windowSoftInputMode="stateHidden"  
             android:label="@string/title_activity_auth">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

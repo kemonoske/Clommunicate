@@ -3,7 +3,7 @@
     <string name="app_name">Clommunicate</string>
     <string name="menu_about">Despre</string>
     <string name="title_activity_auth">Clommunicate</string>
-    <string name="app_version">1.0</string>
+    <string name="app_version">1.1</string>
     <string name="about_description">Manager de proiecte cu interfață simplă.\nPermite crearea proiectelor și organizarea procesului de dezvoltarea a acestora prin adaugarea membrilor noi la echipa proiectului și divizarea proiectului în însărcinări mici. Membriii echipei unui proiect pot comunica în privință la realizarea unei însărcinări prin intermediul unui sistem simplu de comentarii.</string>
 
 </resources>
